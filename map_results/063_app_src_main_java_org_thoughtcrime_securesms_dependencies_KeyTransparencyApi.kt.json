@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt",
+  "change_summary": "키 투명성(Key Transparency) API의 에러 처리 로직을 간소화하고, 커스텀 에러 클래스 대신 libsignal의 KeyTransparencyException을 직접 사용하도록 변경",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Key Transparency Check)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/CheckKeyTransparencyJob.kt",
+  "test_method": [
+    "키 투명성 검증(Search/Monitor) 과정에서 네트워크 오류나 검증 실패 발생 시, 간소화된 에러 전파 로직을 통해 호출부(Job)에서 적절한 예외 처리가 이루어지는지 확인"
+  ],
+  "confirmed_facts": [
+    "search 및 monitor 메서드의 반환 에러 타입을 KeyTransparencyError에서 KeyTransparencyException으로 변경",
+    "내부적으로 복잡했던 mapWithCancellation 및 상세 예외 분기 로직을 제거하고 getOrError()로 대체",
+    "커스텀 BadRequestError 구현체였던 KeyTransparencyError 데이터 클래스 삭제"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

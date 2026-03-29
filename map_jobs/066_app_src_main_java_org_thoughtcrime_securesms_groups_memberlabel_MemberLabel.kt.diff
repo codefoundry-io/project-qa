@@ -1,0 +1,101 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+
+[Changed Symbols]: BidiUtil, BreakIteratorCompat, EmojiUtil, Regex, Returns, Sanitizes, StringUtil, Truncates, sanitizeEmoji, sanitizeLabelText, truncateLabelText
+
+[References]:
+  MemberLabel: (10+ references - common utility)
+  BidiUtil: (10+ references - common utility)
+  BreakIteratorCompat: (10+ references - common utility)
+  EmojiUtil: (10+ references - common utility)
+  Regex: (10+ references - common utility)
+  Returns: (10+ references - common utility)
+  Sanitizes:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+  StringUtil: (10+ references - common utility)
+  Truncates:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+  sanitizeEmoji:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelEmojiValidationTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+  sanitizeLabelText:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelSanitizationTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+  truncateLabelText:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelSanitizationTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+index cce7b1ff89..bee24ef873 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+@@ -6,6 +6,10 @@
+ package org.thoughtcrime.securesms.groups.memberlabel
+ 
+ import androidx.annotation.ColorInt
++import org.signal.core.util.BidiUtil
++import org.signal.core.util.BreakIteratorCompat
++import org.signal.core.util.StringUtil
++import org.thoughtcrime.securesms.components.emoji.EmojiUtil
+ 
+ /**
+  * A member's custom label within a group.
+@@ -13,7 +17,51 @@ import androidx.annotation.ColorInt
+ data class MemberLabel(
+   val emoji: String?,
+   val text: String
+-)
++) {
++
++  /**
++   * The label text formatted for display.
++   *
++   * Use this in all rendering contexts. Use [text] only when comparing or persisting values.
++   */
++  val displayText: String get() = BidiUtil.isolateBidi(text)
++
++  companion object {
++    const val MIN_LABEL_GRAPHEMES = 1
++    const val MAX_LABEL_GRAPHEMES = 24
++    const val MAX_LABEL_BYTES = 96
++    const val MAX_EMOJI_BYTES = 48
++
++    /**
++     * Truncates label [text] to the grapheme and byte limits without any whitespace normalization.
++     */
++    @JvmStatic
++    fun truncateLabelText(text: String): String {
++      val breakIterator = BreakIteratorCompat.getInstance()
++      breakIterator.setText(text)
++      val graphemeTruncated = breakIterator.take(MAX_LABEL_GRAPHEMES).toString()
++      return StringUtil.trimToFit(graphemeTruncated, MAX_LABEL_BYTES)
++    }
++
++    /**
++     * Sanitizes and truncates label [text].
++     */
++    @JvmStatic
++    fun sanitizeLabelText(text: String): String {
++      val collapsed = StringUtil.trimToVisualBounds(text.replace(Regex("\\s+"), " "))
++      return truncateLabelText(collapsed)
++    }
++
++    /**
++     * Returns [emoji] if it is a single valid emoji within [MAX_EMOJI_BYTES], otherwise null.
++     */
++    @JvmStatic
++    fun sanitizeEmoji(emoji: String?): String? {
++      val trimmed = StringUtil.trimToFit(emoji, MAX_EMOJI_BYTES)
++      return trimmed.takeIf { it.isNotBlank() && EmojiUtil.isEmoji(it) }
++    }
++  }
++}
+ 
+ data class StyledMemberLabel(
+   val label: MemberLabel,

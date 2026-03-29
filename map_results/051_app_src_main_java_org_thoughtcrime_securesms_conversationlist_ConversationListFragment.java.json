@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversationlist/ConversationListFragment.java",
+  "change_summary": "대화방 목록에서 보관된 대화방의 '보관 취소' 메뉴 선택 시 잘못된 메서드를 호출하던 버그 수정 및 타입 선언 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation List > Long Press > Unarchive)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversationlist/ConversationListFragment.java",
+  "test_method": [
+    "보관함(Archived) 폴더에서 대화방을 길게 눌러 '보관 취소' 액션을 실행했을 때, 해당 대화방이 보관함에서 제거되고 다시 전체 대화 목록으로 나타나는지 확인"
+  ],
+  "confirmed_facts": [
+    "아이디 목록 변수 id의 타입을 Collection<Long>에서 Set<Long>으로 구체화",
+    "보관 취소(Unarchive) 액션 아이템의 클릭 리스너에서 handleArchive 대신 handleUnarchive를 호출하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

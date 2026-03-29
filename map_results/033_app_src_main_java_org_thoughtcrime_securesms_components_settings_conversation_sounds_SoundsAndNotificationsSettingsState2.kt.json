@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt",
+  "change_summary": "새로운 소리 및 알림 설정 화면(V2)을 위한 상태 데이터 클래스 추가 (전화 및 답장 알림 설정 필드 포함)",
+  "risk_level": "LOW",
+  "trigger_point": "BG(SoundsAndNotificationsSettingsViewModel2)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt",
+  "test_method": [
+    "새로운 알림 설정 화면 진입 시 무음 여부, 멘션/전화/답장 알림 설정의 초기 상태가 올바르게 로드되는지 확인"
+  ],
+  "confirmed_facts": [
+    "SoundsAndNotificationsSettingsState2 데이터 클래스 구현",
+    "기존 필드 외에 callNotificationSetting, replyNotificationSetting 필드 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

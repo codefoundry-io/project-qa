@@ -1,0 +1,71 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt
+
+[Changed Symbols]: ConversationSettingsFragmentDirections, GroupInviteSentDialog, RemoteConfig
+
+[References]:
+  ConversationSettingsFragment: (10+ references - common utility)
+  ConversationSettingsFragmentDirections:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+  GroupInviteSentDialog:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/managegroup/dialogs/GroupInviteSentDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+  RemoteConfig: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt
+index a3bd2d1dd8..008b171a76 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt
+@@ -592,11 +592,19 @@ class ConversationSettingsFragment :
+ 
+       if (!state.recipient.isSelf) {
+         clickPref(
+-          title = DSLSettingsText.from(R.string.ConversationSettingsFragment__sounds_and_notifications),
++          title = if (RemoteConfig.internalUser) {
++            DSLSettingsText.from("${getString(R.string.ConversationSettingsFragment__sounds_and_notifications)} (Internal Only)")
++          } else {
++            DSLSettingsText.from(R.string.ConversationSettingsFragment__sounds_and_notifications)
++          },
+           icon = DSLSettingsIcon.from(R.drawable.symbol_speaker_24),
+           isEnabled = !state.isDeprecatedOrUnregistered,
+           onClick = {
+-            val action = ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToSoundsAndNotificationsSettingsFragment(state.recipient.id)
++            val action = if (RemoteConfig.internalUser) {
++              ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToSoundsAndNotificationsSettingsFragment2(state.recipient.id)
++            } else {
++              ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToSoundsAndNotificationsSettingsFragment(state.recipient.id)
++            }
+ 
+             navController.safeNavigate(action)
+           }
+@@ -853,17 +861,13 @@ class ConversationSettingsFragment :
+           )
+ 
+           if (RemoteConfig.sendMemberLabels) {
+-            val canSetMemberLabel = groupState.canSetOwnMemberLabel && !state.isDeprecatedOrUnregistered
+             clickPref(
+               title = DSLSettingsText.from(R.string.ConversationSettingsFragment__group_member_label),
+               icon = DSLSettingsIcon.from(R.drawable.symbol_tag_24),
+-              isEnabled = canSetMemberLabel,
++              isEnabled = groupState.canSetOwnMemberLabel && !state.isDeprecatedOrUnregistered,
+               onClick = {
+                 val action = ConversationSettingsFragmentDirections.actionConversationSettingsFragmentToMemberLabelFragment(groupState.groupId)
+                 navController.safeNavigate(action)
+-              },
+-              onDisabledClicked = {
+-                Snackbar.make(requireView(), R.string.ConversationSettingsFragment__only_admins_can_add_member_labels, Snackbar.LENGTH_SHORT).show()
+               }
+             )
+           }
+@@ -1044,7 +1048,9 @@ class ConversationSettingsFragment :
+   }
+ 
+   private fun showGroupInvitesSentDialog(showGroupInvitesSentDialog: ConversationSettingsEvent.ShowGroupInvitesSentDialog) {
+-    GroupInviteSentDialog.showInvitesSent(requireContext(), viewLifecycleOwner, showGroupInvitesSentDialog.invitesSentTo)
++    if (showGroupInvitesSentDialog.invitesSentTo.isNotEmpty()) {
++      GroupInviteSentDialog.show(childFragmentManager, showGroupInvitesSentDialog.invitesSentTo)
++    }
+   }
+ 
+   private fun showMembersAdded(showMembersAdded: ConversationSettingsEvent.ShowMembersAdded) {

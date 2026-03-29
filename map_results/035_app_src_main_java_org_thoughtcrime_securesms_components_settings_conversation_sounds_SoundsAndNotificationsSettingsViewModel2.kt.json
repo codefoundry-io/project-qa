@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt",
+  "change_summary": "새로운 소리 및 알림 설정 화면(V2)을 위한 뷰모델 추가 (수신자 상태 관찰 및 알림/무음 설정 DB 저장 로직 포함)",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Sounds and Notifications Settings V2)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt",
+  "test_method": [
+    "무음 시간 설정, 멘션/전화/답장 알림 설정을 변경했을 때 실제 데이터베이스(RecipientTable)에 값이 반영되는지 확인",
+    "수신자 정보(Recipient)가 외부 요인으로 변경될 때 뷰모델 상태가 자동으로 갱신되는지 확인",
+    "초기화 시 알림 채널 일관성 체크(ensureCustomChannelConsistency)가 비동기로 실행되는지 확인"
+  ],
+  "confirmed_facts": [
+    "RecipientForeverObserver를 통한 실시간 수신자 정보 관찰 구현",
+    "MutableStateFlow 기반의 상태 업데이트 및 SignalDatabase를 통한 비동기 설정 저장 로직 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

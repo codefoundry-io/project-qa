@@ -1,0 +1,117 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
+
+[Changed Symbols]: AppDependencies, BackupPassphrase, BackupProgressState, BackupUtil, InProgress, SignalStore, StorageUtil, getDisplayName, onBackupStarted
+
+[References]:
+  LocalBackupsViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsSettingsCallback.kt
+  AppDependencies: (10+ references - common utility)
+  BackupPassphrase: (10+ references - common utility)
+  BackupProgressState:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/BackupProgressState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsSettingsState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsSettingsScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
+  BackupUtil: (10+ references - common utility)
+  InProgress: (10+ references - common utility)
+  SignalStore: (10+ references - common utility)
+  StorageUtil: (10+ references - common utility)
+  getDisplayName: (10+ references - common utility)
+  onBackupStarted:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsSettingsCallback.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
+index 883607e442..f2ce414bca 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt
+@@ -6,6 +6,7 @@
+ package org.thoughtcrime.securesms.components.settings.app.backups.local
+ 
+ import android.content.Context
++import android.net.Uri
+ import androidx.lifecycle.ViewModel
+ import androidx.lifecycle.viewModelScope
+ import kotlinx.coroutines.Dispatchers
+@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
+ import org.greenrobot.eventbus.EventBus
+ import org.greenrobot.eventbus.Subscribe
+ import org.greenrobot.eventbus.ThreadMode
++import org.signal.core.ui.util.StorageUtil
+ import org.signal.core.util.logging.Log
+ import org.thoughtcrime.securesms.R
+ import org.thoughtcrime.securesms.backup.BackupPassphrase
+@@ -50,7 +52,7 @@ class LocalBackupsViewModel : ViewModel(), BackupKeyCredentialManagerHandler {
+   private val internalSettingsState = MutableStateFlow(
+     LocalBackupsSettingsState(
+       backupsEnabled = SignalStore.backup.newLocalBackupsEnabled,
+-      folderDisplayName = SignalStore.backup.newLocalBackupsDirectory
++      folderDisplayName = getDisplayName(AppDependencies.application, SignalStore.backup.newLocalBackupsDirectory)
+     )
+   )
+ 
+@@ -70,7 +72,7 @@ class LocalBackupsViewModel : ViewModel(), BackupKeyCredentialManagerHandler {
+ 
+     viewModelScope.launch {
+       SignalStore.backup.newLocalBackupsDirectoryFlow.collect { directory ->
+-        internalSettingsState.update { it.copy(folderDisplayName = directory) }
++        internalSettingsState.update { it.copy(folderDisplayName = getDisplayName(applicationContext, directory)) }
+       }
+     }
+ 
+@@ -114,6 +116,19 @@ class LocalBackupsViewModel : ViewModel(), BackupKeyCredentialManagerHandler {
+     }
+   }
+ 
++  fun onBackupStarted() {
++    val context = AppDependencies.application
++    internalSettingsState.update {
++      it.copy(
++        progress = BackupProgressState.InProgress(
++          summary = context.getString(R.string.BackupsPreferenceFragment__in_progress),
++          percentLabel = context.getString(R.string.BackupsPreferenceFragment__d_so_far, 0),
++          progressFraction = null
++        )
++      )
++    }
++  }
++
+   @Subscribe(threadMode = ThreadMode.MAIN)
+   fun onBackupEvent(event: LocalBackupV2Event) {
+     val context = AppDependencies.application
+@@ -153,13 +168,13 @@ class LocalBackupsViewModel : ViewModel(), BackupKeyCredentialManagerHandler {
+       withContext(Dispatchers.IO) {
+         AppDependencies.jobManager.cancelAllInQueue(LocalBackupJob.QUEUE)
+         AppDependencies.jobManager.flush()
+-      }
+ 
+-      SignalStore.backup.newLocalBackupsDirectory = SignalStore.settings.signalBackupDirectory?.toString()
++        SignalStore.backup.newLocalBackupsDirectory = SignalStore.settings.signalBackupDirectory?.toString()
+ 
+-      BackupPassphrase.set(context, null)
+-      SignalStore.settings.isBackupEnabled = false
+-      BackupUtil.deleteAllBackups()
++        BackupPassphrase.set(context, null)
++        SignalStore.settings.isBackupEnabled = false
++        BackupUtil.deleteAllBackups()
++      }
+     }
+ 
+     SignalStore.backup.newLocalBackupsEnabled = true
+@@ -167,6 +182,13 @@ class LocalBackupsViewModel : ViewModel(), BackupKeyCredentialManagerHandler {
+   }
+ }
+ 
++private fun getDisplayName(context: Context, directoryUri: String?): String? {
++  if (directoryUri == null) {
++    return null
++  }
++  return StorageUtil.getDisplayPath(context, Uri.parse(directoryUri))
++}
++
+ private fun calculateLastBackupTimeString(context: Context, lastBackupTimestamp: Long): String {
+   return if (lastBackupTimestamp > 0) {
+     val relativeTime = DateUtils.getDatelessRelativeTimeSpanFormattedDate(

@@ -1,0 +1,115 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+
+[Changed Symbols]: AppDependencies, CallParticipant, CommunicationActions, ConversationSettingsActivity, MaterialAlertDialogBuilder, VerifyIdentityActivity, onContactDetails, onGoToChat, onMuteAudio, onRemoveFromCall, onViewSafetyNumber
+
+[References]:
+  CallInfoCallbacks:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+  AppDependencies: (10+ references - common utility)
+  CallParticipant: (10+ references - common utility)
+  CommunicationActions: (10+ references - common utility)
+  ConversationSettingsActivity:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/AndroidManifest.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationAdapterV2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/AvatarImageView.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/calls/log/CallLogContextMenu.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/calls/log/CallLogFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/CallInfoActivity.kt [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsActivity.kt [ENTRY: Activity]
+  MaterialAlertDialogBuilder: (10+ references - common utility)
+  VerifyIdentityActivity: (10+ references - common utility)
+  onContactDetails:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  onGoToChat:
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingItem.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/dialogs/StoryContextMenu.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+  onMuteAudio:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  onRemoveFromCall:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  onViewSafetyNumber:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+index 82e1c7c6e2..683e79463c 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+@@ -15,10 +15,13 @@ import org.thoughtcrime.securesms.BaseActivity
+ import org.thoughtcrime.securesms.R
+ import org.thoughtcrime.securesms.calls.links.CallLinks
+ import org.thoughtcrime.securesms.calls.links.EditCallLinkNameDialogFragment
++import org.thoughtcrime.securesms.components.settings.conversation.ConversationSettingsActivity
+ import org.thoughtcrime.securesms.components.webrtc.controls.CallInfoView
+ import org.thoughtcrime.securesms.components.webrtc.controls.ControlsAndInfoViewModel
+ import org.thoughtcrime.securesms.dependencies.AppDependencies
+ import org.thoughtcrime.securesms.events.CallParticipant
++import org.thoughtcrime.securesms.util.CommunicationActions
++import org.thoughtcrime.securesms.verify.VerifyIdentityActivity
+ 
+ /**
+  * Callbacks for the CallInfoView, shared between CallActivity and ControlsAndInfoController.
+@@ -60,4 +63,34 @@ class CallInfoCallbacks(
+       }
+       .show()
+   }
++
++  override fun onMuteAudio(callParticipant: CallParticipant) {
++    AppDependencies.signalCallManager.sendRemoteMuteRequest(callParticipant)
++  }
++
++  override fun onRemoveFromCall(callParticipant: CallParticipant) {
++    MaterialAlertDialogBuilder(activity)
++      .setNegativeButton(android.R.string.cancel, null)
++      .setMessage(activity.resources.getString(R.string.CallLinkInfoSheet__remove_s_from_the_call, callParticipant.recipient.getShortDisplayName(activity)))
++      .setPositiveButton(R.string.CallLinkInfoSheet__remove) { _, _ ->
++        AppDependencies.signalCallManager.removeFromCallLink(callParticipant)
++      }
++      .setNeutralButton(R.string.CallLinkInfoSheet__block_from_call) { _, _ ->
++        AppDependencies.signalCallManager.blockFromCallLink(callParticipant)
++      }
++      .show()
++  }
++
++  override fun onContactDetails(callParticipant: CallParticipant) {
++    activity.startActivity(ConversationSettingsActivity.forRecipient(activity, callParticipant.recipient.id))
++  }
++
++  override fun onViewSafetyNumber(callParticipant: CallParticipant) {
++    val identityRecord = AppDependencies.protocolStore.aci().identities().getIdentityRecord(callParticipant.recipient.id)
++    VerifyIdentityActivity.startOrShowExchangeMessagesDialog(activity, identityRecord.orElse(null))
++  }
++
++  override fun onGoToChat(callParticipant: CallParticipant) {
++    CommunicationActions.startConversation(activity, callParticipant.recipient, null)
++  }
+ }

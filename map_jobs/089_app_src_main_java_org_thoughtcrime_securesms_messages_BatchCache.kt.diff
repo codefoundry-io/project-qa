@@ -1,0 +1,43 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt
+
+[Changed Symbols]: ReusedBatchCache, SignalDatabase
+
+[References]:
+  BatchCache:
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/MessageContentProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/ReceiptMessageProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/DataMessageProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/PushProcessMessageJob.kt
+  ReusedBatchCache:
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt
+  SignalDatabase: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt b/app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt
+index 12046d5285..24002aef91 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt
+@@ -132,18 +132,13 @@ class ReusedBatchCache : BatchCache() {
+     }
+     batchedJobs.clear()
+ 
+-    if (threadUpdates.isNotEmpty()) {
++    if (threadUpdates.isNotEmpty() || mslDeletes.isNotEmpty()) {
+       SignalDatabase.runInTransaction {
+         threadUpdates.forEach { flushIncomingMessageInsertThreadUpdate(it) }
+-      }
+-    }
+-    threadUpdates.clear()
+-
+-    if (mslDeletes.isNotEmpty()) {
+-      SignalDatabase.runInTransaction {
+         mslDeletes.forEach { (key, timestamps) -> flushMslDelete(key.first, key.second, timestamps) }
+       }
+     }
++    threadUpdates.clear()
+     mslDeletes.clear()
+   }
+ }

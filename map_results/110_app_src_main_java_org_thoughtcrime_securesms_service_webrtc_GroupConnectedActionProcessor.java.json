@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/GroupConnectedActionProcessor.java",
+  "change_summary": "그룹 통화 연결 중 다른 참여자에 대한 원격 음소거 요청(Remote Mute)을 처리하는 로직 구현",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(WebRTC Participant Action)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java",
+  "test_method": [
+    "그룹 통화 도중 관리자가 특정 참여자의 오디오를 음소거했을 때, 해당 참여자의 demuxId를 사용하여 원격 음소거 요청이 서버로 정상 전송되는지 확인",
+    "원격 음소거 요청 과정에서 CallException 발생 시 에러 로그가 기록되고 통화가 끊기지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "WebRtcActionProcessor의 handleSendRemoteMuteRequest를 오버라이드하여 구현",
+    "currentState에서 GroupCall 객체를 획득하여 sendRemoteMuteRequest API를 호출하도록 로직 구성"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

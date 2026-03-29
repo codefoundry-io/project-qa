@@ -1,0 +1,35 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
+
+[Changed Symbols]: Only, This, getApproximateTotalMediaSize
+
+[References]:
+  AttachmentTable: (10+ references - common utility)
+  Only: (10+ references - common utility)
+  This: (10+ references - common utility)
+  getApproximateTotalMediaSize:
+    - ./app/src/main/java/org/thoughtcrime/securesms/megaphone/Megaphones.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt b/app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
+index 96350ccf8e..3867bf1e90 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
+@@ -706,6 +706,17 @@ class AttachmentTable(
+       }
+   }
+ 
++  /**
++   * This is "approximate" because it doesn't account for things like duplicates. Only useful as a heuristic.
++   */
++  fun getApproximateTotalMediaSize(): Long {
++    return readableDatabase
++      .select("SUM($DATA_SIZE)")
++      .from(TABLE_NAME)
++      .run()
++      .readToSingleLong(0L)
++  }
++
+   fun getOptimizedMediaAttachmentSize(): Long {
+     return readableDatabase
+       .select("SUM($DATA_SIZE)")

@@ -1,0 +1,218 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+
+[Changed Symbols]: ApplicationError, GroupInsufficientRightsException, InsufficientRights, MemberLabel, MemberLabelUiState, NetworkError, NetworkResult, RecipientId, SaveState, StatusCodeError, StringUtil, Success, onAboutOverrideSheetDismissed, onAboutOverrideSheetShown
+
+[References]:
+  MemberLabelViewModel:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  ApplicationError: (10+ references - common utility)
+  GroupInsufficientRightsException:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/migration/GroupsV1MigrationSuggestionsDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupChangeFailureReason.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/invitesandrequests/invite/GroupLinkInviteRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/GroupV2UpdateSelfProfileKeyJob.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupManagerV2.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupManager.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/sharablegrouplink/ShareableGroupLinkRepository.java
+  InsufficientRights: (10+ references - common utility)
+  MemberLabel: (10+ references - common utility)
+  MemberLabelUiState:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  NetworkError: (10+ references - common utility)
+  NetworkResult: (10+ references - common utility)
+  RecipientId: (10+ references - common utility)
+  SaveState: (10+ references - common utility)
+  StatusCodeError: (10+ references - common utility)
+  StringUtil: (10+ references - common utility)
+  Success: (10+ references - common utility)
+  onAboutOverrideSheetDismissed:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  onAboutOverrideSheetShown:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+index 9c24e2f047..ea094038ad 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+@@ -12,20 +12,22 @@ import kotlinx.coroutines.flow.StateFlow
+ import kotlinx.coroutines.flow.asStateFlow
+ import kotlinx.coroutines.flow.update
+ import kotlinx.coroutines.launch
++import org.signal.core.util.StringUtil
+ import org.signal.core.util.concurrent.SignalDispatchers
++import org.signal.core.util.isNotNullOrBlank
+ import org.thoughtcrime.securesms.conversation.colors.NameColor
+ import org.thoughtcrime.securesms.groups.GroupId
++import org.thoughtcrime.securesms.groups.GroupInsufficientRightsException
+ import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelUiState.SaveState
+ import org.thoughtcrime.securesms.recipients.Recipient
+ import org.thoughtcrime.securesms.recipients.RecipientId
+-
+-private const val MIN_LABEL_TEXT_LENGTH = 1
+-private const val MAX_LABEL_TEXT_LENGTH = 24
++import org.whispersystems.signalservice.api.NetworkResult
+ 
+ class MemberLabelViewModel(
+   private val memberLabelRepo: MemberLabelRepository = MemberLabelRepository.instance,
+   private val groupId: GroupId.V2,
+-  private val recipientId: RecipientId
++  private val recipientId: RecipientId,
++  private val sanitizeEmoji: (String) -> String? = MemberLabel::sanitizeEmoji
+ ) : ViewModel() {
+ 
+   private var originalLabelEmoji: String = ""
+@@ -40,16 +42,17 @@ class MemberLabelViewModel(
+ 
+   private fun loadInitialState() {
+     viewModelScope.launch(SignalDispatchers.IO) {
+-      val memberLabel = memberLabelRepo.getLabel(groupId, recipientId)
++      val recipient = memberLabelRepo.getRecipient(recipientId)
++      val memberLabel = memberLabelRepo.getLabel(groupId, recipient)
+       originalLabelEmoji = memberLabel?.emoji.orEmpty()
+       originalLabelText = memberLabel?.text.orEmpty()
+ 
+       internalUiState.update {
+         it.copy(
+-          recipient = memberLabelRepo.getRecipient(recipientId),
++          recipient = recipient,
+           labelEmoji = originalLabelEmoji,
+           labelText = originalLabelText,
+-          senderNameColor = memberLabelRepo.getSenderNameColor(groupId, recipientId)
++          senderNameColor = memberLabelRepo.getSenderNameColor(groupId, recipient)
+         )
+       }
+     }
+@@ -65,11 +68,11 @@ class MemberLabelViewModel(
+   }
+ 
+   fun onLabelTextChanged(text: String) {
+-    val sanitizedText = text.take(MAX_LABEL_TEXT_LENGTH)
++    val truncatedText = MemberLabel.truncateLabelText(text)
+     internalUiState.update {
+       it.copy(
+-        labelText = sanitizedText,
+-        hasChanges = hasChanges(labelEmoji = it.labelEmoji, labelText = sanitizedText)
++        labelText = truncatedText,
++        hasChanges = hasChanges(labelEmoji = it.labelEmoji, labelText = truncatedText)
+       )
+     }
+   }
+@@ -85,7 +88,8 @@ class MemberLabelViewModel(
+   }
+ 
+   private fun hasChanges(labelEmoji: String, labelText: String): Boolean {
+-    return labelEmoji != originalLabelEmoji || labelText != originalLabelText
++    return sanitizeEmoji(labelEmoji).orEmpty() != originalLabelEmoji ||
++      MemberLabel.sanitizeLabelText(labelText) != originalLabelText
+   }
+ 
+   fun save() {
+@@ -99,7 +103,7 @@ class MemberLabelViewModel(
+       }
+ 
+       val currentState = internalUiState.value
+-      memberLabelRepo.setLabel(
++      val result = memberLabelRepo.setLabel(
+         groupId = groupId,
+         label = MemberLabel(
+           emoji = currentState.labelEmoji.ifEmpty { null },
+@@ -107,8 +111,32 @@ class MemberLabelViewModel(
+         )
+       )
+ 
+-      internalUiState.update {
+-        it.copy(saveState = SaveState.Success)
++      when (result) {
++        is NetworkResult.Success -> {
++          val isLabelCleared = currentState.sanitizedLabelText.isEmpty() && currentState.labelEmoji.isEmpty()
++          val selfHasAbout = currentState.recipient?.combinedAboutAndEmoji.isNotNullOrBlank()
++          val showOverrideSheet = !isLabelCleared && selfHasAbout && !memberLabelRepo.hasDismissedMemberLabelAboutOverrideWarning()
++
++          internalUiState.update {
++            if (showOverrideSheet) {
++              it.copy(showAboutOverrideSheet = true)
++            } else {
++              it.copy(saveState = SaveState.Success)
++            }
++          }
++        }
++
++        is NetworkResult.NetworkError<*> -> internalUiState.update { it.copy(saveState = SaveState.NetworkError) }
++
++        is NetworkResult.ApplicationError<*> -> {
++          if (result.throwable is GroupInsufficientRightsException) {
++            internalUiState.update { it.copy(saveState = SaveState.InsufficientRights) }
++          } else {
++            throw result.throwable
++          }
++        }
++
++        is NetworkResult.StatusCodeError<*> -> throw result.exception
+       }
+     }
+   }
+@@ -118,6 +146,21 @@ class MemberLabelViewModel(
+       it.copy(saveState = null)
+     }
+   }
++
++  fun onAboutOverrideSheetShown() {
++    internalUiState.update {
++      it.copy(showAboutOverrideSheet = false)
++    }
++  }
++
++  fun onAboutOverrideSheetDismissed(dontShowAgain: Boolean) {
++    if (dontShowAgain) {
++      memberLabelRepo.markMemberLabelAboutOverrideWarningDismissed()
++    }
++    internalUiState.update {
++      it.copy(saveState = SaveState.Success)
++    }
++  }
+ }
+ 
+ data class MemberLabelUiState(
+@@ -126,20 +169,26 @@ data class MemberLabelUiState(
+   val recipient: Recipient? = null,
+   val senderNameColor: NameColor? = null,
+   val hasChanges: Boolean = false,
+-  val saveState: SaveState? = null
++  val saveState: SaveState? = null,
++  val showAboutOverrideSheet: Boolean = false
+ ) {
++  val sanitizedLabelText: String get() = MemberLabel.sanitizeLabelText(labelText)
++
+   val remainingCharacters: Int
+-    get() = MAX_LABEL_TEXT_LENGTH - labelText.length
++    get() = MemberLabel.MAX_LABEL_GRAPHEMES - StringUtil.getGraphemeCount(sanitizedLabelText)
+ 
+   val isSaveEnabled: Boolean
+     get() {
+-      val isCleared = labelText.isEmpty() && labelEmoji.isEmpty()
+-      val hasValidLabel = labelText.length in MIN_LABEL_TEXT_LENGTH..MAX_LABEL_TEXT_LENGTH
++      val isCleared = sanitizedLabelText.isEmpty() && labelEmoji.isEmpty()
++      val graphemeCount = StringUtil.getGraphemeCount(sanitizedLabelText)
++      val hasValidLabel = graphemeCount in MemberLabel.MIN_LABEL_GRAPHEMES..MemberLabel.MAX_LABEL_GRAPHEMES
+       return hasChanges && (hasValidLabel || isCleared) && saveState != SaveState.InProgress
+     }
+ 
+   sealed interface SaveState {
+     data object InProgress : SaveState
+     data object Success : SaveState
++    data object NetworkError : SaveState
++    data object InsufficientRights : SaveState
+   }
+ }

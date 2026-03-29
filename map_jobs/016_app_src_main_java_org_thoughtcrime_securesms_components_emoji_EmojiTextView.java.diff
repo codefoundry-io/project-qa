@@ -1,0 +1,33 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java
+
+[Changed Symbols]: TextDirectionHeuristics
+
+[References]:
+  EmojiTextView: (10+ references - common utility)
+  TextDirectionHeuristics:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java b/app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java
+index af8c7fb00d..a0cb24981a 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java
+@@ -135,7 +135,17 @@ public class EmojiTextView extends AppCompatTextView {
+       spoilerRendererDelegate = new SpoilerRendererDelegate(this);
+     }
+ 
+-    textDirection = getLayoutDirection() == LAYOUT_DIRECTION_LTR ? TextDirectionHeuristics.FIRSTSTRONG_RTL : TextDirectionHeuristics.ANYRTL_LTR;
++    if (getLayoutDirection() == LAYOUT_DIRECTION_LTR) {
++      textDirection = TextDirectionHeuristics.FIRSTSTRONG_RTL;
++      if (getTextDirection() == TEXT_DIRECTION_INHERIT) {
++        setTextDirection(TEXT_DIRECTION_FIRST_STRONG_RTL);
++      }
++    } else {
++      textDirection = TextDirectionHeuristics.ANYRTL_LTR;
++      if (getTextDirection() == TEXT_DIRECTION_INHERIT) {
++        setTextDirection(TEXT_DIRECTION_ANY_RTL);
++      }
++    }
+ 
+     setEmojiCompatEnabled(useSystemEmoji());
+   }

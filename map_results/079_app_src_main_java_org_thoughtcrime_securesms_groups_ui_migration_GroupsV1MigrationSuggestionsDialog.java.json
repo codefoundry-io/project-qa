@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/migration/GroupsV1MigrationSuggestionsDialog.java",
+  "change_summary": "그룹 마이그레이션 멤버 추가 제안 다이얼로그를 DialogFragment 기반으로 전환하여 상태 유지 및 생명주기 안정성 확보",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Conversation Banner > GV1 Suggestion Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "V1에서 V2로 전환된 그룹의 대화방 배너에서 '멤버 추가' 클릭 시 제안 다이얼로그가 정상 노출되는지 확인",
+    "제안된 멤버 목록이 리스트 뷰에 올바르게 나열되는지 확인",
+    "멤버 추가 버튼 클릭 시 진행 상태 다이얼로그가 표시되고, 성공적으로 멤버가 추가된 후 토스트 메시지나 UI 갱신이 이루어지는지 확인"
+  ],
+  "confirmed_facts": [
+    "클래스가 DialogFragment를 상속하도록 구조 변경",
+    "arguments(Bundle)를 사용하여 groupId와 suggestions 리스트를 전달하도록 개선",
+    "onStart에서 리스트 뷰와 어댑터를 초기화하고 비동기로 수신자 정보를 로드함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

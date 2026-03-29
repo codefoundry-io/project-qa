@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java",
+  "change_summary": "통화 연결 시작 시 통화 진행 알림을 표시하기 전, 시스템 방해 금지(DND) 및 수신자 설정을 확인하도록 로직 강화",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(WebRTC Call Setup)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java",
+  "test_method": [
+    "통화가 연결되는 시점에 수신자 설정이 '알림 없음'이거나 시스템 DND 상태인 경우, 상단 바에 통화 진행 중(Connecting) 알림이 나타나지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "setCallInProgressNotification 호출 전 DoNotDisturbUtil.shouldDisturbUserWithCall 메서드를 사용하여 알림 노출 여부를 사전에 필터링함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

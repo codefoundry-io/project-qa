@@ -1,0 +1,31 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+
+[Changed Symbols]: MemberLabelPillView, Style
+
+[References]:
+  RecipientBottomSheetDialogFragment: (10+ references - common utility)
+  MemberLabelPillView:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+  Style: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+index 23519c0051..6b72f7808b 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+@@ -111,7 +111,9 @@ class RecipientBottomSheetDialogFragment : FixedRoundedCornerBottomSheetDialogFr
+ 
+     val avatar: AvatarView = view.findViewById(R.id.rbs_recipient_avatar)
+     val fullName: TextView = view.findViewById(R.id.rbs_full_name)
+-    val memberLabelView: MemberLabelPillView = view.findViewById(R.id.rbs_member_label)
++    val memberLabelView: MemberLabelPillView = view.findViewById<MemberLabelPillView>(R.id.rbs_member_label).apply {
++      style = MemberLabelPillView.Style(maxLines = Int.MAX_VALUE)
++    }
+     val aboutView: TextView = view.findViewById(R.id.rbs_about)
+     val nickname: TextView = view.findViewById(R.id.rbs_nickname_button)
+     val blockButton: TextView = view.findViewById(R.id.rbs_block_button)

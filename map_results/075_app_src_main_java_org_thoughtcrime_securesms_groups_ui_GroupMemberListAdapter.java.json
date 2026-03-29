@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java",
+  "change_summary": "그룹 멤버 리스트 어댑터에 멤버 라벨(Pill)을 바인딩하고 표시하는 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Group Settings > View Members)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListView.java",
+  "test_method": [
+    "그룹 멤버 목록 확인 시, 멤버 라벨이 설정된 사용자의 프로필 옆에 라벨(Pill)이 정상적으로 렌더링되는지 확인",
+    "멤버 라벨이 표시될 때 기존의 '소개(About)' 텍스트 뷰가 숨겨지고 레이아웃이 깨지지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "ViewHolder에서 recipient_member_label(MemberLabelPillView)을 찾아 바인딩함",
+    "fullMember 데이터에서 Label과 NameColor를 추출하여 뷰에 설정하는 로직 구현",
+    "라벨 표시 여부에 따라 about 텍스트 뷰와 memberLabelView의 Visibility를 상호 배타적으로 제어"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

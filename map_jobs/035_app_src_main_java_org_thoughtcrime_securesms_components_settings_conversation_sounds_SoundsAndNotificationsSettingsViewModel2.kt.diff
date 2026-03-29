@@ -1,0 +1,184 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+
+[Changed Symbols]: Copyright, Factory, Identifier, License, Messenger, NavigateToCustomNotifications, Navigation, NotificationChannels, NotificationSetting, Recipient, RecipientForeverObserver, RecipientId, RecipientTable, SetCallNotificationSetting, SetMentionSetting, SetMuteUntil, SetReplyNotificationSetting, Signal, SignalDatabase, SoundsAndNotificationsEvent, SoundsAndNotificationsSettingsState2, Unmute, applySetCallNotificationSetting, applySetMentionSetting, applySetMuteUntil, applySetReplyNotificationSetting, onCleared, onEvent, onRecipientChanged
+
+[References]:
+  SoundsAndNotificationsSettingsViewModel2:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+  Copyright: (10+ references - common utility)
+  Factory: (10+ references - common utility)
+  Identifier: (10+ references - common utility)
+  License: (10+ references - common utility)
+  Messenger: (10+ references - common utility)
+  NavigateToCustomNotifications:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  Navigation: (10+ references - common utility)
+  NotificationChannels: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  Recipient: (10+ references - common utility)
+  RecipientForeverObserver:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/LiveRecipient.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientForeverObserver.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/wallpaper/ChatWallpaperViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationItem.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/profiles/manage/EditProfileViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/QuoteView.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/SharedContactView.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/InternalConversationSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  RecipientId: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+  SetCallNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  SetMentionSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  SetMuteUntil:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+  SetReplyNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  Signal: (10+ references - common utility)
+  SignalDatabase: (10+ references - common utility)
+  SoundsAndNotificationsEvent:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  SoundsAndNotificationsSettingsState2:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  Unmute: (10+ references - common utility)
+  applySetCallNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  applySetMentionSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  applySetMuteUntil:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  applySetReplyNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  onCleared: (10+ references - common utility)
+  onEvent: (10+ references - common utility)
+  onRecipientChanged: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+new file mode 100644
+index 0000000000..a642b3dad0
+--- /dev/null
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+@@ -0,0 +1,102 @@
++/*
++ * Copyright 2025 Signal Messenger, LLC
++ * SPDX-License-Identifier: AGPL-3.0-only
++ */
++
++package org.thoughtcrime.securesms.components.settings.conversation.sounds
++
++import androidx.lifecycle.ViewModel
++import androidx.lifecycle.ViewModelProvider
++import androidx.lifecycle.viewModelScope
++import kotlinx.coroutines.Dispatchers
++import kotlinx.coroutines.flow.MutableStateFlow
++import kotlinx.coroutines.flow.StateFlow
++import kotlinx.coroutines.flow.update
++import kotlinx.coroutines.launch
++import org.thoughtcrime.securesms.database.RecipientTable.NotificationSetting
++import org.thoughtcrime.securesms.database.SignalDatabase
++import org.thoughtcrime.securesms.notifications.NotificationChannels
++import org.thoughtcrime.securesms.recipients.Recipient
++import org.thoughtcrime.securesms.recipients.RecipientForeverObserver
++import org.thoughtcrime.securesms.recipients.RecipientId
++
++class SoundsAndNotificationsSettingsViewModel2(
++  private val recipientId: RecipientId
++) : ViewModel(), RecipientForeverObserver {
++
++  private val _state = MutableStateFlow(SoundsAndNotificationsSettingsState2())
++  val state: StateFlow<SoundsAndNotificationsSettingsState2> = _state
++
++  private val liveRecipient = Recipient.live(recipientId)
++
++  init {
++    liveRecipient.observeForever(this)
++    onRecipientChanged(liveRecipient.get())
++
++    viewModelScope.launch(Dispatchers.IO) {
++      if (NotificationChannels.supported()) {
++        NotificationChannels.getInstance().ensureCustomChannelConsistency()
++      }
++      _state.update { it.copy(channelConsistencyCheckComplete = true) }
++    }
++  }
++
++  override fun onRecipientChanged(recipient: Recipient) {
++    _state.update {
++      it.copy(
++        recipientId = recipientId,
++        muteUntil = if (recipient.isMuted) recipient.muteUntil else 0L,
++        mentionSetting = recipient.mentionSetting,
++        callNotificationSetting = recipient.callNotificationSetting,
++        replyNotificationSetting = recipient.replyNotificationSetting,
++        hasMentionsSupport = recipient.isPushV2Group,
++        hasCustomNotificationSettings = recipient.notificationChannel != null || !NotificationChannels.supported()
++      )
++    }
++  }
++
++  override fun onCleared() {
++    liveRecipient.removeForeverObserver(this)
++  }
++
++  fun onEvent(event: SoundsAndNotificationsEvent) {
++    when (event) {
++      is SoundsAndNotificationsEvent.SetMuteUntil -> applySetMuteUntil(event.muteUntil)
++      is SoundsAndNotificationsEvent.Unmute -> applySetMuteUntil(0L)
++      is SoundsAndNotificationsEvent.SetMentionSetting -> applySetMentionSetting(event.setting)
++      is SoundsAndNotificationsEvent.SetCallNotificationSetting -> applySetCallNotificationSetting(event.setting)
++      is SoundsAndNotificationsEvent.SetReplyNotificationSetting -> applySetReplyNotificationSetting(event.setting)
++      is SoundsAndNotificationsEvent.NavigateToCustomNotifications -> Unit // Navigation handled by UI
++    }
++  }
++
++  private fun applySetMuteUntil(muteUntil: Long) {
++    viewModelScope.launch(Dispatchers.IO) {
++      SignalDatabase.recipients.setMuted(recipientId, muteUntil)
++    }
++  }
++
++  private fun applySetMentionSetting(setting: NotificationSetting) {
++    viewModelScope.launch(Dispatchers.IO) {
++      SignalDatabase.recipients.setMentionSetting(recipientId, setting)
++    }
++  }
++
++  private fun applySetCallNotificationSetting(setting: NotificationSetting) {
++    viewModelScope.launch(Dispatchers.IO) {
++      SignalDatabase.recipients.setCallNotificationSetting(recipientId, setting)
++    }
++  }
++
++  private fun applySetReplyNotificationSetting(setting: NotificationSetting) {
++    viewModelScope.launch(Dispatchers.IO) {
++      SignalDatabase.recipients.setReplyNotificationSetting(recipientId, setting)
++    }
++  }
++
++  class Factory(private val recipientId: RecipientId) : ViewModelProvider.Factory {
++    override fun <T : ViewModel> create(modelClass: Class<T>): T {
++      return requireNotNull(modelClass.cast(SoundsAndNotificationsSettingsViewModel2(recipientId)))
++    }
++  }
++}

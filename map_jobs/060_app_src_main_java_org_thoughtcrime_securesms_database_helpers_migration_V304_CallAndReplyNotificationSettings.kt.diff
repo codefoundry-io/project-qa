@@ -1,0 +1,34 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V304_CallAndReplyNotificationSettings.kt
+
+[Changed Symbols]: Adds, SignalDatabaseMigration, migrate
+
+[References]:
+  V304_CallAndReplyNotificationSettings:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/helpers/SignalDatabaseMigrations.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V304_CallAndReplyNotificationSettings.kt
+  Adds: (10+ references - common utility)
+  SignalDatabaseMigration: (10+ references - common utility)
+  migrate: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V304_CallAndReplyNotificationSettings.kt b/app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V304_CallAndReplyNotificationSettings.kt
+new file mode 100644
+index 0000000000..aa637dd49b
+--- /dev/null
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V304_CallAndReplyNotificationSettings.kt
+@@ -0,0 +1,15 @@
++package org.thoughtcrime.securesms.database.helpers.migration
++
++import android.app.Application
++import org.thoughtcrime.securesms.database.SQLiteDatabase
++
++/**
++ * Adds per-conversation notification settings for calls and replies when muted.
++ */
++@Suppress("ClassName")
++object V304_CallAndReplyNotificationSettings : SignalDatabaseMigration {
++  override fun migrate(context: Application, db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
++    db.execSQL("ALTER TABLE recipient ADD COLUMN call_notification_setting INTEGER DEFAULT 0")
++    db.execSQL("ALTER TABLE recipient ADD COLUMN reply_notification_setting INTEGER DEFAULT 0")
++  }
++}

@@ -1,0 +1,19 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt
+
+[References]:
+  MyStoriesFragment: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt
+index e2a6b51005..ca6b6a0abd 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt
+@@ -118,7 +118,7 @@ class MyStoriesFragment : DSLSettingsFragment(
+     if (it.distributionStory.messageRecord.isOutgoing && it.distributionStory.messageRecord.isFailed) {
+       if (it.distributionStory.messageRecord.isIdentityMismatchFailure) {
+         SafetyNumberBottomSheet
+-          .forMessageRecord(requireContext(), it.distributionStory.messageRecord)
++          .forOutgoingMessageRecord(requireContext(), it.distributionStory.messageRecord)
+           .show(childFragmentManager)
+       } else {
+         StoryDialogs.resendStory(requireContext()) {

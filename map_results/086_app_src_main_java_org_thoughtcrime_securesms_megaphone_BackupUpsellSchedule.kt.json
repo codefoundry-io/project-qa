@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/megaphone/BackupUpsellSchedule.kt",
+  "change_summary": "백업 업셀 관련 여러 메가폰 간의 공유 노출 간격을 제어하여 사용자 피로도를 낮추는 스케줄링 클래스 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Megaphone Scheduling)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/megaphone/Megaphones.java",
+  "test_method": [
+    "임의의 백업 업셀 메가폰(예: 일반 백업 권장)을 확인한 후 60일 이내에 다른 종류의 백업 업셀 메가폰(예: 저장공간 부족)이 중복 노출되지 않는지 확인",
+    "개별 메가폰별로 설정된 재노출 주기(gaps)가 정상적으로 적용되는지 확인"
+  ],
+  "confirmed_facts": [
+    "MegaphoneSchedule 인터페이스를 구현하는 신규 클래스 추가",
+    "BACKUP_UPSELL_EVENTS 집합을 정의하여 관련 있는 4가지 백업 업셀 이벤트를 통합 관리",
+    "이벤트 간 공유되는 최소 노출 간격을 60일로 설정하고 shouldDisplay에서 이를 체크함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

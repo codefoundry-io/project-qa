@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/res/values/light_colors.xml",
+  "change_summary": "라이트 테마 대화방에 배경화면이 적용된 경우, 수신 메시지 인용구 라벨의 배경색을 가독성 개선을 위해 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Quote Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationItem.java",
+  "test_method": [
+    "라이트 모드 및 채팅방 배경화면이 적용된 상태에서, 수신된 인용 메시지의 라벨 배경이 기존의 흰색 투명 대신 변경된 시스템 투명 색상(signal_colorOnSurface_8)으로 렌더링되는지 확인"
+  ],
+  "confirmed_facts": [
+    "quote_view_label_background_incoming_wallpaper 리소스의 참조 값을 transparent_white_80에서 signal_colorOnSurface_8로 변경"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

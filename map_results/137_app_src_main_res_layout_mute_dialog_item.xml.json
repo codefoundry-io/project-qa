@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/res/layout/mute_dialog_item.xml",
+  "change_summary": "무음 설정 다이얼로그의 각 항목 아이콘에 테마에 맞는 틴트 색상 적용",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Mute Options)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/MuteDialog.java",
+  "test_method": [
+    "대화방 무음 설정 다이얼로그를 호출했을 때, 각 시간 옵션(8시간, 1주일 등) 옆의 아이콘이 시스템 테마 색상(OnSurface)으로 올바르게 표시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "ImageView에 app:tint=\"@color/signal_colorOnSurface\" 속성을 추가함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

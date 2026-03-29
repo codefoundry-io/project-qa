@@ -1,0 +1,19 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt
+
+[References]:
+  StoryViewerPageFragment: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt
+index 0bcd7c3084..3c4d7ffa1d 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt
+@@ -833,7 +833,7 @@ class StoryViewerPageFragment :
+     viewModel.setIsDisplayingPartialSendDialog(true)
+     if (storyPost.conversationMessage.messageRecord.isIdentityMismatchFailure) {
+       SafetyNumberBottomSheet
+-        .forMessageRecord(requireContext(), storyPost.conversationMessage.messageRecord)
++        .forOutgoingMessageRecord(requireContext(), storyPost.conversationMessage.messageRecord)
+         .show(childFragmentManager)
+     } else {
+       StoryDialogs.resendStory(requireContext(), { viewModel.setIsDisplayingPartialSendDialog(false) }) {

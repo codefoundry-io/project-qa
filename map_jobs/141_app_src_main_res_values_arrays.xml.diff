@@ -1,0 +1,24 @@
+[Target File]: app/src/main/res/values/arrays.xml
+
+[Diff]:
+diff --git a/app/src/main/res/values/arrays.xml b/app/src/main/res/values/arrays.xml
+index 30885b82c4..9279d90cf3 100644
+--- a/app/src/main/res/values/arrays.xml
++++ b/app/src/main/res/values/arrays.xml
+@@ -392,6 +392,16 @@
+         <item>@string/SoundsAndNotificationsSettingsFragment__do_not_notify</item>
+     </string-array>
+ 
++    <string-array name="SoundsAndNotificationsSettingsFragment__call_labels">
++        <item>@string/SoundsAndNotificationsSettingsFragment__always_notify</item>
++        <item>@string/SoundsAndNotificationsSettingsFragment__do_not_notify</item>
++    </string-array>
++
++    <string-array name="SoundsAndNotificationsSettingsFragment__reply_labels">
++        <item>@string/SoundsAndNotificationsSettingsFragment__always_notify</item>
++        <item>@string/SoundsAndNotificationsSettingsFragment__do_not_notify</item>
++    </string-array>
++
+     <integer-array name="PlaybackSpeedToggleTextView__speeds">
+         <item>100</item>
+         <item>150</item>

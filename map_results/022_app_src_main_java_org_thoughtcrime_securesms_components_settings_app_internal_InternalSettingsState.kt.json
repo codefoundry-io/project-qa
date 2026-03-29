@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt",
+  "change_summary": "내부 설정 화면의 상태 정보를 담는 데이터 클래스(InternalSettingsState)에 내부 사용자 플래그 비활성화 여부를 나타내는 필드 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(InternalSettingsViewModel)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt",
+  "test_method": [
+    "InternalSettingsState를 사용하는 ViewModel 및 Fragment에서 새로운 필드(disableInternalUser)를 정상적으로 인지하고 처리하는지 확인"
+  ],
+  "confirmed_facts": [
+    "InternalSettingsState 데이터 클래스에 disableInternalUser: Boolean 필드 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

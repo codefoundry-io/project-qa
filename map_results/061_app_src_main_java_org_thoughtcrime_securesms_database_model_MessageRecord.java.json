@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/model/MessageRecord.java",
+  "change_summary": "메시지 레코드 모델에 관리자 삭제 상태 확인 로직을 추가하고, 공통 상태 메서드(isFailed, isPending)가 관리자 삭제 상태를 반영하도록 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Message Record Modeling)",
+  "entry_point_file": null,
+  "test_method": [
+    "관리자가 보낸 메시지 삭제 요청이 대기 중이거나 실패했을 때, 해당 메시지 레코드가 isPending() 또는 isFailed()에서 올바른 상태를 반환하는지 확인",
+    "UI 컴포넌트에서 isFailed() 결과를 기반으로 관리자 삭제 실패 건에 대해서도 에러 상태를 정상적으로 표시하는지 확인"
+  ],
+  "confirmed_facts": [
+    "messageExtras 내의 adminDeleteStatus 필드를 기반으로 펜딩/실패 여부를 판단하는 메서드 2종 구현",
+    "기본 isFailed() 및 isPending() 메서드에 관리자 삭제 상태 조건을 추가(OR 연산)하여 확장"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "전체 앱에서 광범위하게 참조되는 핵심 데이터 모델 클래스이며 특정 Android 컴포넌트 진입점을 가지지 않음"
+}

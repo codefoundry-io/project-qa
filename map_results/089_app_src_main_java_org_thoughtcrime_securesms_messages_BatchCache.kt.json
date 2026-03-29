@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/messages/BatchCache.kt",
+  "change_summary": "메시지 일괄 처리 캐시 비우기(clear) 과정에서 대화방 업데이트와 로그 삭제 작업을 단일 트랜잭션으로 통합하여 최적화",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Incoming Message Batching)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt",
+  "test_method": [
+    "메시지 수신 시 대화방 목록 업데이트와 기존 전송 로그(MSL) 삭제가 원자적으로(Atomically) 실행되는지 확인",
+    "트랜잭션 수 감소에 따른 데이터베이스 쓰기 성능 개선 여부 확인"
+  ],
+  "confirmed_facts": [
+    "threadUpdates와 mslDeletes 처리 로직을 하나의 SignalDatabase.runInTransaction 블록 내로 병합"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

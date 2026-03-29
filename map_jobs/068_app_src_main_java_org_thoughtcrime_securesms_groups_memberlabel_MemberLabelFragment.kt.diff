@@ -1,0 +1,227 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt
+
+[Changed Symbols]: CircularProgressWrapper, EmojiPickerButton, Emojifier, InProgress, InsufficientRights, LaunchedEffect, MaterialTheme, MemberLabelAboutOverrideSheet, MemberLabelScreenUi, MemberLabelUiCallbacks, NetworkError, ProvideTextStyle, SaveButton, SaveState, SnackbarHost, SnackbarHostState, Success, onViewCreated
+
+[References]:
+  MemberLabelFragment:
+    - ./app/src/main/res/navigation/conversation_settings.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelActivity.kt [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+  CircularProgressWrapper:
+    - ./feature/registration/src/main/java/org/signal/registration/screens/phonenumber/PhoneNumberEntryScreen.kt
+    - ./core/ui/src/main/java/org/signal/core/ui/compose/CircularProgressWrapper.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/EnterLocalBackupKeyScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/privacy/expire/ExpireTimerSettingsFragment.kt [ENTRY: Fragment]
+  EmojiPickerButton:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  Emojifier:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/megaphone/MegaphoneComponent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/emoji/Emojifier.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/AppSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/notifications/profiles/NotificationProfileComponents.kt
+  InProgress: (10+ references - common utility)
+  InsufficientRights: (10+ references - common utility)
+  LaunchedEffect: (10+ references - common utility)
+  MaterialTheme: (10+ references - common utility)
+  MemberLabelAboutOverrideSheet:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelAboutOverrideSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  MemberLabelScreenUi:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  MemberLabelUiCallbacks:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  NetworkError: (10+ references - common utility)
+  ProvideTextStyle:
+    - ./core/ui/src/main/java/org/signal/core/ui/compose/Buttons.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+  SaveButton:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/mediasend/v2/review/MediaReviewFragment.kt [ENTRY: Fragment]
+  SaveState: (10+ references - common utility)
+  SnackbarHost: (10+ references - common utility)
+  SnackbarHostState: (10+ references - common utility)
+  Success: (10+ references - common utility)
+  onViewCreated: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt
+index 36e7870e9d..6a4c61a533 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt
+@@ -5,6 +5,8 @@
+ 
+ package org.thoughtcrime.securesms.groups.memberlabel
+ 
++import android.os.Bundle
++import android.view.View
+ import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+ import androidx.compose.foundation.layout.Box
+ import androidx.compose.foundation.layout.Column
+@@ -21,6 +23,9 @@ import androidx.compose.foundation.verticalScroll
+ import androidx.compose.material3.Icon
+ import androidx.compose.material3.IconButton
+ import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.ProvideTextStyle
++import androidx.compose.material3.SnackbarHost
++import androidx.compose.material3.SnackbarHostState
+ import androidx.compose.material3.Text
+ import androidx.compose.material3.TextFieldDefaults
+ import androidx.compose.runtime.Composable
+@@ -38,10 +43,12 @@ import androidx.compose.ui.res.vectorResource
+ import androidx.compose.ui.text.input.ImeAction
+ import androidx.compose.ui.text.input.KeyboardCapitalization
+ import androidx.compose.ui.unit.dp
++import androidx.compose.ui.unit.sp
+ import androidx.core.os.bundleOf
+ import androidx.lifecycle.compose.collectAsStateWithLifecycle
+ import org.signal.core.ui.compose.AllDevicePreviews
+ import org.signal.core.ui.compose.Buttons
++import org.signal.core.ui.compose.CircularProgressWrapper
+ import org.signal.core.ui.compose.ClearableTextField
+ import org.signal.core.ui.compose.ComposeFragment
+ import org.signal.core.ui.compose.Previews
+@@ -50,6 +57,7 @@ import org.signal.core.ui.compose.SignalIcons
+ import org.signal.core.util.isNotNullOrBlank
+ import org.signal.core.util.requireParcelableCompat
+ import org.thoughtcrime.securesms.R
++import org.thoughtcrime.securesms.components.emoji.Emojifier
+ import org.thoughtcrime.securesms.groups.GroupId
+ import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelUiState.SaveState
+ import org.thoughtcrime.securesms.profiles.ProfileName
+@@ -83,10 +91,21 @@ class MemberLabelFragment : ComposeFragment(), ReactWithAnyEmojiBottomSheetDialo
+     )
+   }
+ 
++  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
++    super.onViewCreated(view, savedInstanceState)
++
++    childFragmentManager.setFragmentResultListener(MemberLabelAboutOverrideSheet.RESULT_KEY, viewLifecycleOwner) { _, resultData ->
++      viewModel.onAboutOverrideSheetDismissed(
++        dontShowAgain = resultData.getBoolean(MemberLabelAboutOverrideSheet.KEY_DONT_SHOW_AGAIN)
++      )
++    }
++  }
++
+   @Composable
+   override fun FragmentContent() {
+     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+     val backPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
++    val snackbarHostState = remember { SnackbarHostState() }
+ 
+     val callbacks = remember {
+       object : MemberLabelUiCallbacks {
+@@ -102,16 +121,37 @@ class MemberLabelFragment : ComposeFragment(), ReactWithAnyEmojiBottomSheetDialo
+       }
+     }
+ 
++    val networkErrorMessage = stringResource(R.string.GroupMemberLabel__error_cant_save_no_network)
++
++    LaunchedEffect(uiState.showAboutOverrideSheet) {
++      if (uiState.showAboutOverrideSheet) {
++        MemberLabelAboutOverrideSheet.show(childFragmentManager)
++        viewModel.onAboutOverrideSheetShown()
++      }
++    }
++
+     LaunchedEffect(uiState.saveState) {
+-      if (uiState.saveState is SaveState.Success) {
+-        backPressedDispatcher?.onBackPressed()
+-        viewModel.onSaveStateConsumed()
++      when (uiState.saveState) {
++        is SaveState.Success -> {
++          backPressedDispatcher?.onBackPressed()
++          viewModel.onSaveStateConsumed()
++        }
++
++        is SaveState.NetworkError -> {
++          snackbarHostState.showSnackbar(networkErrorMessage)
++          viewModel.onSaveStateConsumed()
++        }
++
++        is SaveState.InsufficientRights -> throw IllegalStateException("User does not have permission to set member label.")
++
++        is SaveState.InProgress, null -> Unit
+       }
+     }
+ 
+     MemberLabelScreenUi(
+       state = uiState,
+-      callbacks = callbacks
++      callbacks = callbacks,
++      snackbarHostState = snackbarHostState
+     )
+   }
+ 
+@@ -127,13 +167,15 @@ class MemberLabelFragment : ComposeFragment(), ReactWithAnyEmojiBottomSheetDialo
+ @Composable
+ private fun MemberLabelScreenUi(
+   state: MemberLabelUiState,
+-  callbacks: MemberLabelUiCallbacks
++  callbacks: MemberLabelUiCallbacks,
++  snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
+ ) {
+   Scaffolds.Settings(
+     title = stringResource(R.string.GroupMemberLabel__title),
+     onNavigationClick = callbacks::onClosePressed,
+     navigationIcon = SignalIcons.X.imageVector,
+-    navigationContentDescription = stringResource(R.string.GroupMemberLabel__accessibility_close_screen)
++    navigationContentDescription = stringResource(R.string.GroupMemberLabel__accessibility_close_screen),
++    snackbarHost = { SnackbarHost(snackbarHostState) }
+   ) { paddingValues ->
+ 
+     val focusRequester = remember { FocusRequester() }
+@@ -185,19 +227,23 @@ private fun MemberLabelScreenUi(
+             sender = state.recipient,
+             senderNameColor = state.senderNameColor,
+             labelEmoji = state.labelEmoji,
+-            labelText = state.labelText,
++            labelText = state.sanitizedLabelText,
+             messageText = stringResource(R.string.GroupMemberLabel__preview_sample_message)
+           )
+         }
+       }
+ 
+-      SaveButton(
+-        enabled = state.isSaveEnabled,
+-        onClick = callbacks::onSaveClicked,
++      CircularProgressWrapper(
++        isLoading = state.saveState is SaveState.InProgress,
+         modifier = Modifier
+           .align(Alignment.BottomEnd)
+           .padding(end = 24.dp, bottom = 16.dp)
+-      )
++      ) {
++        SaveButton(
++          enabled = state.isSaveEnabled,
++          onClick = callbacks::onSaveClicked
++        )
++      }
+     }
+   }
+ }
+@@ -253,10 +299,14 @@ private fun EmojiPickerButton(
+     onClick = onEmojiSelected
+   ) {
+     if (selectedEmoji.isNotNullOrBlank()) {
+-      Text(
+-        text = selectedEmoji,
+-        style = MaterialTheme.typography.bodyLarge
+-      )
++      ProvideTextStyle(MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)) {
++        Emojifier(text = selectedEmoji) { annotatedText, inlineContent ->
++          Text(
++            text = annotatedText,
++            inlineContent = inlineContent
++          )
++        }
++      }
+     } else {
+       Icon(
+         imageVector = ImageVector.vectorResource(R.drawable.symbol_emoji_plus_24),

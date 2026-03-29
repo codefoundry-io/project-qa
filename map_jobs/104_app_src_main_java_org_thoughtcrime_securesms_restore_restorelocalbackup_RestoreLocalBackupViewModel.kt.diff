@@ -1,0 +1,25 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt
+
+[Changed Symbols]: SignalStore
+
+[References]:
+  RestoreLocalBackupViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/restore/local/PostRegistrationRestoreLocalBackupFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt
+  SignalStore: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt
+index 01828815a4..8836a4c591 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt
+@@ -97,6 +97,7 @@ class RestoreLocalBackupViewModel(fileBackupUri: Uri) : ViewModel() {
+           SignalStore.registration.localRegistrationMetadata = null
+           RegistrationUtil.maybeMarkRegistrationComplete()
+ 
++          SignalStore.misc.needsUsernameRestore = true
+           AppDependencies.jobManager.add(ReclaimUsernameAndLinkJob())
+         }

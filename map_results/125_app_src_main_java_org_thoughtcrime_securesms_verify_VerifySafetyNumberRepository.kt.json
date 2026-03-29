@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt",
+  "change_summary": "안전 번호 검증 요청 결과 처리 중 데이터 손상(Corrupted) 에러를 판단하는 로직의 위치를 변경된 API 명세에 맞춰 조정",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Safety Number Verification)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberViewModel.kt",
+  "test_method": [
+    "키 투명성 데이터 오염 등으로 인해 IllegalArgumentException이 발생했을 때, 이를 ApplicationError 단계에서 올바르게 감지하여 CorruptedFailure 결과를 반환하는지 확인"
+  ],
+  "confirmed_facts": [
+    "RequestResult.NonSuccess 분기에서 수행하던 예외 체크를 RequestResult.ApplicationError 분기로 이동함",
+    "예외 원인(result.cause)이 IllegalArgumentException인 경우에만 VerifyResult.CorruptedFailure로 매핑하도록 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

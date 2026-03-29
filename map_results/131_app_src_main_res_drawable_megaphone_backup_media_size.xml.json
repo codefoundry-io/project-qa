@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/res/drawable/megaphone_backup_media_size.xml",
+  "change_summary": "미디어 백업 업셀 메가폰(안내 배너)에 표시할 기본 벡터 이미지 리소스 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation List > Megaphone Display)",
+  "entry_point_file": null,
+  "test_method": [
+    "미디어 용량 기반 백업 안내 메가폰이 노출될 때, 추가된 벡터 이미지가 의도한 위치에 정상적으로 렌더링되는지 확인"
+  ],
+  "confirmed_facts": [
+    "drawable 폴더에 새로운 벡터 XML 파일 생성"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "UI 구성을 위한 정적 이미지 리소스 파일이며 실행 로직을 포함하지 않음"
+}

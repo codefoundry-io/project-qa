@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt",
+  "change_summary": "통화 화면 UI 컴포넌트(CallScreen)에 내부 사용자 정보 및 참여자 제어 관련 콜백들을 주입하도록 중계자(Mediator) 로직 수정",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Call > Mediator Render)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/webrtc/WebRtcCallActivity.java",
+  "test_method": [
+    "통화 화면 진입 시 Mediator가 필요한 정보(관리자 권한, 내부 사용자 여부 등)를 CallScreen에 올바르게 전달하여 UI 기능이 정상 활성화되는지 확인"
+  ],
+  "confirmed_facts": [
+    "controlsAndInfoViewModel.state를 구독하여 실시간 권한 상태(isSelfAdmin)를 파악하도록 구현",
+    "CallScreen 호출 시 RemoteConfig.internalUser 및 callInfoCallbacks의 메서드들을 파라미터로 전달"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java",
+  "change_summary": "WebRTC 액션 프로세서 추상 클래스에 원격 음소거 요청을 처리하기 위한 기본 메서드(handleSendRemoteMuteRequest) 정의",
+  "risk_level": "LOW",
+  "trigger_point": "BG(WebRtc Action Handling)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java",
+  "test_method": [
+    "원격 음소거 요청이 발생했을 때, 해당 기능을 지원하지 않는 상태(Processor)라면 정의된 로그('not processed')가 출력되는지 확인"
+  ],
+  "confirmed_facts": [
+    "WebRtcActionProcessor 클래스에 handleSendRemoteMuteRequest 메서드의 기본 구현체를 추가하여 하위 클래스에서 선택적으로 오버라이드할 수 있게 함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

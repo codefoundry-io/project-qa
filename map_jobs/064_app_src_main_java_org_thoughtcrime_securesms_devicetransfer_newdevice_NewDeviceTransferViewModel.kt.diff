@@ -1,0 +1,22 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt
+
+[Changed Symbols]: SignalStore
+
+[References]:
+  NewDeviceTransferViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferFragment.kt [ENTRY: Fragment]
+  SignalStore: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt
+index abea1efb1a..e25a58797d 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt
+@@ -27,6 +27,7 @@ class NewDeviceTransferViewModel : ViewModel() {
+         SignalStore.registration.localRegistrationMetadata = null
+         RegistrationUtil.maybeMarkRegistrationComplete()
+ 
++        SignalStore.misc.needsUsernameRestore = true
+         AppDependencies.jobManager.add(ReclaimUsernameAndLinkJob())
+       }

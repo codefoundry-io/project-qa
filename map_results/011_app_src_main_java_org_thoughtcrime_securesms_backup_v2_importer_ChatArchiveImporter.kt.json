@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/backup/v2/importer/ChatArchiveImporter.kt",
+  "change_summary": "백업 복구(Import) 시 대화방의 멘션 알림 설정을 복원할 때 사용하는 상수를 MentionSetting에서 NotificationSetting으로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "BG(RestoreMessagesJob)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/RestoreMessagesJob.kt",
+  "test_method": [
+    "멘션 무음 설정이 적용된 백업 파일을 복구했을 때, 해당 대화방의 알림 설정이 올바르게 '멘션 알림 없음'으로 복원되는지 확인"
+  ],
+  "confirmed_facts": [
+    "dontNotifyForMentionsIfMuted 값에 따른 MENTION_SETTING 업데이트 시 NotificationSetting 상수 참조"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

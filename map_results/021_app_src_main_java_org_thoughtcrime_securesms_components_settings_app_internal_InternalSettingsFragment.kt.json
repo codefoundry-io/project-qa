@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt",
+  "change_summary": "내부 설정(Internal Settings) 화면에 일시적으로 내부 사용자 플래그를 비활성화하여 일반 사용자 환경을 테스트할 수 있는 옵션 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Internal Settings > Disable internal user flag)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt",
+  "test_method": [
+    "해당 옵션을 활성화했을 때 내부 사용자 전용 기능(예: 디버그 로그, 내부 설정 메뉴 등)이 일반 사용자 수준으로 제한되는지 확인",
+    "앱을 강제 종료 후 재실행했을 때 해당 설정이 유지되지 않고 다시 내부 사용자 상태로 복구되는지 확인"
+  ],
+  "confirmed_facts": [
+    "switchPref를 사용하여 'Disable internal user flag' 항목을 추가함",
+    "상태 업데이트를 위해 viewModel.setDisableInternalUser 호출"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,36 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/restore/RestoreViewModel.kt
+
+[Changed Symbols]: Backups, Environment, RestoreMethod
+
+[References]:
+  RestoreViewModel: (10+ references - common utility)
+  Backups: (10+ references - common utility)
+  Environment: (10+ references - common utility)
+  RestoreMethod: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/restore/RestoreViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/restore/RestoreViewModel.kt
+index 29523a3803..e082e14c6f 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/restore/RestoreViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/restore/RestoreViewModel.kt
+@@ -25,6 +25,7 @@ import org.thoughtcrime.securesms.keyvalue.skippedRestoreChoice
+ import org.thoughtcrime.securesms.registration.data.QuickRegistrationRepository
+ import org.thoughtcrime.securesms.registration.ui.restore.RestoreMethod
+ import org.thoughtcrime.securesms.registration.ui.restore.StorageServiceRestore
++import org.thoughtcrime.securesms.util.Environment
+ import org.whispersystems.signalservice.api.provisioning.RestoreMethod as ApiRestoreMethod
+ 
+ /**
+@@ -59,7 +60,11 @@ class RestoreViewModel : ViewModel() {
+ 
+   fun getAvailableRestoreMethods(): List<RestoreMethod> {
+     if (SignalStore.registration.isOtherDeviceAndroid || SignalStore.registration.restoreDecisionState.skippedRestoreChoice) {
+-      val methods = mutableListOf(RestoreMethod.FROM_LOCAL_BACKUP_V1)
++      val methods = if (Environment.Backups.isNewFormatSupportedForLocalBackup()) {
++        mutableListOf(RestoreMethod.FROM_LOCAL_BACKUP_V2)
++      } else {
++        mutableListOf(RestoreMethod.FROM_LOCAL_BACKUP_V1)
++      }
+ 
+       if (SignalStore.registration.isOtherDeviceAndroid && SignalStore.registration.restoreDecisionState.includeDeviceToDeviceTransfer) {
+         methods.add(0, RestoreMethod.FROM_OLD_DEVICE)

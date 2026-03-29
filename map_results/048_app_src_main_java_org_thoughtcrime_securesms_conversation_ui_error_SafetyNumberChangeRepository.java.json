@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/ui/error/SafetyNumberChangeRepository.java",
+  "change_summary": "안전 번호 변경으로 인해 실패한 관리자 메시지 삭제 요청을 처리하고 재전송하는 로직 추가",
+  "risk_level": "HIGH",
+  "trigger_point": "UI(Safety Number Change Bottom Sheet > Accept/Resend)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheetFragment.kt",
+  "test_method": [
+    "관리자 권한으로 메시지를 삭제했으나 특정 사용자의 안전 번호 변경으로 실패(Identity Mismatch)했을 때, 안전 번호 승인 후 삭제 요청이 정상적으로 재전송되는지 확인",
+    "재전송 프로세스 진행 시 SignalDatabase에서 불일치하는 신원 정보가 정상적으로 제거되는지 확인"
+  ],
+  "confirmed_facts": [
+    "handleApproval에서 messageRecord.isFailedAdminDelete() 상태를 확인하는 분기 추가",
+    "실패한 관리자 삭제 건에 대해 불일치 신원 정보를 정리하고 MessageSender.resendAdminDelete를 호출하는 processAdminDeletedMessageRecord 메서드 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

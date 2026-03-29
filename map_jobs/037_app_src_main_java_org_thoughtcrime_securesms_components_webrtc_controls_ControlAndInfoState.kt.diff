@@ -1,0 +1,25 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt
+
+[References]:
+  ControlAndInfoState:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt
+index 93a60a0c83..8c0f20d20e 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt
+@@ -11,9 +11,10 @@ import org.thoughtcrime.securesms.database.CallLinkTable
+ @Immutable
+ data class ControlAndInfoState(
+   val callLink: CallLinkTable.CallLink? = null,
++  val isGroupAdmin: Boolean = false,
+   val resetScrollState: Long = 0
+ ) {
+   fun isSelfAdmin(): Boolean {
+-    return callLink?.credentials?.adminPassBytes != null
++    return callLink?.credentials?.adminPassBytes != null || isGroupAdmin
+   }
+ }

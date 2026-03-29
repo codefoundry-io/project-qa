@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/GroupSendJobHelper.java",
+  "change_summary": "그룹 메시지 전송 결과 처리 유틸리티에 신원 불일치(Identity Mismatch) 수신자 트래킹 기능 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Group Message Sending)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/AdminDeleteSendJob.kt",
+  "test_method": [
+    "그룹 전송 작업 완료 후 특정 참여자의 안전 번호 변경으로 인한 전송 실패가 발생했을 때, SendResult 객체 내 identityMismatch 리스트에 해당 정보가 포함되는지 확인"
+  ],
+  "confirmed_facts": [
+    "getCompletedSends 메서드에서 IdentityKeyMismatch 리스트를 초기화하고 실패 결과 발생 시 데이터를 수집하도록 수정",
+    "결과 객체인 SendResult 데이터 클래스에 identityMismatch 필드 추가 및 생성자 업데이트"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

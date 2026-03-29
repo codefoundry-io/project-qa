@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/notifications/DoNotDisturbUtil.java",
+  "change_summary": "통화 알림 노출 여부 판단 시 수신자별 통화 알림 설정과 시스템 방해 금지(DND) 모드를 종합적으로 체크하도록 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Incoming Call Notification)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java",
+  "test_method": [
+    "특정 사용자를 무음으로 설정하고 '통화 알림 거부' 옵션을 선택했을 때, 해당 사용자로부터의 전화 알림이 발생하지 않는지 확인",
+    "안드로이드 시스템 방해 금지 모드가 활성화된 상태에서 그룹 통화와 개인 통화가 각각 정의된 정책(연락처 우선순위 등)에 따라 올바르게 차단/허용되는지 확인"
+  ],
+  "confirmed_facts": [
+    "shouldDisturbUserWithCall 메서드에 recipient.getCallNotificationSetting() 조건을 추가하여 앱 수준의 필터링 강화",
+    "그룹 수신자 여부에 따라 checkSystemDnd(전체 필터)와 checkSystemDndWithContactPriority(우선순위 고려)로 로직을 분기하여 시스템 DND 연동 최적화"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

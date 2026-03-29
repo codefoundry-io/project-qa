@@ -1,0 +1,32 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java
+
+[Changed Symbols]: Throwable
+
+[References]:
+  GroupInsufficientRightsException:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/sharablegrouplink/ShareableGroupLinkRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/migration/GroupsV1MigrationSuggestionsDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupChangeFailureReason.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/invitesandrequests/invite/GroupLinkInviteRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/GroupV2UpdateSelfProfileKeyJob.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupManagerV2.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupManager.java
+  Throwable: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java b/app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java
+index 24554b4a65..1209f6735a 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java
+@@ -2,7 +2,7 @@ package org.thoughtcrime.securesms.groups;
+ 
+ public final class GroupInsufficientRightsException extends GroupChangeException {
+ 
+-  GroupInsufficientRightsException(Throwable throwable) {
++  public GroupInsufficientRightsException(Throwable throwable) {
+     super(throwable);
+   }
+ }

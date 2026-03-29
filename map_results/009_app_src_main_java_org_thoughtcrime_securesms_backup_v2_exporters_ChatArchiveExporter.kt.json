@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt",
+  "change_summary": "대화방 백업(Export) 시 멘션 알림 설정(dontNotifyForMentionsIfMuted)을 판단하는 상수를 MentionSetting에서 NotificationSetting으로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "BG(BackupMessagesJob)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/BackupMessagesJob.kt",
+  "test_method": [
+    "멘션 알림 설정(언급 시 무음 설정 등)이 적용된 대화방이 포함된 백업을 생성하고, 복구 후에도 해당 설정값이 정상적으로 유지되는지 확인"
+  ],
+  "confirmed_facts": [
+    "dontNotifyForMentionsIfMuted 할당 시 참조 상수를 MentionSetting에서 NotificationSetting으로 교체"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

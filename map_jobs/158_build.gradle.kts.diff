@@ -1,0 +1,16 @@
+[Target File]: build.gradle.kts
+
+[Diff]:
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 6bc49d742c..10ce6c4166 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -79,7 +79,7 @@ tasks.register("qa") {
+ 
+ // Wire up QA dependencies after all projects are evaluated
+ gradle.projectsEvaluated {
+-  val appTestTask = tasks.findByPath(":Signal-Android:testPlayProdPerfUnitTest")
++  val appTestTask = tasks.findByPath(":Signal-Android:testPlayProdReleaseUnitTest")
+   val appLintTask = tasks.findByPath(":Signal-Android:lintPlayProdRelease")
+ 
+   tasks.named("qa") {

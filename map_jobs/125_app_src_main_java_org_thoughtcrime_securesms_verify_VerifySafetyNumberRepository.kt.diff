@@ -1,0 +1,58 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+
+[Changed Symbols]: ApplicationError, CorruptedFailure, RequestResult, UnretryableFailure, VerifyResult
+
+[References]:
+  VerifySafetyNumberRepository:
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberViewModel.kt
+  ApplicationError: (10+ references - common utility)
+  CorruptedFailure:
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberViewModel.kt
+  RequestResult: (10+ references - common utility)
+  UnretryableFailure:
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberViewModel.kt
+  VerifyResult:
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheetFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheetViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ui/error/SafetyNumberChangeDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ui/error/SafetyNumberChangeRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ui/error/SafetyNumberChangeViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ui/error/TrustAndVerifyResult.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberViewModel.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt b/app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+index 5eb3037c43..9fbdc5722a 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+@@ -50,11 +50,7 @@ object VerifySafetyNumberRepository {
+         VerifyResult.Success
+       }
+       is RequestResult.NonSuccess -> {
+-        if (result.error.exception is IllegalArgumentException) {
+-          VerifyResult.CorruptedFailure
+-        } else {
+-          VerifyResult.UnretryableFailure
+-        }
++        VerifyResult.UnretryableFailure
+       }
+       is RequestResult.RetryableNetworkError -> {
+         if (result.retryAfter != null) {
+@@ -63,7 +59,13 @@ object VerifySafetyNumberRepository {
+           VerifyResult.UnretryableFailure
+         }
+       }
+-      is RequestResult.ApplicationError -> VerifyResult.UnretryableFailure
++      is RequestResult.ApplicationError -> {
++        if (result.cause is IllegalArgumentException) {
++          VerifyResult.CorruptedFailure
++        } else {
++          VerifyResult.UnretryableFailure
++        }
++      }
+     }
+   }

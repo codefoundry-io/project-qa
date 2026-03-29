@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java",
+  "change_summary": "EmojiTextView의 초기화 과정에서 레이아웃 방향에 따라 텍스트 방향성(TextDirection)을 명시적으로 설정하도록 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Global > View Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/emoji/EmojiTextView.java",
+  "test_method": [
+    "RTL(오른쪽에서 왼쪽으로 읽는 언어) 텍스트가 포함된 메시지가 LTR 및 RTL 레이아웃 환경에서 올바른 방향으로 렌더링되는지 확인",
+    "이모지가 포함된 텍스트의 정렬 방향이 의도대로 표시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "getLayoutDirection() 결과에 따라 setTextDirection을 FIRST_STRONG_RTL 또는 ANY_RTL로 강제 설정하는 로직 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

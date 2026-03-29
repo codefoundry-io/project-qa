@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt",
+  "change_summary": "복구 방법 선택 화면에서 최신 로컬 백업(V2) 방식을 선택했을 때 해당 복구 화면으로 이동하도록 네비게이션 연결",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Registration/Restore > Select Method Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt",
+  "test_method": [
+    "복구 방법 리스트에서 로컬 백업 V2 관련 항목을 클릭했을 때 에러 없이 다음 단계(V2 복구 프래그먼트)로 화면이 전환되는지 확인"
+  ],
+  "confirmed_facts": [
+    "RestoreMethod.FROM_LOCAL_BACKUP_V2 선택 시 기존의 error() 발생 대신 findNavController().safeNavigate를 호출하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

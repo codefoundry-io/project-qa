@@ -1,0 +1,122 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java
+
+[Changed Symbols]: ColorizerV2, FullMember, GroupId, GroupMemberEntry, GroupRecord, MemberLabel, MemberLabelRepository, NameColor, Recipient, RecipientId, ServiceId, SignalDatabase
+
+[References]:
+  ShowAdminsBottomSheetDialog:
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/DisabledInputView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt
+  ColorizerV2:
+    - ./app/src/debug/java/org/thoughtcrime/securesms/components/settings/app/internal/conversation/test/InternalConversationTestFragment.kt [ENTRY: Fragment]
+    - ./app/src/androidTest/java/org/thoughtcrime/securesms/conversation/v2/items/V2ConversationItemShapeTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/colors/ui/ChatColorPreviewView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/colors/Colorizer.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messagedetails/MessageDetailsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+  FullMember: (10+ references - common utility)
+  GroupId: (10+ references - common utility)
+  GroupMemberEntry: (10+ references - common utility)
+  GroupRecord: (10+ references - common utility)
+  MemberLabel: (10+ references - common utility)
+  MemberLabelRepository:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationMessage.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheetRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelEducationViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+  NameColor: (10+ references - common utility)
+  Recipient: (10+ references - common utility)
+  RecipientId: (10+ references - common utility)
+  ServiceId: (10+ references - common utility)
+  SignalDatabase: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java b/app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java
+index 27e7c7ec56..0c95ad0f8a 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java
+@@ -14,19 +14,28 @@ import androidx.fragment.app.FragmentManager;
+ 
+ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+ 
++import org.signal.core.models.ServiceId;
+ import org.thoughtcrime.securesms.R;
++import org.thoughtcrime.securesms.conversation.colors.ColorizerV2;
++import org.thoughtcrime.securesms.conversation.colors.NameColor;
+ import org.thoughtcrime.securesms.database.SignalDatabase;
+ import org.thoughtcrime.securesms.database.model.GroupRecord;
+ import org.thoughtcrime.securesms.groups.GroupId;
++import org.thoughtcrime.securesms.groups.memberlabel.MemberLabel;
++import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelRepository;
++import org.thoughtcrime.securesms.groups.ui.GroupMemberEntry;
+ import org.thoughtcrime.securesms.groups.ui.GroupMemberListView;
+ import org.thoughtcrime.securesms.recipients.Recipient;
++import org.thoughtcrime.securesms.recipients.RecipientId;
+ import org.signal.core.ui.BottomSheetUtil;
+ import org.thoughtcrime.securesms.util.CommunicationActions;
+ import org.signal.core.util.concurrent.LifecycleDisposable;
+ import org.thoughtcrime.securesms.util.WindowUtil;
+ 
++import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.List;
++import java.util.Map;
+ 
+ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+ import io.reactivex.rxjava3.core.Single;
+@@ -68,7 +77,7 @@ public final class ShowAdminsBottomSheetDialog extends BottomSheetDialogFragment
+ 
+     GroupMemberListView list = view.findViewById(R.id.show_admin_list);
+     list.initializeAdapter(getViewLifecycleOwner());
+-    list.setDisplayOnlyMembers(Collections.emptyList());
++    list.setMembers(Collections.emptyList());
+ 
+     list.setRecipientClickListener(recipient -> {
+       CommunicationActions.startConversation(requireContext(), recipient, null);
+@@ -78,7 +87,7 @@ public final class ShowAdminsBottomSheetDialog extends BottomSheetDialogFragment
+     disposables.add(Single.fromCallable(() -> getAdmins(requireContext().getApplicationContext(), getGroupId()))
+                           .subscribeOn(Schedulers.io())
+                           .observeOn(AndroidSchedulers.mainThread())
+-                          .subscribe(list::setDisplayOnlyMembers));
++                          .subscribe(list::setMembers));
+   }
+ 
+   @Override
+@@ -97,10 +106,23 @@ public final class ShowAdminsBottomSheetDialog extends BottomSheetDialogFragment
+   }
+ 
+   @WorkerThread
+-  private static @NonNull List<Recipient> getAdmins(@NonNull Context context, @NonNull GroupId groupId) {
+-    return SignalDatabase.groups()
+-                         .getGroup(groupId)
+-                         .map(GroupRecord::getAdmins)
+-                         .orElse(Collections.emptyList());
++  private static @NonNull List<GroupMemberEntry> getAdmins(@NonNull Context context, @NonNull GroupId groupId) {
++    GroupRecord groupRecord = SignalDatabase.groups().getGroup(groupId).orElse(null);
++    if (groupRecord == null) {
++      return Collections.emptyList();
++    }
++
++    List<Recipient>               admins              = groupRecord.getAdmins();
++    Map<RecipientId, MemberLabel> labelsByRecipientId = MemberLabelRepository.getInstance().getLabelsJava(groupId.requireV2(), admins);
++    List<ServiceId>               memberIds           = groupRecord.requireV2GroupProperties().getMemberServiceIds();
++    ColorizerV2                   colorizer           = new ColorizerV2(memberIds);
++
++    List<GroupMemberEntry> result = new ArrayList<>();
++    for (Recipient admin : admins) {
++      MemberLabel label     = labelsByRecipientId.get(admin.getId());
++      NameColor   nameColor = label != null ? colorizer.getNameColor(context, admin) : null;
++      result.add(new GroupMemberEntry.FullMember(admin, true, label, nameColor));
++    }
++    return result;
+   }
+ }

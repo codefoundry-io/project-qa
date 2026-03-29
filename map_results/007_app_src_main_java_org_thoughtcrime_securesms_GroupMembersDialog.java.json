@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/GroupMembersDialog.java",
+  "change_summary": "그룹 멤버 목록을 표시하는 다이얼로그 클래스(GroupMembersDialog)가 삭제됨",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Group Conversation > View Group Members)",
+  "entry_point_file": null,
+  "test_method": [
+    "그룹 대화방 정보 또는 설정 화면에서 멤버 목록을 확인하는 기능이 다른 방식으로(예: Fragment 등) 대체되었는지 확인",
+    "해당 클래스를 참조하던 코드들이 빌드 오류 없이 정상적으로 제거/수정되었는지 확인"
+  ],
+  "confirmed_facts": [
+    "GroupMembersDialog.java 파일이 완전히 삭제됨"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "삭제된 파일이므로 진입점 추적을 중단함"
+}

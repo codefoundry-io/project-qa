@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/res/drawable-night/megaphone_backup_storage_low.xml",
+  "change_summary": "나이트 모드 환경에서 저장공간 부족 안내 메가폰에 표시할 벡터 이미지 리소스 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation List > Megaphone Display)",
+  "entry_point_file": null,
+  "test_method": [
+    "시스템 테마가 나이트 모드일 때, 기기 저장공간 부족에 따른 백업 제안 메가폰이 적절한 아이콘과 함께 노출되는지 확인"
+  ],
+  "confirmed_facts": [
+    "drawable-night 폴더에 새로운 벡터 XML 파일 생성"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "UI 렌더링을 위한 정적 그래픽 리소스 파일이며 특정 실행 로직의 진입점이 아님"
+}

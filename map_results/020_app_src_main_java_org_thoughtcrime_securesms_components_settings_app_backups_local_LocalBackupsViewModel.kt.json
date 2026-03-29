@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsViewModel.kt",
+  "change_summary": "로컬 백업 폴더의 표시 이름을 사용자 친화적인 경로로 변환하여 제공하고, 백업 시작 시의 진행 상태 초기화 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Settings > Local Backups)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt",
+  "test_method": [
+    "로컬 백업 설정 화면에서 '백업 위치' 항목에 URI 형식이 아닌 실제 디렉토리 경로명이 표시되는지 확인",
+    "백업 수동 시작 시 즉각적으로 '진행 중' 상태(0% 등)로 UI가 업데이트되는지 확인"
+  ],
+  "confirmed_facts": [
+    "StorageUtil.getDisplayPath를 사용하여 directoryUri를 표시용 이름으로 변환하는 getDisplayName 함수 구현",
+    "onBackupStarted 호출 시 progress 상태를 BackupProgressState.InProgress로 업데이트"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

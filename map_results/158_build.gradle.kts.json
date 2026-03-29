@@ -1,0 +1,15 @@
+{
+  "target_file": "build.gradle.kts",
+  "change_summary": "QA 검증 태스크(qa)가 참조하는 단위 테스트 대상을 Perf 배리언트에서 Release 배리언트로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Build/QA Automation)",
+  "entry_point_file": null,
+  "test_method": [
+    "Gradle qa 태스크 실행 시 testPlayProdReleaseUnitTest 작업이 의도한 대로 포함되어 실행되는지 확인"
+  ],
+  "confirmed_facts": [
+    "appTestTask 할당 시 사용하는 태스크 경로 문자열 수정"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "빌드 자동화 설정을 위한 구성 파일이며 특정 기능의 런타임 진입점이 아님"
+}

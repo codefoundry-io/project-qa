@@ -1,0 +1,24 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt
+
+[Changed Symbols]: RestoreMethod, SelectRestoreMethodFragmentDirections
+
+[References]:
+  SelectRestoreMethodFragment: (10+ references - common utility)
+  RestoreMethod: (10+ references - common utility)
+  SelectRestoreMethodFragmentDirections:
+    - ./app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt
+index 43c8a518cf..3f16d88ea0 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt
+@@ -98,7 +98,7 @@ class SelectRestoreMethodFragment : ComposeFragment() {
+       }
+       RestoreMethod.FROM_OLD_DEVICE -> findNavController().safeNavigate(SelectRestoreMethodFragmentDirections.goToDeviceTransfer())
+       RestoreMethod.FROM_LOCAL_BACKUP_V1 -> findNavController().safeNavigate(SelectRestoreMethodFragmentDirections.goToLocalBackupRestore())
+-      RestoreMethod.FROM_LOCAL_BACKUP_V2 -> error("Not currently supported")
++      RestoreMethod.FROM_LOCAL_BACKUP_V2 -> findNavController().safeNavigate(SelectRestoreMethodFragmentDirections.goToLocalBackupRestoreV2())
+     }
+   }
+ }

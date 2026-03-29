@@ -1,0 +1,24 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/storage/StorageSyncModels.kt
+
+[Changed Symbols]: MentionSetting, NotificationSetting, RecipientTable
+
+[References]:
+  StorageSyncModels: (10+ references - common utility)
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/storage/StorageSyncModels.kt b/app/src/main/java/org/thoughtcrime/securesms/storage/StorageSyncModels.kt
+index 9467e26eb4..224fd0afce 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/storage/StorageSyncModels.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/storage/StorageSyncModels.kt
+@@ -249,7 +249,7 @@ object StorageSyncModels {
+       archived = recipient.syncExtras.isArchived
+       markedUnread = recipient.syncExtras.isForcedUnread
+       mutedUntilTimestamp = recipient.muteUntil
+-      dontNotifyForMentionsIfMuted = recipient.mentionSetting == RecipientTable.MentionSetting.DO_NOT_NOTIFY
++      dontNotifyForMentionsIfMuted = recipient.mentionSetting == RecipientTable.NotificationSetting.DO_NOT_NOTIFY
+       hideStory = recipient.extras != null && recipient.extras.hideStory()
+       avatarColor = localToRemoteAvatarColor(recipient.avatarColor)
+       storySendMode = when (groups.getShowAsStoryState(groupId)) {

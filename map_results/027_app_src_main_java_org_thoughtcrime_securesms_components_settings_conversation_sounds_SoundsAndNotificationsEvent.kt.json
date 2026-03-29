@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt",
+  "change_summary": "새로운 소리 및 알림 설정 화면(V2)에서 발생하는 무음 설정, 알림 세부 설정 변경 등의 사용자 액션을 정의하는 인터페이스 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Sounds and Notifications Settings V2)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt",
+  "test_method": [
+    "SoundsAndNotificationsSettingsScreen에서 각 설정 항목(무음, 멘션 알림 등) 클릭 시 대응하는 이벤트가 ViewModel에 정상적으로 도달하는지 확인"
+  ],
+  "confirmed_facts": [
+    "SetMuteUntil, Unmute, SetMentionSetting 등 알림 제어와 관련된 다양한 Event 정의 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

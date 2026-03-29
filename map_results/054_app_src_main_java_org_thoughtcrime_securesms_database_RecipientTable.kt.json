@@ -1,0 +1,20 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt",
+  "change_summary": "수신자 테이블에 통화 및 답장 알림 설정 컬럼을 추가하고, 기존 멘션 설정을 범용적인 NotificationSetting으로 통합 및 레거시 코드 제거",
+  "risk_level": "CRITICAL",
+  "trigger_point": "BG(Database Schema Update / Recipient Settings)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt",
+  "test_method": [
+    "데이터베이스 마이그레이션 후 CALL_NOTIFICATION_SETTING 및 REPLY_NOTIFICATION_SETTING 컬럼이 정상적으로 생성되고 기본값이 적용되었는지 확인",
+    "대화방별 알림 설정에서 통화 알림 및 답장 알림 옵션을 변경했을 때 DB 값이 올바르게 업데이트되고 기기 간 동기화(StorageSync)가 예약되는지 확인",
+    "기존의 멘션 설정(MentionSetting)이 바뀐 enum 명칭(NotificationSetting)으로 소스코드 전반에서 문제없이 동작하는지 확인"
+  ],
+  "confirmed_facts": [
+    "CALL_NOTIFICATION_SETTING, REPLY_NOTIFICATION_SETTING 상수 및 컬럼 정의 추가",
+    "MentionSetting enum 클래스를 NotificationSetting으로 명칭 변경",
+    "setCallNotificationSetting, setReplyNotificationSetting 저장 메서드 구현",
+    "사용되지 않는 레거시 메서드 updateSystemContactColors 삭제"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

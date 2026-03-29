@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/model/RecipientRecord.kt",
+  "change_summary": "수신자 정보 레코드 모델에 통화 및 답장 알림 설정 필드를 추가하고 기존 멘션 설정 타입을 업데이트",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Recipient Record Modeling)",
+  "entry_point_file": null,
+  "test_method": [
+    "RecipientRecord를 사용하는 곳에서 새로 추가된 callNotificationSetting 및 replyNotificationSetting 필드에 정상적으로 접근하여 값을 활용하는지 확인"
+  ],
+  "confirmed_facts": [
+    "RecipientRecord 데이터 클래스에 callNotificationSetting, replyNotificationSetting 필드 추가",
+    "기존 mentionSetting 필드의 데이터 타입을 RecipientTable.NotificationSetting으로 변경함"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "전체 앱에서 광범위하게 참조되는 핵심 데이터 모델 클래스이며 특정 Android 컴포넌트 진입점을 가지지 않음"
+}

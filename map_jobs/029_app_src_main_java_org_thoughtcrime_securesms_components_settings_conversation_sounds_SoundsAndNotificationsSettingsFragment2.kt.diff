@@ -1,0 +1,112 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt
+
+[Changed Symbols]: ComposeFragment, Copyright, Factory, FragmentContent, Identifier, License, Messenger, MuteDialog, NavigateToCustomNotifications, Navigation, Recipient, SetMuteUntil, Signal, SoundsAndNotificationsEvent, SoundsAndNotificationsSettingsFragment2Args, SoundsAndNotificationsSettingsFragment2Directions, SoundsAndNotificationsSettingsScreen, SoundsAndNotificationsSettingsViewModel2, Utils
+
+[References]:
+  SoundsAndNotificationsSettingsFragment2:
+    - ./app/src/main/res/navigation/conversation_settings.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+  ComposeFragment: (10+ references - common utility)
+  Copyright: (10+ references - common utility)
+  Factory: (10+ references - common utility)
+  FragmentContent: (10+ references - common utility)
+  Identifier: (10+ references - common utility)
+  License: (10+ references - common utility)
+  Messenger: (10+ references - common utility)
+  MuteDialog: (10+ references - common utility)
+  NavigateToCustomNotifications:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  Navigation: (10+ references - common utility)
+  Recipient: (10+ references - common utility)
+  SetMuteUntil:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+  Signal: (10+ references - common utility)
+  SoundsAndNotificationsEvent:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+  SoundsAndNotificationsSettingsFragment2Args:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+  SoundsAndNotificationsSettingsFragment2Directions:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+  SoundsAndNotificationsSettingsScreen:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  SoundsAndNotificationsSettingsViewModel2:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+  Utils: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt
+new file mode 100644
+index 0000000000..471b743006
+--- /dev/null
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt
+@@ -0,0 +1,59 @@
++/*
++ * Copyright 2025 Signal Messenger, LLC
++ * SPDX-License-Identifier: AGPL-3.0-only
++ */
++
++package org.thoughtcrime.securesms.components.settings.conversation.sounds
++
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.getValue
++import androidx.fragment.app.viewModels
++import androidx.lifecycle.compose.collectAsStateWithLifecycle
++import androidx.navigation.Navigation
++import org.signal.core.ui.compose.ComposeFragment
++import org.thoughtcrime.securesms.MuteDialog
++import org.thoughtcrime.securesms.components.settings.conversation.preferences.Utils.formatMutedUntil
++import org.thoughtcrime.securesms.recipients.Recipient
++import org.thoughtcrime.securesms.util.navigation.safeNavigate
++
++class SoundsAndNotificationsSettingsFragment2 : ComposeFragment() {
++
++  private val viewModel: SoundsAndNotificationsSettingsViewModel2 by viewModels(
++    factoryProducer = {
++      val recipientId = SoundsAndNotificationsSettingsFragment2Args.fromBundle(requireArguments()).recipientId
++      SoundsAndNotificationsSettingsViewModel2.Factory(recipientId)
++    }
++  )
++
++  @Composable
++  override fun FragmentContent() {
++    val state by viewModel.state.collectAsStateWithLifecycle()
++
++    if (!state.channelConsistencyCheckComplete || state.recipientId == Recipient.UNKNOWN.id) {
++      return
++    }
++
++    SoundsAndNotificationsSettingsScreen(
++      state = state,
++      formatMuteUntil = { it.formatMutedUntil(requireContext()) },
++      onEvent = { event ->
++        when (event) {
++          is SoundsAndNotificationsEvent.NavigateToCustomNotifications -> {
++            val action = SoundsAndNotificationsSettingsFragment2Directions
++              .actionSoundsAndNotificationsSettingsFragment2ToCustomNotificationsSettingsFragment(state.recipientId)
++            Navigation.findNavController(requireView()).safeNavigate(action)
++          }
++          else -> viewModel.onEvent(event)
++        }
++      },
++      onNavigationClick = {
++        requireActivity().onBackPressedDispatcher.onBackPressed()
++      },
++      onMuteClick = {
++        MuteDialog.show(requireContext(), childFragmentManager, viewLifecycleOwner) { muteUntil ->
++          viewModel.onEvent(SoundsAndNotificationsEvent.SetMuteUntil(muteUntil))
++        }
++      }
++    )
++  }
++}

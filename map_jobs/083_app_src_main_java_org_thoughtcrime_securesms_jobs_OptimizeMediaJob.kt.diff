@@ -1,0 +1,30 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt
+
+[Changed Symbols]: Result, SignalStore
+
+[References]:
+  OptimizeMediaJob:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/storage/ManageStorageSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/BackupMessagesJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/JobManagerFactories.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/RestoreOptimizedMediaJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt
+  Result: (10+ references - common utility)
+  SignalStore: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt b/app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt
+index 377bd914cb..5fdb58c364 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt
+@@ -48,6 +48,11 @@ class OptimizeMediaJob private constructor(parameters: Parameters) : Job(paramet
+       return Result.success()
+     }
+ 
++    if (SignalStore.backup.backupDownloadNotifierState != null) {
++      Log.i(TAG, "Backup subscription is pending cancellation, skipping media optimization.")
++      return Result.success()
++    }
++
+     if (ArchiveRestoreProgress.state.activelyRestoring()) {
+       ArchiveRestoreProgress.onCancelMediaRestore()

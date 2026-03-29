@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/util/BackupUtil.java",
+  "change_summary": "백업 삭제 메서드(deleteAllBackups)에 워커 스레드 실행 보장을 위한 @WorkerThread 어노테이션 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Database/File Cleanup)",
+  "entry_point_file": null,
+  "test_method": [
+    "정적 코드 분석(Lint) 도구 등을 통해 해당 메서드가 메인 스레드에서 호출되지 않도록 강제되는지 확인"
+  ],
+  "confirmed_facts": [
+    "deleteAllBackups() 메서드 선언부에 @WorkerThread 어노테이션 명시"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "단순 어노테이션 추가 작업이며 특정 기능의 실행 흐름을 변경하지 않음"
+}

@@ -1,0 +1,92 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt
+
+[Changed Symbols]: Companion, Dialogs, IndeterminateProgressDialog, StorageUtil, rememberChooseBackupLocationLauncher
+
+[References]:
+  LocalBackupsFragment:
+    - ./app/src/main/res/navigation/app_settings_with_change_number.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsSettingsCallback.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/AppSettingsActivity.kt [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/preferences/BackupsPreferenceFragment.java [ENTRY: Fragment]
+  Companion: (10+ references - common utility)
+  Dialogs: (10+ references - common utility)
+  IndeterminateProgressDialog: (10+ references - common utility)
+  StorageUtil: (10+ references - common utility)
+  rememberChooseBackupLocationLauncher:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt
+index 8093789646..613bf7fb71 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt
+@@ -13,8 +13,10 @@ import androidx.compose.material3.SnackbarHostState
+ import androidx.compose.runtime.Composable
+ import androidx.compose.runtime.CompositionLocalProvider
+ import androidx.compose.runtime.getValue
++import androidx.compose.runtime.mutableStateOf
+ import androidx.compose.runtime.remember
+ import androidx.compose.runtime.rememberCoroutineScope
++import androidx.compose.runtime.setValue
+ import androidx.compose.ui.platform.LocalContext
+ import androidx.compose.ui.res.stringResource
+ import androidx.lifecycle.compose.LifecycleResumeEffect
+@@ -29,7 +31,9 @@ import androidx.navigation3.ui.NavDisplay
+ import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
+ import kotlinx.coroutines.launch
+ import org.signal.core.ui.compose.ComposeFragment
++import org.signal.core.ui.compose.Dialogs
+ import org.signal.core.ui.compose.Launchers
++import org.signal.core.ui.util.StorageUtil
+ import org.signal.core.util.logging.Log
+ import org.thoughtcrime.securesms.R
+ import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsKeyEducationScreen
+@@ -38,6 +42,7 @@ import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsKeyRec
+ import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsKeyRecordScreen
+ import org.thoughtcrime.securesms.backup.v2.ui.subscription.MessageBackupsKeyVerifyScreen
+ import org.thoughtcrime.securesms.keyvalue.SignalStore
++import kotlin.time.Duration.Companion.milliseconds
+ 
+ private val TAG = Log.tag(LocalBackupsFragment::class)
+ 
+@@ -126,6 +131,7 @@ class LocalBackupsFragment : ComposeFragment() {
+               val state: LocalBackupsKeyState by viewModel.backupState.collectAsStateWithLifecycle()
+               val scope = rememberCoroutineScope()
+               val backupKeyUpdatedMessage = stringResource(R.string.OnDeviceBackupsFragment__backup_key_updated)
++              var upgradeInProgress by remember { mutableStateOf(false) }
+ 
+               MessageBackupsKeyVerifyScreen(
+                 backupKey = state.accountEntropyPool.displayValue,
+@@ -138,7 +144,9 @@ class LocalBackupsFragment : ComposeFragment() {
+                   backstack.removeAll { it != LocalBackupsNavKey.SETTINGS }
+ 
+                   scope.launch {
++                    upgradeInProgress = true
+                     viewModel.handleUpgrade(requireContext())
++                    upgradeInProgress = false
+ 
+                     snackbarHostState.showSnackbar(
+                       message = backupKeyUpdatedMessage
+@@ -146,6 +154,12 @@ class LocalBackupsFragment : ComposeFragment() {
+                   }
+                 }
+               )
++
++              Dialogs.IndeterminateProgressDialog(
++                visible = upgradeInProgress,
++                delayDuration = 100.milliseconds,
++                minimumDisplayDuration = 500.milliseconds
++              )
+             }
+ 
+             else -> error("Unknown key: $key")
+@@ -167,7 +181,7 @@ private fun rememberChooseBackupLocationLauncher(backStack: NavBackStack<NavKey>
+       SignalStore.backup.newLocalBackupsDirectory = uri.toString()
+       backStack.add(LocalBackupsNavKey.YOUR_RECOVERY_KEY)
+ 
+-      Toast.makeText(context, context.getString(R.string.OnDeviceBackupsFragment__directory_selected, uri), Toast.LENGTH_SHORT).show()
++      Toast.makeText(context, context.getString(R.string.OnDeviceBackupsFragment__directory_selected, StorageUtil.getDisplayPath(context, uri)), Toast.LENGTH_SHORT).show()
+     } else {
+       Log.w(TAG, "Unified backup location selection cancelled or failed")
+     }

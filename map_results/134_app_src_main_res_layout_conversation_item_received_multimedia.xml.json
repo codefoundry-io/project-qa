@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/res/layout/conversation_item_received_multimedia.xml",
+  "change_summary": "수신된 멀티미디어 메시지의 지표(답장 수, 에러, 전달 등) 레이아웃 재배치 및 크기 조정",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Message List Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "수신된 사진이나 동영상 메시지 우측에 표시되는 답장 아이콘(quoted_indicator)과 전달 아이콘이 겹침 현상 없이 적절한 위치에 렌더링되는지 확인",
+    "메시지 전송 실패 등의 에러 발생 시 indicators_parent(AlertView)가 작아진 크기(20dp)로 의도한 위치에 정상 노출되는지 확인"
+  ],
+  "confirmed_facts": [
+    "indicators_parent를 FrameLayout 내부로 이동시키고 너비와 높이를 36dp에서 20dp로 축소함",
+    "지표 아이콘들의 여백(marginEnd)을 조정하여 버블과의 간격을 최적화함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

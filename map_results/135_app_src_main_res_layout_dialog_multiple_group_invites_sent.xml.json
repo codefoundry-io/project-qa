@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/res/layout/dialog_multiple_group_invites_sent.xml",
+  "change_summary": "그룹 초대 발송 다이얼로그의 멤버 리스트 높이 제한을 제거하여 가독성 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Group Invite Success Dialog)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/managegroup/dialogs/GroupInviteSentDialog.java",
+  "test_method": [
+    "다수의 멤버를 그룹에 초대했을 때, 결과 다이얼로그의 리스트 영역이 100dp에 고정되지 않고 내용에 맞게 확장되어 모든 멤버가 잘 보이는지 확인"
+  ],
+  "confirmed_facts": [
+    "GroupMemberListView에서 app:maxHeight=\"100dp\" 속성을 제거하여 높이 제약 해제",
+    "개발 편의를 위해 tools:listitem 미리보기 속성 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

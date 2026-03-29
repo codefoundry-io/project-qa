@@ -1,0 +1,16 @@
+[Target File]: app/src/main/res/layout/dialog_multiple_group_invites_sent.xml
+
+[Diff]:
+diff --git a/app/src/main/res/layout/dialog_multiple_group_invites_sent.xml b/app/src/main/res/layout/dialog_multiple_group_invites_sent.xml
+index 3b72828894..dc016054ac 100644
+--- a/app/src/main/res/layout/dialog_multiple_group_invites_sent.xml
++++ b/app/src/main/res/layout/dialog_multiple_group_invites_sent.xml
+@@ -16,6 +16,6 @@
+         app:layout_constraintEnd_toEndOf="parent"
+         app:layout_constraintStart_toStartOf="parent"
+         app:layout_constraintTop_toTopOf="parent"
+-        app:maxHeight="100dp" />
++        tools:listitem="@layout/group_recipient_list_item" />
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file

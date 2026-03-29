@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt",
+  "change_summary": "메시지 백업 시 식별 정보(ACI/E164)가 없는 저자의 메시지나 인용구를 필터링하고, 부적절한 메시지 본문 스타일 범위를 제외하는 로직 추가",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(BackupMessagesJob)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/BackupMessagesJob.kt",
+  "test_method": [
+    "ACI/E164 정보가 없는 사용자가 작성한 메시지가 백업에서 제외되고 로그가 기록되는지 확인",
+    "인용구 저자의 식별 정보가 없는 경우 인용구만 제거되고 원본 메시지는 백업되는지 확인",
+    "메시지 본문의 스타일 범위(BodyRange) 데이터가 유효하지 않을 때 해당 범위가 필터링되는지 확인"
+  ],
+  "confirmed_facts": [
+    "toRemoteQuote에서 저자 식별 정보 부재 시 null 반환 로직 추가",
+    "toRemoteBodyRanges에서 mapNotNull을 사용하여 유효하지 않은 범위 필터링",
+    "validateChatItem에서 방향성 없는 메시지의 저자 식별 정보 부재 시 로그 기록 및 스킵"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

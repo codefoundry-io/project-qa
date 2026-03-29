@@ -1,0 +1,67 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+
+[Changed Symbols]: Compact, MemberLabelPill, Normal, Style, TextStyle
+
+[References]:
+  MemberLabelPillView:
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+  Compact: (10+ references - common utility)
+  MemberLabelPill:
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+  Normal: (10+ references - common utility)
+  Style: (10+ references - common utility)
+  TextStyle: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+index 9da9aeb3fc..fd48e890c1 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+@@ -53,10 +53,11 @@ class MemberLabelPillView : AbstractComposeView {
+     memberLabel?.let { label ->
+       MemberLabelPill(
+         emoji = label.emoji,
+-        text = label.text,
++        text = label.displayText,
+         tintColor = tintColor,
+         modifier = Modifier.padding(horizontal = style.horizontalPadding, vertical = style.verticalPadding),
+-        textStyle = style.textStyle()
++        textStyle = style.textStyle(),
++        maxLines = style.maxLines
+       )
+     }
+   }
+@@ -64,6 +65,19 @@ class MemberLabelPillView : AbstractComposeView {
+   data class Style(
+     val horizontalPadding: Dp = 12.dp,
+     val verticalPadding: Dp = 2.dp,
+-    val textStyle: @Composable () -> TextStyle = { MemberLabelPill.textStyleNormal }
+-  )
++    val textStyle: @Composable () -> TextStyle = { MemberLabelPill.textStyleNormal },
++    val maxLines: Int = 1
++  ) {
++    companion object {
++      @JvmField
++      val Normal = Style()
++
++      @JvmField
++      val Compact = Style(
++        horizontalPadding = 8.dp,
++        verticalPadding = 2.dp,
++        textStyle = { MemberLabelPill.textStyleCompact }
++      )
++    }
++  }
+ }

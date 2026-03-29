@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt",
+  "change_summary": "새로운 소리 및 알림 설정 화면(V2)의 전체 레이아웃 및 UI 구성요소(무음 설정, 알림 예외 항목 등)를 Compose로 구현",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Sounds and Notifications Settings V2)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt",
+  "test_method": [
+    "화면 진입 시 무음 여부에 따라 벨 아이콘 및 설명 텍스트가 동적으로 변하는지 확인",
+    "전화/멘션/답장 알림 설정 클릭 시 라디오 버튼이 포함된 다이얼로그가 표시되고 선택 값이 반영되는지 확인",
+    "이미 무음 상태일 때 '무음 설정' 항목 클릭 시 무음 해제 확인 다이얼로그가 뜨는지 확인"
+  ],
+  "confirmed_facts": [
+    "LazyColumn을 사용하여 설정 항목들을 리스트로 구성",
+    "NotificationSettingRow와 NotificationSettingDialog를 통한 공통 설정 로직 분리",
+    "Scaffolds.Settings와 SignalIcons를 활용한 표준 테마 적용"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/managegroup/dialogs/GroupInviteSentDialog.java",
+  "change_summary": "그룹 초대 발송 알림 다이얼로그를 유틸리티 방식에서 DialogFragment 기반 프래그먼트로 전환하여 생명주기 관리 및 콜백 구조 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Group Invite > Success)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/managegroup/dialogs/GroupInviteSentDialog.java",
+  "test_method": [
+    "그룹에 멤버를 초대했을 때 초대 발송 완료 다이얼로그가 정상적으로 팝업되는지 확인",
+    "여러 명을 한꺼번에 초대했을 때 다이얼로그 내부에 참여 예정자 목록이 올바르게 나열되는지 확인",
+    "다이얼로그를 닫았을 때 RESULT_DISMISSED 결과가 부모 프래그먼트/액티비티로 전달되어 후속 동작이 일어나는지 확인"
+  ],
+  "confirmed_facts": [
+    "클래스가 DialogFragment를 상속받도록 구조 변경",
+    "정적 show 메서드를 통해 FragmentManager와 RecipientId 목록을 전달받도록 개선",
+    "onDismiss 콜백 내에서 setFragmentResult를 호출하여 다이얼로그 종료 상태를 알림"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

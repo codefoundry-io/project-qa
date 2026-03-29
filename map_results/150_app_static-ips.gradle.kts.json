@@ -1,0 +1,15 @@
+{
+  "target_file": "app/static-ips.gradle.kts",
+  "change_summary": "서비스 연결을 위한 정적 CDN IP 주소 목록 업데이트",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Network Connectivity / Build Configuration)",
+  "entry_point_file": null,
+  "test_method": [
+    "변경된 IP 주소 환경에서 CDN 서버를 통한 리소스 다운로드 및 업로드 기능이 정상 작동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "cdn_ips 배열 내의 4개 IP 주소가 새로운 값으로 교체됨"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "네트워크 인프라 설정을 위한 빌드 구성 파일이며 특정 Android 컴포넌트 진입점을 가지지 않음"
+}

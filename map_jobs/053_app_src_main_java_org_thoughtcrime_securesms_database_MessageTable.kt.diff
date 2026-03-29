@@ -1,0 +1,229 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+
+[Changed Symbols]: Actually, AdminDeleteStatus, AppDependencies, AttachmentTable, Bulk, Delete, Given, GroupReceiptTable, MentionTable, MessageExtras, MessageId, Must, Only, SearchTable, Sets, SignalDatabase, SignalTrace, Status, This, getApproximateTotalMessageCount, markAsFailedAdminDelete, markAsPendingAdminDelete, markAsSentAdminDelete
+
+[References]:
+  MessageTable: (10+ references - common utility)
+  Actually:
+    - ./core/util-jvm/src/main/java/org/signal/core/util/Base64Tools.java
+  AdminDeleteStatus:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/model/MessageRecord.java
+  AppDependencies: (10+ references - common utility)
+  AttachmentTable: (10+ references - common utility)
+  Bulk: (10+ references - common utility)
+  Delete: (10+ references - common utility)
+  Given: (10+ references - common utility)
+  GroupReceiptTable: (10+ references - common utility)
+  MentionTable:
+    - ./app/src/androidTest/java/org/thoughtcrime/securesms/database/RecipientTableTest_getAndPossiblyMerge.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/search/SearchRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/FullBackupExporter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MentionTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+  MessageExtras: (10+ references - common utility)
+  MessageId: (10+ references - common utility)
+  Must: (10+ references - common utility)
+  Only: (10+ references - common utility)
+  SearchTable:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/FullBackupExporter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/FullBackupImporter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/search/SearchRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/BackupRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/EmojiSearchTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SearchTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/keyboard/sticker/StickerSearchRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/keyboard/emoji/search/EmojiSearchRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/migrations/EmojiSearchIndexCheckMigrationJob.java
+  Sets: (10+ references - common utility)
+  SignalDatabase: (10+ references - common utility)
+  SignalTrace:
+    - ./app/src/benchmarkShared/java/org/whispersystems/signalservice/internal/websocket/BenchmarkWebSocketConnection.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversationlist/ConversationListDataSource.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/MessageContentProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/ReceiptMessageProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/DataMessageProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/util/SignalLocalMetrics.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/util/SignalTrace.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+  Status: (10+ references - common utility)
+  This: (10+ references - common utility)
+  getApproximateTotalMessageCount:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/megaphone/Megaphones.java
+  markAsFailedAdminDelete:
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/AdminDeleteSendJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+  markAsPendingAdminDelete:
+    - ./app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+  markAsSentAdminDelete:
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/AdminDeleteSendJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt b/app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+index 8a712cabc4..823dcbf2bb 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+@@ -106,6 +106,7 @@ import org.thoughtcrime.securesms.database.model.StoryResult
+ import org.thoughtcrime.securesms.database.model.StoryType
+ import org.thoughtcrime.securesms.database.model.StoryType.Companion.fromCode
+ import org.thoughtcrime.securesms.database.model.StoryViewState
++import org.thoughtcrime.securesms.database.model.databaseprotos.AdminDeleteStatus
+ import org.thoughtcrime.securesms.database.model.databaseprotos.BodyRangeList
+ import org.thoughtcrime.securesms.database.model.databaseprotos.DecryptedGroupV2Context
+ import org.thoughtcrime.securesms.database.model.databaseprotos.GV2UpdateDescription
+@@ -144,6 +145,7 @@ import org.thoughtcrime.securesms.util.JsonUtils
+ import org.thoughtcrime.securesms.util.MediaUtil
+ import org.thoughtcrime.securesms.util.MessageConstraintsUtil
+ import org.thoughtcrime.securesms.util.RemoteConfig
++import org.thoughtcrime.securesms.util.SignalTrace
+ import org.thoughtcrime.securesms.util.TextSecurePreferences
+ import org.thoughtcrime.securesms.util.isStory
+ import org.whispersystems.signalservice.internal.push.SyncMessage
+@@ -228,6 +230,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
+     const val QUOTE_TARGET_MISSING_ID = -1L
+ 
+     const val ADDRESSABLE_MESSAGE_LIMIT = 5
++    private const val DELETE_BATCH_SIZE = 1000
+     const val PARENT_STORY_MISSING_ID = -1L
+ 
+     const val PIN_FOREVER = Long.MAX_VALUE
+@@ -1915,9 +1918,15 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
+   }
+ 
+   /**
+-   * Given a set of thread ids, return the count of all messages in the table that match that thread id. This will include *all* messages, and is
+-   * explicitly for use as a "fuzzy total"
++   * "Approximate" because we're not filtering out stuff like message edits. Only useful as a heuristic.
+    */
++  fun getApproximateTotalMessageCount(): Long {
++    return readableDatabase.count()
++      .from(TABLE_NAME)
++      .run()
++      .readToSingleLong(0L)
++  }
++
+   fun getApproximateExportableMessageCount(threadIds: Set<Long>): Long {
+     val queries = SqlUtil.buildCollectionQuery(THREAD_ID, threadIds)
+     return queries.sumOf {
+@@ -3780,6 +3789,45 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
+     }
+   }
+ 
++  /**
++   * Sets admin delete status to pending
++   */
++  fun markAsPendingAdminDelete(messageId: Long) {
++    val messageExtras = MessageExtras(adminDeleteStatus = AdminDeleteStatus(AdminDeleteStatus.Status.PENDING))
++    writableDatabase
++      .update(TABLE_NAME)
++      .values(MESSAGE_EXTRAS to messageExtras.encode())
++      .where("$ID = ?", messageId)
++      .run()
++    AppDependencies.databaseObserver.notifyMessageUpdateObservers(MessageId(messageId))
++  }
++
++  /**
++   * Sets admin delete status to failed
++   */
++  fun markAsFailedAdminDelete(messageId: Long) {
++    val messageExtras = MessageExtras(adminDeleteStatus = AdminDeleteStatus(AdminDeleteStatus.Status.FAILED))
++    writableDatabase
++      .update(TABLE_NAME)
++      .values(MESSAGE_EXTRAS to messageExtras.encode())
++      .where("$ID = ?", messageId)
++      .run()
++    AppDependencies.databaseObserver.notifyMessageUpdateObservers(MessageId(messageId))
++  }
++
++  /**
++   * Sets admin delete status to complete.
++   */
++  fun markAsSentAdminDelete(messageId: Long) {
++    val messageExtras = MessageExtras(adminDeleteStatus = AdminDeleteStatus(AdminDeleteStatus.Status.DONE))
++    writableDatabase
++      .update(TABLE_NAME)
++      .values(MESSAGE_EXTRAS to messageExtras.encode())
++      .where("$ID = ?", messageId)
++      .run()
++    AppDependencies.databaseObserver.notifyMessageUpdateObservers(MessageId(messageId))
++  }
++
+   /**
+    * When a message gets deleted, clear the pinned record and remove any references
+    */
+@@ -3966,14 +4014,12 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
+       return 0
+     }
+ 
+-    writableDatabase.withinTransaction { db ->
+-      SignalDatabase.messageSearch.dropAfterMessageDeleteTrigger()
+-      SignalDatabase.messageLog.dropAfterMessageDeleteTrigger()
+-
+-      for (threadId in threadsWithPossibleDeletes) {
+-        val subSelect = "SELECT ${TABLE_NAME}.$ID FROM $TABLE_NAME WHERE ${TABLE_NAME}.$THREAD_ID = $threadId $extraWhere LIMIT 1000"
+-        do {
+-          // Bulk deleting FK tables for large message delete efficiency
++    SignalTrace.beginSection("MessageTable#deleteMessagesInThread")
++    for (threadId in threadsWithPossibleDeletes) {
++      val subSelect = "SELECT ${TABLE_NAME}.$ID FROM $TABLE_NAME WHERE ${TABLE_NAME}.$THREAD_ID = $threadId $extraWhere LIMIT $DELETE_BATCH_SIZE"
++      var deletedCount: Int
++      do {
++        deletedCount = writableDatabase.withinTransaction { db ->
+           db.delete(StorySendTable.TABLE_NAME)
+             .where("${StorySendTable.TABLE_NAME}.${StorySendTable.MESSAGE_ID} IN ($subSelect)")
+             .run()
+@@ -3986,23 +4032,28 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
+             .where("${CallTable.TABLE_NAME}.${CallTable.MESSAGE_ID} IN ($subSelect)")
+             .run()
+ 
+-          // Must delete rows from FTS table before deleting from main table due to FTS requirement when deleting by rowid
+-          db.delete(SearchTable.FTS_TABLE_NAME)
+-            .where("${SearchTable.FTS_TABLE_NAME}.${SearchTable.ID} IN ($subSelect)")
++          db.delete(AttachmentTable.TABLE_NAME)
++            .where("${AttachmentTable.TABLE_NAME}.${AttachmentTable.MESSAGE_ID} IN ($subSelect)")
+             .run()
+ 
+-          // Actually delete messages
+-          val deletedCount = db.delete(TABLE_NAME)
+-            .where("$ID IN ($subSelect)")
++          db.delete(GroupReceiptTable.TABLE_NAME)
++            .where("${GroupReceiptTable.TABLE_NAME}.${GroupReceiptTable.MMS_ID} IN ($subSelect)")
+             .run()
+ 
+-          totalDeletedCount += deletedCount
+-        } while (deletedCount > 0)
+-      }
++          db.delete(MentionTable.TABLE_NAME)
++            .where("${MentionTable.TABLE_NAME}.${MentionTable.MESSAGE_ID} IN ($subSelect)")
++            .run()
++
++          // Delete the messages themselves
++          db.delete(TABLE_NAME)
++            .where("$ID IN ($subSelect)")
++            .run()
++        }
+ 
+-      SignalDatabase.messageSearch.restoreAfterMessageDeleteTrigger()
+-      SignalDatabase.messageLog.restoreAfterMessageDeleteTrigger()
++        totalDeletedCount += deletedCount
++      } while (deletedCount > 0)
+     }
++    SignalTrace.endSection()
+ 
+     return totalDeletedCount
+   }
+@@ -5917,6 +5968,7 @@ open class MessageTable(context: Context?, databaseHelper: SignalDatabase) : Dat
+         .forEach { entry -> fixDuplicate(writableDatabase, entry.value) }
+     }
+ 
++    writableDatabase.execSQL("DELETE FROM $TABLE_NAME WHERE $ORIGINAL_MESSAGE_ID IS NOT NULL AND $ORIGINAL_MESSAGE_ID NOT IN (SELECT $ID FROM $TABLE_NAME)")
+     writableDatabase.execSQL("DELETE FROM ${ReactionTable.TABLE_NAME} WHERE ${ReactionTable.MESSAGE_ID} NOT IN (SELECT $ID FROM $TABLE_NAME)")
+     writableDatabase.execSQL("DELETE FROM ${StorySendTable.TABLE_NAME} WHERE ${StorySendTable.MESSAGE_ID} NOT IN (SELECT $ID FROM $TABLE_NAME)")
+     writableDatabase.execSQL("DELETE FROM ${CallTable.TABLE_NAME} WHERE ${CallTable.MESSAGE_ID} NOT NULL AND ${CallTable.MESSAGE_ID} NOT IN (SELECT $ID FROM $TABLE_NAME)")

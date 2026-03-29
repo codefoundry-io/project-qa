@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java",
+  "change_summary": "1:1 통화 수신 시 사용자의 방해 금지 설정을 확인하여, 알림 거부 시 통화 화면 실행 및 벨소리 재생을 조기에 차단하도록 로직 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Incoming Call Processing)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java",
+  "test_method": [
+    "통화 알림이 비활성화된 수신자로부터 전화를 받았을 때, 화면이 켜지지 않고 벨소리나 진동이 전혀 발생하지 않는지(Silent Ignore) 확인",
+    "알림이 허용된 정상적인 통화 수신 시에는 통화 액티비티 실행 및 알림 채널 로직이 기존과 동일하게 작동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "shouldDisturbUserWithCall 결과가 false인 경우 로그 기록 후 CALL_INCOMING 상태만 설정하고 즉시 반환하도록 구현",
+    "기존에 개별적으로 흩어져 있던 알림 체크 로직을 상단의 조건문 하나로 통합하여 가독성 및 안정성 확보"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

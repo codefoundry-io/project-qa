@@ -1,0 +1,31 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt
+
+[Changed Symbols]: MentionSetting, NotificationSetting, RecipientTable
+
+[References]:
+  RecipientTableCursorUtil:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ContactArchiveExporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/GroupArchiveExporter.kt
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt b/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt
+index 3df1f1f7d7..ecaec9e3c6 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt
+@@ -150,7 +150,9 @@ object RecipientTableCursorUtil {
+       sealedSenderAccessMode = RecipientTable.SealedSenderAccessMode.fromMode(cursor.requireInt(RecipientTable.SEALED_SENDER_MODE)),
+       capabilities = readCapabilities(cursor),
+       storageId = Base64.decodeNullableOrThrow(cursor.requireString(RecipientTable.STORAGE_SERVICE_ID)),
+-      mentionSetting = RecipientTable.MentionSetting.fromId(cursor.requireInt(RecipientTable.MENTION_SETTING)),
++      mentionSetting = RecipientTable.NotificationSetting.fromId(cursor.requireInt(RecipientTable.MENTION_SETTING)),
++      callNotificationSetting = RecipientTable.NotificationSetting.fromId(cursor.requireInt(RecipientTable.CALL_NOTIFICATION_SETTING)),
++      replyNotificationSetting = RecipientTable.NotificationSetting.fromId(cursor.requireInt(RecipientTable.REPLY_NOTIFICATION_SETTING)),
+       wallpaper = chatWallpaper,
+       chatColors = chatColors,
+       avatarColor = avatarColor,

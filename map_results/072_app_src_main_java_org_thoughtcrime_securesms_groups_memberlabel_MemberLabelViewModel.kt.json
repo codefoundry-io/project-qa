@@ -1,0 +1,20 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt",
+  "change_summary": "멤버 라벨 뷰모델의 저장 로직 고도화: 네트워크 에러 처리, 권한 확인, 글자 수 제한 방식 개선 및 소개 글 대체 안내 시트 제어 로직 추가",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Member Label Settings > Save/Edit)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt",
+  "test_method": [
+    "멤버 라벨 저장 시 네트워크 결과(성공, 에러, 권한 부족)에 따라 SaveState가 올바르게 업데이트되는지 확인",
+    "라벨을 새로 설정할 때 본인의 '소개(About)'가 있는 경우 안내 바텀 시트 노출 여부 결정 로직이 정상 동작하는지 확인",
+    "이모지 및 복합 문자가 포함된 라벨 텍스트의 글자 수(Grapheme) 제한이 MemberLabel.MAX_LABEL_GRAPHEMES(24자)를 기준으로 정확히 계산되는지 확인"
+  ],
+  "confirmed_facts": [
+    "MemberLabel.truncateLabelText 및 sanitizeLabelText를 사용하여 입력 텍스트 정제 로직 통합",
+    "save() 메서드에서 NetworkResult 분기 처리를 통해 상세 에러 상태(NetworkError, InsufficientRights) 관리",
+    "소개 글 대체 안내 시트 노출을 위한 showAboutOverrideSheet 플래그 및 관련 처리 콜백(onAboutOverrideSheetDismissed) 추가",
+    "remainingCharacters 계산 시 단순 length가 아닌 StringUtil.getGraphemeCount를 사용하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallParticipantsPager.kt",
+  "change_summary": "통화 참여자 페이저 화면에서 참여자 영상을 길게 눌렀을 때(Long Press) 특정 액션을 수행할 수 있는 콜백 및 인터랙션 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Call > Participant Pager > Long Press)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt",
+  "test_method": [
+    "통화 화면의 참여자 영상을 길게 눌렀을 때 참여자 액션 시트가 나타나는지 확인",
+    "참여자 영상을 짧게 탭했을 때 기존의 UI 토글(컨트롤 바 숨김/표시 등) 기능이 정상적으로 동작하는지 확인"
+  ],
+  "confirmed_facts": [
+    "pointerInput 및 detectTapGestures를 사용하여 탭(onTap)과 롱 프레스(onLongPress)를 감지하도록 구현",
+    "본인이 아닌 다른 참여자 영상에 대해서만 롱 프레스 인터랙션이 활성화되도록 조건 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

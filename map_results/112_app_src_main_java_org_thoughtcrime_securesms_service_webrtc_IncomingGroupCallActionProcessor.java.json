@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingGroupCallActionProcessor.java",
+  "change_summary": "그룹 통화 수신 시 사용자의 방해 금지 설정을 확인하여, 알림 거부 시 알림 노출 및 통화 처리 로직을 중단하도록 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Incoming Group Call Processing)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java",
+  "test_method": [
+    "그룹 대화방 알림이 꺼져 있거나 시스템 DND 상태일 때 그룹 통화 벨소리가 울리거나 통화 화면이 나타나지 않는지 확인",
+    "알림이 활성화된 그룹 통화 수신 시에는 정상적으로 상단 알림 바에 통화 정보가 표시되고 벨소리가 들리는지 확인"
+  ],
+  "confirmed_facts": [
+    "DoNotDisturbUtil.shouldDisturbUserWithCall 호출 시 대상 recipient 객체를 전달하도록 수정",
+    "shouldDisturbUserWithCall 결과가 false인 경우 setCallInProgressNotification 및 startIncomingRinger 등의 호출을 건너뛰는 if-else 구조 적용"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

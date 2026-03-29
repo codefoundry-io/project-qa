@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberEntry.java",
+  "change_summary": "그룹 멤버 리스트 항목 모델(FullMember)에 멤버 라벨 및 이름 색상 정보 필드 추가 및 관련 데이터 비교 로직 업데이트",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Group Member List Modeling)",
+  "entry_point_file": null,
+  "test_method": [
+    "GroupMemberEntry.FullMember 인스턴스 생성 시 전달된 MemberLabel과 NameColor가 getter를 통해 정확히 반환되는지 확인",
+    "멤버 라벨이나 이름 색상이 변경되었을 때 equals 및 hashCode가 이를 감지하여 UI 리스트 갱신(DiffUtil 등)이 일어나는지 확인"
+  ],
+  "confirmed_facts": [
+    "FullMember 클래스에 MemberLabel 및 NameColor 필드 추가",
+    "신규 필드를 포함하는 4개 인자 생성자 추가 및 기존 2개 인자 생성자 유지(하위 호환)",
+    "equals와 hashCode 메서드에 신규 필드 비교 로직 포함"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "그룹 멤버 리스트 UI를 위한 순수 데이터 모델 클래스로 특정 Android 컴포넌트 진입점을 가지지 않음"
+}

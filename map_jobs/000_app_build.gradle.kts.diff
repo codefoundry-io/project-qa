@@ -1,0 +1,50 @@
+[Target File]: app/build.gradle.kts
+
+[Changed Symbols]: Backup
+
+[References]:
+  Backup: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+index 5b3c23d929..3bbd560369 100644
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -24,8 +24,8 @@ plugins {
+ 
+ apply(from = "static-ips.gradle.kts")
+ 
+-val canonicalVersionCode = 1657
+-val canonicalVersionName = "8.1.0"
++val canonicalVersionCode = 1661
++val canonicalVersionName = "8.2.0"
+ val currentHotfixVersion = 0
+ val maxHotfixVersions = 100
+ 
+@@ -53,8 +53,6 @@ val localProperties: Properties? = if (localPropertiesFile.exists()) {
+ val quickstartCredentialsDir: String? = localProperties?.getProperty("quickstart.credentials.dir")
+ 
+ val selectableVariants = listOf(
+-  "nightlyBackupRelease",
+-  "nightlyBackupSpinner",
+   "nightlyProdSpinner",
+   "nightlyProdPerf",
+   "nightlyProdRelease",
+@@ -468,17 +466,6 @@ android {
+       buildConfigField("String", "BUILD_ENVIRONMENT_TYPE", "\"Staging\"")
+       buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"pk_test_sngOd8FnXNkpce9nPXawKrJD00kIDngZkD\"")
+     }
+-
+-    create("backup") {
+-      initWith(getByName("staging"))
+-
+-      dimension = "environment"
+-
+-      applicationIdSuffix = ".backup"
+-
+-      buildConfigField("boolean", "MANAGES_APP_UPDATES", "true")
+-      buildConfigField("String", "BUILD_ENVIRONMENT_TYPE", "\"Backup\"")
+-    }
+   }
+ 
+   lint {

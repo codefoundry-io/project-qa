@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt",
+  "change_summary": "발신자 이름과 멤버 라벨을 함께 표시하는 컴포넌트에서 라벨 텍스트의 Bidi 격리 처리(displayText) 적용",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Global > Sender Name Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt",
+  "test_method": [
+    "대화방 메시지 발신자 영역에서 멤버 라벨이 RTL(오른쪽에서 왼쪽으로 읽는 언어) 환경에서도 올바른 텍스트 방향으로 표시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "MemberLabelPill 컴포저블 호출 시 text 파라미터에 label.text 대신 label.displayText를 전달하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

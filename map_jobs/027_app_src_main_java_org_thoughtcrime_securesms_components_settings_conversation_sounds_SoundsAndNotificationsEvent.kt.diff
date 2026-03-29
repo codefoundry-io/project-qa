@@ -1,0 +1,128 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+
+[Changed Symbols]: Clears, Controls, Copyright, CustomNotificationsSettingsFragment, Epoch, Identifier, License, Messenger, Mutes, NavigateToCustomNotifications, NotificationSetting, Notifications, Only, RecipientTable, Represents, SetCallNotificationSetting, SetMentionSetting, SetMuteUntil, SetReplyNotificationSetting, Signal, Signals, Sounds, Unmute, Updates
+
+[References]:
+  SoundsAndNotificationsEvent:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  Clears: (10+ references - common utility)
+  Controls: (10+ references - common utility)
+  Copyright: (10+ references - common utility)
+  CustomNotificationsSettingsFragment:
+    - ./app/src/main/res/navigation/conversation_settings.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/custom/CustomNotificationsSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt [ENTRY: Fragment]
+  Epoch: (10+ references - common utility)
+  Identifier: (10+ references - common utility)
+  License: (10+ references - common utility)
+  Messenger: (10+ references - common utility)
+  Mutes:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/WebRtcCallViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+  NavigateToCustomNotifications:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  NotificationSetting: (10+ references - common utility)
+  Notifications: (10+ references - common utility)
+  Only: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+  Represents: (10+ references - common utility)
+  SetCallNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  SetMentionSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  SetMuteUntil:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+  SetReplyNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  Signal: (10+ references - common utility)
+  Signals:
+    - ./app/src/main/res/values-sv/strings.xml
+    - ./app/src/main/res/values-de/strings.xml
+    - ./app/src/main/res/values-da/strings.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+    - ./app/src/main/res/values-nl/strings.xml
+    - ./app/src/main/res/values-nb/strings.xml
+  Sounds: (10+ references - common utility)
+  Unmute: (10+ references - common utility)
+  Updates: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+new file mode 100644
+index 0000000000..c6408d2bda
+--- /dev/null
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsEvent.kt
+@@ -0,0 +1,57 @@
++/*
++ * Copyright 2025 Signal Messenger, LLC
++ * SPDX-License-Identifier: AGPL-3.0-only
++ */
++
++package org.thoughtcrime.securesms.components.settings.conversation.sounds
++
++import org.thoughtcrime.securesms.database.RecipientTable.NotificationSetting
++
++/**
++ * Represents all user-driven actions that can occur on the Sounds & Notifications settings screen.
++ */
++sealed interface SoundsAndNotificationsEvent {
++
++  /**
++   * Mutes notifications for this recipient until the given epoch-millisecond timestamp.
++   *
++   * @param muteUntil Epoch-millisecond timestamp after which notifications should resume.
++   *                  Use [Long.MAX_VALUE] to mute indefinitely.
++   */
++  data class SetMuteUntil(val muteUntil: Long) : SoundsAndNotificationsEvent
++
++  /**
++   * Clears any active mute, immediately restoring notifications for this recipient.
++   */
++  data object Unmute : SoundsAndNotificationsEvent
++
++  /**
++   * Updates the mention notification setting for this recipient.
++   * Only relevant for group conversations that support @mentions.
++   *
++   * @param setting The new [NotificationSetting] to apply for @mention notifications.
++   */
++  data class SetMentionSetting(val setting: NotificationSetting) : SoundsAndNotificationsEvent
++
++  /**
++   * Updates the call notification setting for this recipient.
++   * Controls whether incoming calls still produce notifications while the conversation is muted.
++   *
++   * @param setting The new [NotificationSetting] to apply for call notifications.
++   */
++  data class SetCallNotificationSetting(val setting: NotificationSetting) : SoundsAndNotificationsEvent
++
++  /**
++   * Updates the reply notification setting for this recipient.
++   * Controls whether replies directed at the current user still produce notifications while muted.
++   *
++   * @param setting The new [NotificationSetting] to apply for reply notifications.
++   */
++  data class SetReplyNotificationSetting(val setting: NotificationSetting) : SoundsAndNotificationsEvent
++
++  /**
++   * Signals that the user tapped the "Custom Notifications" row and wishes to navigate to the
++   * [custom notifications settings screen][org.thoughtcrime.securesms.components.settings.conversation.sounds.custom.CustomNotificationsSettingsFragment].
++   */
++  data object NavigateToCustomNotifications : SoundsAndNotificationsEvent
++}

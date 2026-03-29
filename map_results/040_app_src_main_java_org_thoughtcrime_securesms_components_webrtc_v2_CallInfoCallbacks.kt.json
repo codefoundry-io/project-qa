@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt",
+  "change_summary": "통화 참여자 액션 시트에서 발생하는 콜백(음소거, 제거, 상세 정보 확인 등)에 대한 실제 동작 로직 구현",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Call > Info > Participant Action)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt",
+  "test_method": [
+    "참여자 음소거 클릭 시 상대방에게 음소거 요청이 전달되는지 확인",
+    "참여자 제거 클릭 시 확인 다이얼로그가 표시되고, '제거' 또는 '차단' 선택 시 통화에서 해당 인원이 제외되는지 확인",
+    "대화방 이동, 안전 번호 확인, 연락처 상세 클릭 시 각각 올바른 Activity로 이동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "AppDependencies.signalCallManager를 통한 원격 제어 명령 전송 구현",
+    "MaterialAlertDialogBuilder를 사용한 참여자 제거 확인 다이얼로그 구현",
+    "VerifyIdentityActivity 및 CommunicationActions를 활용한 화면 전환 로직 포함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

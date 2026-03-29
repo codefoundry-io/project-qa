@@ -1,0 +1,63 @@
+[Target File]: app/src/main/res/navigation/conversation_settings.xml
+
+[Diff]:
+diff --git a/app/src/main/res/navigation/conversation_settings.xml b/app/src/main/res/navigation/conversation_settings.xml
+index d190183a47..6fa3016a59 100644
+--- a/app/src/main/res/navigation/conversation_settings.xml
++++ b/app/src/main/res/navigation/conversation_settings.xml
+@@ -66,6 +66,20 @@
+ 
+         </action>
+ 
++        <action
++            android:id="@+id/action_conversationSettingsFragment_to_soundsAndNotificationsSettingsFragment2"
++            app:destination="@id/soundsAndNotificationsSettingsFragment2"
++            app:enterAnim="@anim/fragment_open_enter"
++            app:exitAnim="@anim/fragment_open_exit"
++            app:popEnterAnim="@anim/fragment_close_enter"
++            app:popExitAnim="@anim/fragment_close_exit">
++
++            <argument
++                android:name="recipient_id"
++                app:argType="org.thoughtcrime.securesms.recipients.RecipientId" />
++
++        </action>
++
+         <action
+             android:id="@+id/action_conversationSettingsFragment_to_permissionsSettingsFragment"
+             app:destination="@id/permissionsSettingsFragment"
+@@ -120,7 +134,8 @@
+ 
+     <fragment
+         android:id="@+id/soundsAndNotificationsSettingsFragment"
+-        android:name="org.thoughtcrime.securesms.components.settings.conversation.sounds.SoundsAndNotificationsSettingsFragment">
++        android:name="org.thoughtcrime.securesms.components.settings.conversation.sounds.SoundsAndNotificationsSettingsFragment"
++        tools:layout="@layout/dsl_settings_fragment">
+ 
+         <argument
+             android:name="recipient_id"
+@@ -136,6 +151,24 @@
+ 
+     </fragment>
+ 
++    <fragment
++        android:id="@+id/soundsAndNotificationsSettingsFragment2"
++        android:name="org.thoughtcrime.securesms.components.settings.conversation.sounds.SoundsAndNotificationsSettingsFragment2">
++
++        <argument
++            android:name="recipient_id"
++            app:argType="org.thoughtcrime.securesms.recipients.RecipientId" />
++
++        <action
++            android:id="@+id/action_soundsAndNotificationsSettingsFragment2_to_customNotificationsSettingsFragment"
++            app:destination="@id/customNotificationsSettingsFragment"
++            app:enterAnim="@anim/fragment_open_enter"
++            app:exitAnim="@anim/fragment_open_exit"
++            app:popEnterAnim="@anim/fragment_close_enter"
++            app:popExitAnim="@anim/fragment_close_exit" />
++
++    </fragment>
++
+     <fragment
+         android:id="@+id/internalDetailsSettingsFragment"
+         android:name="org.thoughtcrime.securesms.components.settings.conversation.InternalConversationSettingsFragment">

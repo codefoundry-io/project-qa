@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/storage/StorageSyncModels.kt",
+  "change_summary": "기기 간 데이터 동기화 모델 생성 시 멘션 설정 판별에 사용하는 상수를 MentionSetting에서 NotificationSetting으로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Storage Sync)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/StorageSyncJob.java",
+  "test_method": [
+    "한 기기에서 멘션 알림 설정을 변경했을 때, 동기화 로직을 통해 다른 기기에서도 해당 설정이 유실 없이 동일하게 반영되는지 확인"
+  ],
+  "confirmed_facts": [
+    "dontNotifyForMentionsIfMuted 필드 값을 결정할 때 참조하는 Enum 타입을 NotificationSetting으로 업데이트함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "file": "app/src/benchmarkShared/java/org/signal/benchmark/BenchmarkCommandReceiver.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/benchmarkShared/java/org/signal/benchmark/BenchmarkSetupActivity.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/benchmarkShared/java/org/thoughtcrime/securesms/database/TestDbUtils.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/benchmarkShared/java/org/whispersystems/signalservice/internal/websocket/BenchmarkWebSocketConnection.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/main/generated/baselineProfiles/baseline-prof.txt",
+    "reason": "diff too large (29000 lines)"
+  },
+  {
+    "file": "app/src/main/generated/baselineProfiles/startup-prof.txt",
+    "reason": "diff too large (29000 lines)"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/database/RecipientDatabaseTestUtils.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/groups/GroupManagerV2Test_edit.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelEmojiValidationTest.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelSanitizationTest.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/megaphone/BackupUpsellScheduleTest.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "app/src/test/java/org/thoughtcrime/securesms/util/RemoteConfig_StaticValuesTest.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/BenchmarkMetrics.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/BenchmarkSetup.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/ConversationBenchmarks.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/GroupMessageProcessingBenchmarks.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/MessageProcessingBenchmarks.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/StartupBenchmarks.kt",
+    "reason": "non-production source set"
+  },
+  {
+    "file": "benchmark/src/main/java/org/thoughtcrime/benchmark/ThreadDeletionBenchmarks.kt",
+    "reason": "non-production source set"
+  }
+]

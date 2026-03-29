@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V304_CallAndReplyNotificationSettings.kt",
+  "change_summary": "수신자(recipient) 테이블에 통화 및 답장 알림 설정을 저장하기 위한 신규 컬럼 2종 추가 마이그레이션 구현",
+  "risk_level": "HIGH",
+  "trigger_point": "BG(Database Migration V304)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt",
+  "test_method": [
+    "304 마이그레이션 수행 후 SQLite 브라우저 등을 통해 recipient 테이블에 call_notification_setting, reply_notification_setting 컬럼이 추가되었는지 확인",
+    "새로 추가된 컬럼들의 기본값이 0(NotificationSetting.ALWAYS_NOTIFY)으로 정상 할당되었는지 확인"
+  ],
+  "confirmed_facts": [
+    "ALTER TABLE recipient ADD COLUMN 문을 사용하여 두 개의 정수형 컬럼을 추가함",
+    "각 컬럼의 기본값을 0으로 명시적으로 지정함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

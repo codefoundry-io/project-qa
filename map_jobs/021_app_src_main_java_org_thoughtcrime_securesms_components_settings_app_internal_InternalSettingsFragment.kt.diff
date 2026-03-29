@@ -1,0 +1,29 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt
+
+[References]:
+  InternalSettingsFragment:
+    - ./app/src/main/res/navigation/app_settings_with_change_number.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt
+index 1ab3769e77..d9a3858987 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt
+@@ -190,6 +190,16 @@ class InternalSettingsFragment : DSLSettingsFragment(R.string.preferences__inter
+           promptUserForSentTimestamp()
+         }
+       )
++
++      switchPref(
++        title = DSLSettingsText.from("Disable internal user flag"),
++        summary = DSLSettingsText.from("Experience life as a non-internal user. Force-stop the app to be an internal user again."),
++        isChecked = state.disableInternalUser,
++        onClick = {
++          viewModel.setDisableInternalUser(!state.disableInternalUser)
++        }
++      )
++
+       dividerPref()
+ 
+       sectionHeaderPref(DSLSettingsText.from("App UI"))

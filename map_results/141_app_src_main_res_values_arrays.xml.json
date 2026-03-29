@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/res/values/arrays.xml",
+  "change_summary": "알림 설정 화면(V2)의 통화 및 답장 알림 옵션 선택 다이얼로그에서 사용할 문자열 배열 리소스 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Sounds and Notifications Settings V2 > Dialog)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt",
+  "test_method": [
+    "통화 알림 설정 또는 답장 알림 설정 클릭 시 나타나는 선택 팝업에서 '항상 알림'과 '알림 없음' 옵션이 정상적으로 표시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "SoundsAndNotificationsSettingsFragment__call_labels 및 reply_labels 문자열 배열 정의 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

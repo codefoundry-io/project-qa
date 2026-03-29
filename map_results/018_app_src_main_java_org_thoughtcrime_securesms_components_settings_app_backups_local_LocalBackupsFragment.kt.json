@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt",
+  "change_summary": "로컬 백업 업그레이드 시 진행 상태 표시를 위한 로딩 다이얼로그 추가 및 백업 위치 선택 시 경로 표시 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Settings > Local Backups > Upgrade/Location Selection)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt",
+  "test_method": [
+    "로컬 백업 업그레이드 버튼 클릭 시 로딩 애니메이션이 나타나고 작업 완료 후 스낵바가 표시되는지 확인",
+    "백업 저장 폴더 선택 완료 후 하단 토스트 메시지에 원본 URI가 아닌 실제 사용자 경로(예: 내장 메모리/...)가 표시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "handleUpgrade 호출 전후로 upgradeInProgress 상태를 변경하여 Dialogs.IndeterminateProgressDialog를 제어",
+    "Toast 메시지 출력 시 StorageUtil.getDisplayPath를 사용하여 URI를 사용자 친화적인 경로로 변환"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

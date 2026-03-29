@@ -1,0 +1,40 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+
+[Changed Symbols]: GroupId, MemberLabelRepository, Recipient, SignalDispatchers, loadCanSetMemberLabel
+
+[References]:
+  ConversationSettingsViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+  GroupId: (10+ references - common utility)
+  MemberLabelRepository:
+    - ./app/src/test/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModelTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheetRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationMessage.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelEducationViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+  Recipient: (10+ references - common utility)
+  SignalDispatchers: (10+ references - common utility)
+  loadCanSetMemberLabel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+index cf38d44e21..07d00036bb 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt
+@@ -522,8 +522,8 @@ sealed class ConversationSettingsViewModel(
+       }
+     }
+ 
+-    private fun loadCanSetMemberLabel(v2GroupId: GroupId.V2) = viewModelScope.launch(SignalDispatchers.IO) {
+-      val canSetLabel = MemberLabelRepository.instance.canSetLabel(v2GroupId, Recipient.self())
++    private fun loadCanSetMemberLabel(groupId: GroupId.V2) = viewModelScope.launch(SignalDispatchers.IO) {
++      val canSetLabel = MemberLabelRepository.instance.canSetLabel(groupId, Recipient.self())
+       store.update {
+         it.copy(
+           specificSettingsState = it.requireGroupSettingsState().copy(

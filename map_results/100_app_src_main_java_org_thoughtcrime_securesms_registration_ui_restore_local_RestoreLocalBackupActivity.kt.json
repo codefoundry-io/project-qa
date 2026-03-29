@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivity.kt",
+  "change_summary": "로컬 백업 복구 실패 시 에러 알림 다이얼로그 노출 및 고객 지원 문의 연동 기능을 추가하여 실패 대응 시나리오 강화",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Registration/Restore > Restore Local Backup Failure)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivity.kt",
+  "test_method": [
+    "로컬 백업 복구 과정에서 오류가 발생했을 때(FAILED 단계), 안내 다이얼로그가 정상적으로 팝업되는지 확인",
+    "다이얼로그의 '고객 지원 문의' 버튼 클릭 시 지원 요청을 위한 ContactSupportDialog가 나타나는지 확인",
+    "에러 확인 후 '확인' 버튼을 눌렀을 때 RestoreActivity(복구 방법 선택 화면)로 안전하게 되돌아가는지 확인"
+  ],
+  "confirmed_facts": [
+    "RestorePhase.FAILED 상태에 대한 Compose UI 조건부 렌더링 로직 추가",
+    "ContactSupportViewModel을 액티비티 수준에서 통합하여 지원 요청 상태 관리",
+    "실패 다이얼로그 확인 시점에 따라 RestoreActivity로의 네비게이션 또는 액티비티 종료 처리 분기 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

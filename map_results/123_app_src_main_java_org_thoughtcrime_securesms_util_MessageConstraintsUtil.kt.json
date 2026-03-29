@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/util/MessageConstraintsUtil.kt",
+  "change_summary": "메시지 삭제 가능 시간 임계값 단위를 보정하고, 관리자 삭제 재전송 시 이미 삭제된 메시지에 대한 유효성 검사 예외 조건 추가",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Conversation > Message Options)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "일반 삭제 및 관리자 삭제 기능의 시간 제한이 정의된 설정값(RemoteConfig)에 따라 정확하게 작동하는지 확인",
+    "관리자 메시지 삭제가 1차 실패한 후 재전송을 시도할 때, 해당 메시지가 '이미 삭제됨' 상태임에도 불구하고 유효성 검사를 통과하여 재전송 작업이 진행되는지 확인"
+  ],
+  "confirmed_facts": [
+    "SEND_THRESHOLD 및 ADMIN_SEND_THRESHOLD 계산 시 milliseconds 대신 seconds 단위를 사용하도록 수정",
+    "isValidAdminDeleteSend 메서드에 isResend 파라미터를 추가하여 재전송 시에는 isRemoteDelete 체크를 우회하도록 로직 변경"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

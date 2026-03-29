@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java",
+  "change_summary": "그룹 생성 완료 후 초대 발송 다이얼로그 표시 방식을 FragmentManager 기반으로 리팩토링하고 종료 콜백 연동",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Create Group > Create Success)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java",
+  "test_method": [
+    "새로운 그룹 생성을 마친 후 초대된 멤버 목록이 있는 경우 알림 다이얼로그가 정상적으로 노출되는지 확인",
+    "해당 다이얼로그를 닫았을 때(Dismiss) 즉시 생성된 그룹 대화방으로 화면 전환이 이루어지는지 확인"
+  ],
+  "confirmed_facts": [
+    "기존 정적 메서드 GroupInviteSentDialog.showInvitesSent 대신 Fragment.show() 호출 방식을 채택",
+    "getSupportFragmentManager().setFragmentResultListener를 사용하여 다이얼로그 종료 시점의 후속 작업(goToConversation)을 정의함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

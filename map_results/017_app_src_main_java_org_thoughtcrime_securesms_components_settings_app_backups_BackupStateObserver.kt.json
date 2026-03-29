@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/BackupStateObserver.kt",
+  "change_summary": "백업 구독 상태를 판단할 때 결제 대기(Pending) 상태 확인 로직을 간소화 및 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Settings > Backups)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/BackupsSettingsViewModel.kt",
+  "test_method": [
+    "구독 결제가 진행 중(Pending)인 경우 백업 설정 화면에서 해당 상태가 올바르게 표시되는지 확인",
+    "기존에 명시적으로 확인하던 keepAlive 조건 제거가 실제 구독 상태 표시 정합성에 문제가 없는지 확인"
+  ],
+  "confirmed_facts": [
+    "getDatabaseBackupState에서 hasPendingBackupRedemption() 호출로 대체",
+    "getNetworkBackupState에서 isKeepAlive 여부 확인 로직 제거"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

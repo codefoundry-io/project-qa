@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt",
+  "change_summary": "내부 사용자용 새로운 알림 설정 화면(V2) 진입점 추가 및 그룹 초대 성공 다이얼로그 표시 방식 변경",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Conversation Settings > Sounds and notifications / Group Invite)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt",
+  "test_method": [
+    "내부 사용자(Internal User)로 설정된 경우 알림 설정 진입 시 SoundsAndNotificationsSettingsFragment2로 이동하는지 확인",
+    "그룹 초대 발송 시 GroupInviteSentDialog가 정상적으로 나타나고 리스트를 보여주는지 확인",
+    "그룹 멤버 라벨 설정 기능이 비활성화되었을 때 기존의 스낵바 알림이 더 이상 나타나지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "RemoteConfig.internalUser 값에 따른 알림 설정 화면 이동 분기 구현",
+    "GroupInviteSentDialog의 호출 방식을 정적 메서드에서 Fragment.show() 기반으로 변경",
+    "그룹 멤버 라벨 설정의 onDisabledClicked 스낵바 호출 제거"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

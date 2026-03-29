@@ -1,0 +1,76 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+
+[Changed Symbols]: FontWeight, MaterialTheme, Normal, RoundedCornerShape, TextStyle
+
+[References]:
+  MemberLabelPill:
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+  FontWeight: (10+ references - common utility)
+  MaterialTheme: (10+ references - common utility)
+  Normal: (10+ references - common utility)
+  RoundedCornerShape: (10+ references - common utility)
+  TextStyle: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+index 4fd2c4c086..1f4d7c1221 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+@@ -32,7 +32,7 @@ import org.thoughtcrime.securesms.components.emoji.Emojifier
+ object MemberLabelPill {
+   @get:Composable
+   val textStyleCompact: TextStyle
+-    get() = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.Normal)
++    get() = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Normal)
+ 
+   @get:Composable
+   val textStyleNormal: TextStyle
+@@ -50,7 +50,8 @@ fun MemberLabelPill(
+   text: String,
+   tintColor: Color,
+   modifier: Modifier = defaultModifier,
+-  textStyle: TextStyle = MemberLabelPill.textStyleCompact
++  textStyle: TextStyle = MemberLabelPill.textStyleCompact,
++  maxLines: Int = 1
+ ) {
+   val isDark = isSystemInDarkTheme()
+   val backgroundColor = tintColor.copy(alpha = if (isDark) 0.32f else 0.10f)
+@@ -67,7 +68,8 @@ fun MemberLabelPill(
+     textColor = textColor,
+     backgroundColor = backgroundColor,
+     modifier = modifier,
+-    textStyle = textStyle
++    textStyle = textStyle,
++    maxLines = maxLines
+   )
+ }
+ 
+@@ -81,9 +83,10 @@ fun MemberLabelPill(
+   textColor: Color,
+   backgroundColor: Color,
+   modifier: Modifier = defaultModifier,
+-  textStyle: TextStyle = MemberLabelPill.textStyleCompact
++  textStyle: TextStyle = MemberLabelPill.textStyleCompact,
++  maxLines: Int = 1
+ ) {
+-  val shape = RoundedCornerShape(percent = 50)
++  val shape = if (maxLines > 1) RoundedCornerShape(24.dp) else RoundedCornerShape(percent = 50)
+ 
+   Row(
+     modifier = Modifier
+@@ -112,7 +115,7 @@ fun MemberLabelPill(
+             text = annotatedText,
+             inlineContent = inlineContent,
+             color = textColor,
+-            maxLines = 1,
++            maxLines = maxLines,
+             overflow = TextOverflow.Ellipsis
+           )
+         }

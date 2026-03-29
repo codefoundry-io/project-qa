@@ -1,0 +1,24 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt
+
+[Changed Symbols]: MessageBackupTier
+
+[References]:
+  AccountDataArchiveProcessor:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/BackupRepository.kt
+  MessageBackupTier: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt
+index 35c8b55eca..9a535a7cc1 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt
+@@ -125,7 +125,7 @@ object AccountDataArchiveProcessor {
+             hasSeenGroupStoryEducationSheet = signalStore.storyValues.userHasSeenGroupStoryEducationSheet,
+             hasCompletedUsernameOnboarding = signalStore.uiHintValues.hasCompletedUsernameOnboarding(),
+             customChatColors = db.chatColorsTable.getSavedChatColors().toRemoteChatColors().also { colors -> exportState.customChatColorIds.addAll(colors.map { it.id }) },
+-            optimizeOnDeviceStorage = signalStore.backupValues.optimizeStorage,
++            optimizeOnDeviceStorage = signalStore.backupValues.optimizeStorage && signalStore.backupValues.backupTier == MessageBackupTier.PAID,
+             backupTier = signalStore.backupValues.backupTier.toRemoteBackupTier(),
+             defaultSentMediaQuality = signalStore.settingsValues.sentMediaQuality.toRemoteSentMediaQuality(),
+             autoDownloadSettings = AccountData.AutoDownloadSettings(

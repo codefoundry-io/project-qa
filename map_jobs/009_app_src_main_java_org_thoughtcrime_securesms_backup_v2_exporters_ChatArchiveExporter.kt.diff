@@ -1,0 +1,26 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt
+
+[Changed Symbols]: MentionSetting, NotificationSetting, RecipientTable
+
+[References]:
+  ChatArchiveExporter:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/database/ThreadTableArchiveExtensions.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt
+index 3d7e80162d..89ebf186be 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatArchiveExporter.kt
+@@ -62,7 +62,7 @@ class ChatArchiveExporter(private val cursor: Cursor, private val db: SignalData
+       expireTimerVersion = cursor.requireInt(RecipientTable.MESSAGE_EXPIRATION_TIME_VERSION),
+       muteUntilMs = cursor.requireLong(RecipientTable.MUTE_UNTIL).takeIf { it > 0 },
+       markedUnread = ThreadTable.ReadStatus.deserialize(cursor.requireInt(ThreadTable.READ)) == ThreadTable.ReadStatus.FORCED_UNREAD,
+-      dontNotifyForMentionsIfMuted = RecipientTable.MentionSetting.DO_NOT_NOTIFY.id == cursor.requireInt(RecipientTable.MENTION_SETTING),
++      dontNotifyForMentionsIfMuted = RecipientTable.NotificationSetting.DO_NOT_NOTIFY.id == cursor.requireInt(RecipientTable.MENTION_SETTING),
+       style = ChatStyleConverter.constructRemoteChatStyle(
+         db = db,
+         chatColors = chatColors,

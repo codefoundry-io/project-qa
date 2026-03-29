@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/res/menu/conversation_group_options.xml",
+  "change_summary": "사용하지 않는 그룹 대화방 옵션 메뉴(구성원 리스트 보기) 리소스 파일 삭제",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Options Menu)",
+  "entry_point_file": null,
+  "test_method": [
+    "그룹 대화방 우측 상단 메뉴를 열었을 때 삭제된 리소스로 인한 런타임 오류가 발생하지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "conversation_group_options.xml 파일이 물리적으로 삭제됨"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "삭제된 리소스 파일이므로 진입점 추적을 진행하지 않음"
+}

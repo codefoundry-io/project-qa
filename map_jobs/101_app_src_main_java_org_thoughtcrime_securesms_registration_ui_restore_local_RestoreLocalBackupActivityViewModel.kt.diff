@@ -1,0 +1,30 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt
+
+[Changed Symbols]: RestoreDecisionState, SignalStore, resetRestoreState
+
+[References]:
+  RestoreLocalBackupActivityViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivity.kt [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt
+  RestoreDecisionState: (10+ references - common utility)
+  SignalStore: (10+ references - common utility)
+  resetRestoreState:
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivity.kt [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt
+index 4d8479ed55..71b0f6429f 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt
+@@ -133,6 +133,10 @@ class RestoreLocalBackupActivityViewModel : ViewModel() {
+       }
+     }
+   }
++
++  fun resetRestoreState() {
++    SignalStore.registration.restoreDecisionState = RestoreDecisionState(decisionState = RestoreDecisionState.State.START)
++  }
+ }
+ 
+ data class RestoreLocalBackupScreenState(

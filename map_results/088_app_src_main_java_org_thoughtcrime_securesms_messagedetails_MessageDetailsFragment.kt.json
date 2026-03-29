@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/messagedetails/MessageDetailsFragment.kt",
+  "change_summary": "메시지 상세 정보 화면의 에러 처리 핸들러에서 호출하는 안전 번호 바텀 시트 생성 메서드 명칭 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Message Details > Error Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/messagedetails/MessageDetailsFragment.kt",
+  "test_method": [
+    "메시지 정보(Info) 화면에서 전송 실패 아이콘을 클릭했을 때 안전 번호 확인 및 승인을 위한 바텀 시트가 정상적으로 팝업되는지 확인"
+  ],
+  "confirmed_facts": [
+    "onErrorClicked 콜백 내에서 SafetyNumberBottomSheet.forMessageRecord 호출을 forOutgoingMessageRecord로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,48 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt
+
+[Changed Symbols]: handleDisplayGroupRecipients
+
+[References]:
+  ConversationOptionsMenu:
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt
+  handleDisplayGroupRecipients: (no references found)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt b/app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt
+index a0d3f7f2c1..5818087ac2 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt
+@@ -126,7 +126,6 @@ internal object ConversationOptionsMenu {
+             hideMenuItem(menu, R.id.menu_video_secure)
+           }
+         }
+-        menuInflater.inflate(R.menu.conversation_group_options, menu)
+         menuInflater.inflate(R.menu.conversation_active_group_options, menu)
+       }
+ 
+@@ -164,8 +163,6 @@ internal object ConversationOptionsMenu {
+         hideMenuItem(menu, R.id.menu_add_shortcut)
+       }
+ 
+-      hideMenuItem(menu, R.id.menu_group_recipients)
+-
+       if (isActiveV2Group) {
+         hideMenuItem(menu, R.id.menu_mute_notifications)
+         hideMenuItem(menu, R.id.menu_conversation_settings)
+@@ -206,7 +203,6 @@ internal object ConversationOptionsMenu {
+         R.id.menu_add_shortcut -> callback.handleAddShortcut()
+         R.id.menu_search -> callback.handleSearch()
+         R.id.menu_add_to_contacts -> callback.handleAddToContacts()
+-        R.id.menu_group_recipients -> callback.handleDisplayGroupRecipients()
+         R.id.menu_group_settings -> callback.handleManageGroup()
+         R.id.menu_leave -> callback.handleLeavePushGroup()
+         R.id.menu_invite -> callback.handleInviteLink()
+@@ -276,7 +272,6 @@ internal object ConversationOptionsMenu {
+     fun handleAddShortcut()
+     fun handleSearch()
+     fun handleAddToContacts()
+-    fun handleDisplayGroupRecipients()
+     fun handleManageGroup()
+     fun handleLeavePushGroup()
+     fun handleInviteLink()

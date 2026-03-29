@@ -1,0 +1,20 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/recipients/Recipient.kt",
+  "change_summary": "수신자 모델에 통화 및 답장 알림 설정 필드를 추가하고, 내부 사용자 여부에 따라 해당 설정의 적용 방식을 제어하도록 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Recipient Record Modeling)",
+  "entry_point_file": null,
+  "test_method": [
+    "내부 사용자(internalUser)인 경우 실제 DB에 저장된 callNotificationSetting 값이 반환되는지 확인",
+    "일반 사용자의 경우 callNotificationSetting이 항상 ALWAYS_NOTIFY를 반환하여 기존 동작이 유지되는지 확인",
+    "그룹 대화방이 아닌 경우(개인 대화) replyNotificationSetting이 DO_NOT_NOTIFY를 반환하는지 확인"
+  ],
+  "confirmed_facts": [
+    "mentionSetting 필드의 타입을 RecipientTable.NotificationSetting으로 변경함",
+    "callNotificationSettingValue 및 replyNotificationSettingValue 프라이빗 필드 추가",
+    "RemoteConfig.internalUser 플래그를 사용하여 알림 설정 접근 시점의 노출 로직 구현",
+    "equals 메서드에 신규 추가된 설정 필드들에 대한 비교 로직 포함"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "전체 앱에서 광범위하게 참조되는 핵심 데이터 모델 클래스이며 특정 Android 컴포넌트 진입점을 가지지 않음"
+}

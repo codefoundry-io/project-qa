@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationOptionsMenu.kt",
+  "change_summary": "대화방 옵션 메뉴에서 그룹 구성원 목록을 확인하는 메뉴(menu_group_recipients) 관련 로직을 삭제",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Options Menu)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "대화방 화면 우측 상단 메뉴를 열었을 때 '그룹 구성원' 보기 항목이 정상적으로 제거되었는지 확인",
+    "메뉴 클릭 시의 콜백 인터페이스(handleDisplayGroupRecipients) 제거에 따른 영향 범위 확인"
+  ],
+  "confirmed_facts": [
+    "R.menu.conversation_group_options 인플레이션 로직 제거",
+    "onOptionsItemSelected 내 menu_group_recipients 분기 처리 및 Callback 인터페이스의 handleDisplayGroupRecipients 정의 삭제"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

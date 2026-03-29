@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/ConversationItem.java",
+  "change_summary": "삭제된 메시지의 안내 텍스트 표시 로직을 개선하여 본인 삭제 여부를 명확히 하고, 관리자 삭제 시의 텍스트 템플릿 적용 방식을 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Message Item Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "자신이 삭제한 메시지가 '내가 메시지를 삭제했습니다'와 같이 1인칭 시점으로 올바르게 표시되는지 확인",
+    "관리자가 삭제한 메시지의 경우 관리자 이름이 포함된 템플릿 문구가 올바른 색상과 스타일로 렌더링되는지 확인",
+    "삭제된 메시지 안내 문구 내의 사용자 이름을 클릭했을 때 해당 사용자의 정보 화면으로 정상 이동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "message.getDeletedByRecipient().equals(Recipient.self()) 조건을 사용하여 본인 삭제 케이스를 판별하도록 수정",
+    "관리자 삭제 안내 문구 생성 시 SpanUtil.SPAN_PLACE_HOLDER를 포함한 새로운 템플릿 리소스 사용",
+    "RecipientClickableSpan 클릭 콜백에 GroupId 존재 여부 확인 로직 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

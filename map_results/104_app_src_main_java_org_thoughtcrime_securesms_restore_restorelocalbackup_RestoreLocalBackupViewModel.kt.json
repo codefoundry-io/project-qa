@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupViewModel.kt",
+  "change_summary": "가입 전 로컬 백업 복구 성공 시 사용자 이름 복구가 필요함을 알리는 상태 플래그(needsUsernameRestore) 설정 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Restore Local Backup > Success)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/restore/restorelocalbackup/RestoreLocalBackupFragment.kt",
+  "test_method": [
+    "가입 전 단계에서 기존 로컬 백업 파일로부터 복구를 마친 후 SignalStore에 사용자 이름 복구 필요 플래그가 저장되는지 확인"
+  ],
+  "confirmed_facts": [
+    "onRestoreSuccess 내부에서 SignalStore.misc.needsUsernameRestore를 true로 설정하는 코드 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

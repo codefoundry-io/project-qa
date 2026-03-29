@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt",
+  "change_summary": "메시지 수신 처리의 데이터베이스 트랜잭션을 배치 단위로 묶어 성능을 최적화하고, 실패 시 개별 처리로 전환하는 폴백 로직 구현",
+  "risk_level": "HIGH",
+  "trigger_point": "BG(Incoming Message Receiving)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt",
+  "test_method": [
+    "수십 개의 메시지가 동시에 도착할 때 단일 트랜잭션(processBatchInTransaction)으로 일괄 처리되어 메시지 표시 속도가 향상되는지 확인",
+    "배치 처리 도중 특정 메시지에서 DB 오류나 예외가 발생할 경우, 전체 배치가 롤백되고 각 메시지를 개별 트랜잭션(processMessagesIndividually)으로 안전하게 다시 처리하는지 확인",
+    "트랜잭션이 성공적으로 커밋된 경우에만 서버에 Ack를 전송하고 후속 작업(Job)이 정상적으로 등록되는지 확인"
+  ],
+  "confirmed_facts": [
+    "batch 처리 전체를 하나의 트랜잭션으로 묶는 processBatchInTransaction 메서드 추가",
+    "SignalDatabase.tryRunInTransaction의 반환값을 기반으로 성공 시에만 후속 로직(Ack, Job 실행)을 수행하도록 구조 변경",
+    "일괄 트랜잭션 실패 시 데이터 무결성을 위해 기존 방식인 개별 메시지 처리(processMessagesIndividually)로 폴백하는 로직 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt",
+  "change_summary": "멤버 라벨의 텍스트 및 이모지에 대한 유효성 검사, 글자 수 제한 처리 및 표시용 텍스트 가공 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Member Label Processing)",
+  "entry_point_file": null,
+  "test_method": [
+    "라벨 텍스트가 최대 24자(Grapheme) 또는 96바이트를 초과할 경우 올바르게 잘리는지 확인",
+    "공백이 많은 텍스트 입력 시 sanitizeLabelText를 통해 단일 공백으로 치환되고 양끝 공백이 제거되는지 확인",
+    "RTL 언어 포함 시 displayText 프로퍼티를 통해 방향성 격리 처리가 적용되는지 확인"
+  ],
+  "confirmed_facts": [
+    "BidiUtil.isolateBidi를 사용하는 displayText 프로퍼티 추가",
+    "최대 글자 수(24) 및 바이트 제한(96, 이모지 48) 상수 정의",
+    "정적인 텍스트/이모지 정제 메서드(truncateLabelText, sanitizeLabelText, sanitizeEmoji) 구현"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "특정 진입점 없이 앱 전반의 그룹 멤버 라벨 처리 시 사용되는 데이터 모델 클래스임"
+}

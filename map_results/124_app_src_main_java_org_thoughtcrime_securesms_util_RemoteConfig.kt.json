@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt",
+  "change_summary": "원격 설정 시스템의 내부 사용자 판단 로직을 개선하고, 메시지 삭제 임계값의 키 및 단위를 글로벌 표준(초 단위)으로 변경",
+  "risk_level": "HIGH",
+  "trigger_point": "BG(Remote Configuration Update)",
+  "entry_point_file": null,
+  "test_method": [
+    "내부 설정 메뉴를 통해 internalUserDisabled 플래그를 켰을 때 internalUser 관련 기능이 즉시 비활성화되는지 확인",
+    "서버에서 내려오는 글로벌 삭제 제한 시간(normalDeleteMaxAgeInSeconds 등)이 초 단위로 정확히 파싱되어 로컬 기능에 적용되는지 확인",
+    "sendMemberLabels 및 receiveAdminDelete의 키 버전이 업데이트됨에 따라 기존 기능이 중단되지 않고 새로운 설정값을 정상 수신하는지 확인"
+  ],
+  "confirmed_facts": [
+    "internalUser 판단 시 internalUserDisabled, underTest, Environment.isInternal()을 순차적으로 확인하는 when 문 도입",
+    "regularDeleteThreshold와 adminDeleteThreshold의 키를 android.xxx에서 global.xxxInSeconds로 변경하고 기본값 단위를 seconds로 보정",
+    "주요 기능(멤버 라벨 전송, 관리자 삭제 수신)의 원격 키 버전 상향 조정"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "전역 설정을 관리하는 싱글톤 오브젝트로 특정 기능의 실행 진입점이 아님"
+}

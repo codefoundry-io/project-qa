@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt",
+  "change_summary": "수신자 설정 항목(RecipientPreference)에서 멤버 라벨 정보를 유지하고 표시하는 로직을 개선 및 스타일 리팩토링",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > Recipient Info)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt",
+  "test_method": [
+    "대화방 설정 상단의 사용자 프로필 영역에서 멤버 라벨(예: 관리자 등)이 정상적으로 표시되는지 확인",
+    "수신자 정보가 업데이트되어 Observer가 동작할 때 멤버 라벨이 누락되지 않고 올바르게 재렌더링되는지 확인"
+  ],
+  "confirmed_facts": [
+    "memberLabel 상태를 클래스 레벨에서 관리하도록 추가",
+    "MemberLabelPillView 스타일을 직접 생성하지 않고 미리 정의된 MemberLabelPillView.Style.Compact 상수를 사용하도록 변경"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt",
+  "change_summary": "수신자 상세 정보 바텀 시트에서 멤버 라벨이 길어질 경우 생략 없이 여러 줄로 모두 표시되도록 설정 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Member Avatar/Name Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt",
+  "test_method": [
+    "대화방에서 긴 멤버 라벨이 설정된 사용자를 클릭하여 바텀 시트를 열었을 때, 라벨 텍스트가 줄바꿈되어 전체 내용이 다 보이는지 확인"
+  ],
+  "confirmed_facts": [
+    "memberLabelView 초기화 시 Style(maxLines = Int.MAX_VALUE)을 적용하여 텍스트 제한을 해제함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

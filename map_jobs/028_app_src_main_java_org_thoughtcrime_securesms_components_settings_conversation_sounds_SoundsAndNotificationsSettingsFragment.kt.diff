@@ -1,0 +1,36 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt
+
+[Changed Symbols]: MentionSetting, NotificationSetting, RecipientTable
+
+[References]:
+  SoundsAndNotificationsSettingsFragment: (10+ references - common utility)
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt
+index db8f2a9335..05a70d019d 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt
+@@ -82,7 +82,7 @@ class SoundsAndNotificationsSettingsFragment :
+       )
+ 
+       if (state.hasMentionsSupport) {
+-        val mentionSelection = if (state.mentionSetting == RecipientTable.MentionSetting.ALWAYS_NOTIFY) {
++        val mentionSelection = if (state.mentionSetting == RecipientTable.NotificationSetting.ALWAYS_NOTIFY) {
+           0
+         } else {
+           1
+@@ -96,9 +96,9 @@ class SoundsAndNotificationsSettingsFragment :
+           onSelected = {
+             viewModel.setMentionSetting(
+               if (it == 0) {
+-                RecipientTable.MentionSetting.ALWAYS_NOTIFY
++                RecipientTable.NotificationSetting.ALWAYS_NOTIFY
+               } else {
+-                RecipientTable.MentionSetting.DO_NOT_NOTIFY
++                RecipientTable.NotificationSetting.DO_NOT_NOTIFY
+               }
+             )
+           }

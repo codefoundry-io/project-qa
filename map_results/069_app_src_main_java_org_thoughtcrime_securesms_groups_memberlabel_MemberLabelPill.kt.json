@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt",
+  "change_summary": "멤버 라벨 필(Pill) 컴포저블의 기본 텍스트 스타일을 개선하고 다중 행 표시를 위한 레이아웃 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Global > Member Label Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt",
+  "test_method": [
+    "멤버 라벨의 글꼴 크기가 bodySmall 스타일로 정상 적용되었는지 확인",
+    "긴 라벨이 설정되어 여러 줄로 표시될 때 배경의 둥근 모서리(Shape)가 캡슐 모양(50%)에서 둥근 사각형(24dp)으로 적절히 변하는지 확인"
+  ],
+  "confirmed_facts": [
+    "textStyleCompact의 기본 스타일을 labelSmall에서 bodySmall로 변경",
+    "maxLines 매개변수를 추가하여 텍스트 오버플로우 제어권 확장",
+    "다중 행(maxLines > 1) 여부에 따라 배경 테두리 모양(RoundedCornerShape)을 동적으로 결정하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

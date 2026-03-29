@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt",
+  "change_summary": "통화 참여자 목록 화면에서 내부 사용자(Internal User)에 한해 참여자 클릭 시 상세 액션(음소거, 제거, 대화방 이동 등)을 수행할 수 있는 바텀 시트 노출 로직 추가",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Call > Info > Participant Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt",
+  "test_method": [
+    "내부 사용자 설정이 활성화된 상태에서 통화 중 정보 화면의 참여자 리스트를 클릭했을 때 ParticipantActionsSheet가 나타나는지 확인",
+    "액션 시트 내의 각 항목(음소거, 통화에서 제거, 안전 번호 확인 등) 클릭 시 대응하는 콜백이 정상적으로 호출되는지 확인",
+    "일반 사용자(Non-internal user)는 참여자 클릭 시 액션 시트가 나타나지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "CallInfoView.Callbacks에 오디오 음소거, 통화 제거 등 5개의 새로운 콜백 메서드 추가",
+    "RemoteConfig.internalUser 여부에 따라 참여자 행의 클릭 가능 여부를 결정하도록 수정",
+    "참여자 클릭 시 selectedParticipant 상태를 업데이트하여 ParticipantActionsSheet를 렌더링하도록 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

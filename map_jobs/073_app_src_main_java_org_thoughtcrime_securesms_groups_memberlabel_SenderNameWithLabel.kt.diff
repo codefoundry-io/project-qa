@@ -1,0 +1,28 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+
+[References]:
+  SenderNameWithLabel: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+index 0697bcddf6..7262879fc6 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+@@ -48,7 +48,7 @@ fun SenderNameWithLabel(
+     labelSlot = { label ->
+       MemberLabelPill(
+         emoji = label.emoji,
+-        text = label.text,
++        text = label.displayText,
+         tintColor = senderColor,
+         modifier = defaultLabelModifier,
+         textStyle = defaultLabelTextStyle()
+@@ -78,7 +78,7 @@ fun SenderNameWithLabel(
+     labelSlot = { label ->
+       MemberLabelPill(
+         emoji = label.emoji,
+-        text = label.text,
++        text = label.displayText,
+         textColor = labelTextColor,
+         backgroundColor = labelBackgroundColor,
+         modifier = defaultLabelModifier,

@@ -1,0 +1,30 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt
+
+[Changed Symbols]: MentionSetting, NotificationSetting, RecipientTable
+
+[References]:
+  SoundsAndNotificationsSettingsState:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt [ENTRY: Fragment]
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt
+index 82ac5ea907..e53c4309df 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt
+@@ -7,7 +7,7 @@ import org.thoughtcrime.securesms.recipients.RecipientId
+ data class SoundsAndNotificationsSettingsState(
+   val recipientId: RecipientId = Recipient.UNKNOWN.id,
+   val muteUntil: Long = 0L,
+-  val mentionSetting: RecipientTable.MentionSetting = RecipientTable.MentionSetting.DO_NOT_NOTIFY,
++  val mentionSetting: RecipientTable.NotificationSetting = RecipientTable.NotificationSetting.DO_NOT_NOTIFY,
+   val hasCustomNotificationSettings: Boolean = false,
+   val hasMentionsSupport: Boolean = false,
+   val channelConsistencyCheckComplete: Boolean = false

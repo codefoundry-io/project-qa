@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AccountDataArchiveProcessor.kt",
+  "change_summary": "계정 데이터 백업 시 디바이스 저장소 최적화(optimizeOnDeviceStorage) 설정이 유료 티어(PAID)일 때만 활성화되도록 조건 강화",
+  "risk_level": "LOW",
+  "trigger_point": "BG(BackupMessagesJob)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/BackupMessagesJob.kt",
+  "test_method": [
+    "유료 티어 사용자가 저장소 최적화 기능을 활성화하고 백업을 수행했을 때, 설정이 정상적으로 백업 데이터에 포함되는지 확인",
+    "무료 티어 사용자의 경우 저장소 최적화 설정을 켰더라도 백업 시 해당 항목이 비활성화(false)로 처리되는지 확인"
+  ],
+  "confirmed_facts": [
+    "optimizeOnDeviceStorage 결정 시 backupTier == MessageBackupTier.PAID 조건 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

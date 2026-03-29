@@ -1,0 +1,306 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+
+[Changed Symbols]: Alignment, AllNightPreviews, AndroidView, AvatarImageView, BackpressureStrategy, BottomSheetPreview, CallParticipant, CenterHorizontally, Copyright, Default, Dividers, ExperimentalMaterial3Api, Identifier, License, LocalContext, LocalInspectionMode, MaterialTheme, Messenger, ModalBottomSheet, Observable, OptIn, ParticipantActionsSheetAdminPreview, ParticipantActionsSheetContent, ParticipantActionsSheetNonAdminPreview, ParticipantHeader, Previews, Recipient, Rows, Signal, Spacer, TextRow
+
+[References]:
+  ParticipantActionsSheet:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  Alignment: (10+ references - common utility)
+  AllNightPreviews:
+    - ./core/ui/src/main/java/org/signal/core/ui/compose/SignalPreviews.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallGrid.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreenJoiningOverlay.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallElementsLayout.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallParticipantsOverflow.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/MoveableLocalVideoRenderer.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallParticipantsPager.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreenPreJoinOverlay.kt
+  AndroidView: (10+ references - common utility)
+  AvatarImageView: (10+ references - common utility)
+  BackpressureStrategy: (10+ references - common utility)
+  BottomSheetPreview:
+    - ./feature/registration/src/main/java/org/signal/registration/screens/welcome/WelcomeScreen.kt
+    - ./core/ui/src/main/java/org/signal/core/ui/compose/Previews.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ui/BackupUpsellBottomSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ui/BackupSetupCompleteBottomSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/SelectInstructionsSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/SelectLocalBackupSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/EnterBackupKeyScreen.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/remote/RemoteBackupsSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/mediasend/v2/QuickRestoreInfoDialog.kt
+  CallParticipant: (10+ references - common utility)
+  CenterHorizontally: (10+ references - common utility)
+  Copyright: (10+ references - common utility)
+  Default: (10+ references - common utility)
+  Dividers: (10+ references - common utility)
+  ExperimentalMaterial3Api: (10+ references - common utility)
+  Identifier: (10+ references - common utility)
+  License: (10+ references - common utility)
+  LocalContext: (10+ references - common utility)
+  LocalInspectionMode: (10+ references - common utility)
+  MaterialTheme: (10+ references - common utility)
+  Messenger: (10+ references - common utility)
+  ModalBottomSheet: (10+ references - common utility)
+  Observable: (10+ references - common utility)
+  OptIn: (10+ references - common utility)
+  ParticipantActionsSheetAdminPreview:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  ParticipantActionsSheetContent:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  ParticipantActionsSheetNonAdminPreview:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  ParticipantHeader:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+  Previews: (10+ references - common utility)
+  Recipient: (10+ references - common utility)
+  Rows: (10+ references - common utility)
+  Signal: (10+ references - common utility)
+  Spacer: (10+ references - common utility)
+  TextRow: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+new file mode 100644
+index 0000000000..5132c02782
+--- /dev/null
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt
+@@ -0,0 +1,235 @@
++/*
++ * Copyright 2025 Signal Messenger, LLC
++ * SPDX-License-Identifier: AGPL-3.0-only
++ */
++
++package org.thoughtcrime.securesms.components.webrtc.controls
++
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.Spacer
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.layout.size
++import androidx.compose.material3.ExperimentalMaterial3Api
++import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.ModalBottomSheet
++import androidx.compose.material3.Text
++import androidx.compose.material3.rememberModalBottomSheetState
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.getValue
++import androidx.compose.runtime.livedata.observeAsState
++import androidx.compose.ui.Alignment
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.platform.LocalInspectionMode
++import androidx.compose.ui.res.painterResource
++import androidx.compose.ui.res.stringResource
++import androidx.compose.ui.unit.dp
++import androidx.compose.ui.viewinterop.AndroidView
++import androidx.lifecycle.toLiveData
++import io.reactivex.rxjava3.core.BackpressureStrategy
++import io.reactivex.rxjava3.core.Observable
++import org.signal.core.ui.compose.AllNightPreviews
++import org.signal.core.ui.compose.Dividers
++import org.signal.core.ui.compose.Previews
++import org.signal.core.ui.compose.Rows
++import org.thoughtcrime.securesms.R
++import org.thoughtcrime.securesms.components.AvatarImageView
++import org.thoughtcrime.securesms.events.CallParticipant
++import org.thoughtcrime.securesms.recipients.Recipient
++
++@OptIn(ExperimentalMaterial3Api::class)
++@Composable
++fun ParticipantActionsSheet(
++  callParticipant: CallParticipant,
++  isSelfAdmin: Boolean,
++  isCallLink: Boolean,
++  onDismiss: () -> Unit,
++  onMuteAudio: (CallParticipant) -> Unit,
++  onRemoveFromCall: (CallParticipant) -> Unit,
++  onContactDetails: (CallParticipant) -> Unit,
++  onViewSafetyNumber: (CallParticipant) -> Unit,
++  onGoToChat: (CallParticipant) -> Unit
++) {
++  val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
++
++  ModalBottomSheet(
++    onDismissRequest = onDismiss,
++    sheetState = sheetState
++  ) {
++    val recipient by (
++      (if (LocalInspectionMode.current) Observable.just(Recipient.UNKNOWN) else Recipient.observable(callParticipant.recipient.id))
++        .toFlowable(BackpressureStrategy.LATEST)
++        .toLiveData()
++        .observeAsState(initial = callParticipant.recipient)
++      )
++
++    ParticipantActionsSheetContent(
++      recipient = recipient,
++      callParticipant = callParticipant,
++      isSelfAdmin = isSelfAdmin,
++      isCallLink = isCallLink,
++      onDismiss = onDismiss,
++      onMuteAudio = onMuteAudio,
++      onRemoveFromCall = onRemoveFromCall,
++      onContactDetails = onContactDetails,
++      onViewSafetyNumber = onViewSafetyNumber,
++      onGoToChat = onGoToChat
++    )
++  }
++}
++
++@Composable
++private fun ParticipantActionsSheetContent(
++  recipient: Recipient,
++  callParticipant: CallParticipant,
++  isSelfAdmin: Boolean,
++  isCallLink: Boolean,
++  onDismiss: () -> Unit,
++  onMuteAudio: (CallParticipant) -> Unit,
++  onRemoveFromCall: (CallParticipant) -> Unit,
++  onContactDetails: (CallParticipant) -> Unit,
++  onViewSafetyNumber: (CallParticipant) -> Unit,
++  onGoToChat: (CallParticipant) -> Unit
++) {
++  ParticipantHeader(recipient = recipient)
++
++  val hasAdminActions = isSelfAdmin && (callParticipant.isMicrophoneEnabled || isCallLink)
++
++  if (hasAdminActions) {
++    Dividers.Default()
++
++    if (callParticipant.isMicrophoneEnabled) {
++      Rows.TextRow(
++        text = stringResource(id = R.string.CallParticipantSheet__mute_audio),
++        icon = painterResource(id = R.drawable.symbol_mic_slash_24),
++        onClick = {
++          onMuteAudio(callParticipant)
++          onDismiss()
++        }
++      )
++    }
++
++    if (isCallLink) {
++      Rows.TextRow(
++        text = stringResource(id = R.string.CallParticipantSheet__remove_from_call),
++        icon = painterResource(id = R.drawable.symbol_minus_circle_24),
++        onClick = {
++          onRemoveFromCall(callParticipant)
++          onDismiss()
++        }
++      )
++    }
++  }
++
++  Dividers.Default()
++
++  Rows.TextRow(
++    text = stringResource(id = R.string.CallParticipantSheet__contact_details),
++    icon = painterResource(id = R.drawable.symbol_person_24),
++    onClick = {
++      onContactDetails(callParticipant)
++      onDismiss()
++    }
++  )
++
++  Rows.TextRow(
++    text = stringResource(id = R.string.ConversationSettingsFragment__view_safety_number),
++    icon = painterResource(id = R.drawable.symbol_safety_number_24),
++    onClick = {
++      onViewSafetyNumber(callParticipant)
++      onDismiss()
++    }
++  )
++
++  Rows.TextRow(
++    text = stringResource(id = R.string.CallContextMenu__go_to_chat),
++    icon = painterResource(id = R.drawable.symbol_open_24),
++    onClick = {
++      onGoToChat(callParticipant)
++      onDismiss()
++    }
++  )
++
++  Spacer(modifier = Modifier.size(48.dp))
++}
++
++@Composable
++private fun ParticipantHeader(recipient: Recipient) {
++  Column(
++    horizontalAlignment = Alignment.CenterHorizontally,
++    modifier = Modifier
++      .fillMaxWidth()
++      .padding(vertical = 16.dp)
++  ) {
++    if (LocalInspectionMode.current) {
++      Spacer(modifier = Modifier.size(64.dp))
++    } else {
++      AndroidView(
++        factory = ::AvatarImageView,
++        modifier = Modifier.size(64.dp)
++      ) {
++        it.setAvatarUsingProfile(recipient)
++      }
++    }
++
++    Spacer(modifier = Modifier.size(12.dp))
++
++    Text(
++      text = recipient.getDisplayName(androidx.compose.ui.platform.LocalContext.current),
++      style = MaterialTheme.typography.titleLarge
++    )
++
++    val e164 = recipient.e164
++    if (e164.isPresent) {
++      Spacer(modifier = Modifier.size(2.dp))
++      Text(
++        text = e164.get(),
++        style = MaterialTheme.typography.bodyMedium,
++        color = MaterialTheme.colorScheme.onSurfaceVariant
++      )
++    }
++  }
++}
++
++@AllNightPreviews
++@Composable
++private fun ParticipantActionsSheetAdminPreview() {
++  Previews.BottomSheetPreview {
++    ParticipantActionsSheetContent(
++      recipient = Recipient(isResolving = false, systemContactName = "Peter Parker"),
++      callParticipant = CallParticipant(
++        recipient = Recipient(isResolving = false, systemContactName = "Peter Parker"),
++        isMicrophoneEnabled = true
++      ),
++      isSelfAdmin = true,
++      isCallLink = true,
++      onDismiss = {},
++      onMuteAudio = {},
++      onRemoveFromCall = {},
++      onContactDetails = {},
++      onViewSafetyNumber = {},
++      onGoToChat = {}
++    )
++  }
++}
++
++@AllNightPreviews
++@Composable
++private fun ParticipantActionsSheetNonAdminPreview() {
++  Previews.BottomSheetPreview {
++    ParticipantActionsSheetContent(
++      recipient = Recipient(isResolving = false, systemContactName = "Gwen Stacy"),
++      callParticipant = CallParticipant(
++        recipient = Recipient(isResolving = false, systemContactName = "Gwen Stacy")
++      ),
++      isSelfAdmin = false,
++      isCallLink = false,
++      onDismiss = {},
++      onMuteAudio = {},
++      onRemoveFromCall = {},
++      onContactDetails = {},
++      onViewSafetyNumber = {},
++      onGoToChat = {}
++    )
++  }
++}

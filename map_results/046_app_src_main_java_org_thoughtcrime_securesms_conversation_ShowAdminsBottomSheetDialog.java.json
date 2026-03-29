@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java",
+  "change_summary": "그룹 관리자 목록 표시 시 멤버 라벨(MemberLabel)과 이름 색상(NameColor)을 함께 표시하도록 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > View Admins)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/ShowAdminsBottomSheetDialog.java",
+  "test_method": [
+    "대화방에서 관리자 목록 보기 시 각 관리자의 프로필과 함께 부여된 라벨 및 지정된 이름 색상이 올바르게 렌더링되는지 확인",
+    "관리자 목록 중 한 명을 클릭했을 때 해당 사용자와의 대화창으로 정상 이동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "getAdmins 메서드에서 MemberLabelRepository를 호출하여 관리자별 라벨 정보를 로드함",
+    "ColorizerV2를 사용하여 관리자의 이름 색상을 계산하고 GroupMemberEntry.FullMember에 포함함",
+    "GroupMemberListView의 데이터 설정 메서드를 setDisplayOnlyMembers에서 setMembers로 변경"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

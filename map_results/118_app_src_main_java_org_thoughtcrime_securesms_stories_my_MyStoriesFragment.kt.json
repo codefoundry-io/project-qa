@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt",
+  "change_summary": "내 스토리 화면의 에러 처리 로직에서 호출하는 안전 번호 바텀 시트 생성 메서드 명칭 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(My Stories > Failed Story Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt",
+  "test_method": [
+    "내 스토리(My Stories) 리스트에서 전송 실패(신원 불일치)된 스토리를 클릭했을 때 안전 번호 확인 다이얼로그가 정상적으로 팝업되는지 확인"
+  ],
+  "confirmed_facts": [
+    "SafetyNumberBottomSheet.forMessageRecord 호출을 forOutgoingMessageRecord로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

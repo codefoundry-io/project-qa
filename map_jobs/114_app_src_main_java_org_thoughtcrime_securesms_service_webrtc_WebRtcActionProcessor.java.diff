@@ -1,0 +1,36 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java
+
+[Changed Symbols]: CallParticipant, WebRtcServiceState
+
+[References]:
+  WebRtcActionProcessor:
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/ActiveCallActionProcessorDelegate.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IdleActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/CallSetupActionProcessorDelegate.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/GroupNetworkUnavailableActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/DeviceAwareActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/state/WebRtcServiceStateBuilder.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/state/WebRtcServiceState.java
+  CallParticipant: (10+ references - common utility)
+  WebRtcServiceState: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java
+index 6c4cc49b41..3669ee72bb 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/WebRtcActionProcessor.java
+@@ -973,6 +973,12 @@ public abstract class WebRtcActionProcessor {
+     return currentState;
+   }
+ 
++  protected @NonNull WebRtcServiceState handleSendRemoteMuteRequest(@NonNull WebRtcServiceState currentState, @NonNull CallParticipant participant) {
++    Log.i(tag, "handleSendRemoteMuteRequest not processed");
++
++    return currentState;
++  }
++
+   protected @NonNull WebRtcServiceState handleRemoveFromCallLink(@NonNull WebRtcServiceState currentState, @NonNull CallParticipant participant) {
+     Log.i(tag, "handleRemoveFromCallLink not processed");

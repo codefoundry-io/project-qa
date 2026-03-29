@@ -1,0 +1,20 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/EnterBackupKeyViewModel.kt",
+  "change_summary": "로컬 백업 복구 과정에서 입력된 백업 키의 유효성을 실제 백업 파일의 메타데이터와 비교하여 검증하는 로직 추가",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Registration/Restore > Enter Backup Key)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/EnterBackupKeyFragment.kt",
+  "test_method": [
+    "백업 파일이 존재하는 디렉토리를 선택한 후, 해당 백업에 맞는 올바른 30자리 키를 입력했을 때 검증이 성공(backupKeyValid = true)하는지 확인",
+    "다른 백업용 키를 입력하거나 임의의 키를 입력했을 때 '잘못된 키' 에러 메시지가 화면에 표시되는지 확인",
+    "키 검증이 진행되는 비동기 상황에서 사용자가 키를 수정할 때, 이전 검증 결과가 현재 상태를 덮어쓰지 않는지(generation 체크) 확인"
+  ],
+  "confirmed_facts": [
+    "verifyLocalBackupKey 메서드를 통해 비동기 키 검증 프로세스 시작",
+    "입력된 키(AccountEntropyPool)로부터 도출된 메타데이터 키를 사용하여 백업 파일 내의 암호화된 backupId를 복호화하고 비교하는 로직 구현",
+    "AES/CTR/NoPadding 알고리즘을 사용한 암호화 통신 로직 포함",
+    "AtomicInteger(verifyGeneration)를 활용하여 최신 검증 작업의 결과만 반영하도록 보장"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,49 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
+
+[Changed Symbols]: RemoteConfig, SignalStore, setDisableInternalUser
+
+[References]:
+  InternalSettingsViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt [ENTRY: Fragment]
+  RemoteConfig: (10+ references - common utility)
+  SignalStore: (10+ references - common utility)
+  setDisableInternalUser:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
+index a4860d5bfd..67027b8b84 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
+@@ -11,6 +11,7 @@ import org.thoughtcrime.securesms.keyvalue.InternalValues
+ import org.thoughtcrime.securesms.keyvalue.SignalStore
+ import org.thoughtcrime.securesms.recipients.Recipient
+ import org.thoughtcrime.securesms.stories.Stories
++import org.thoughtcrime.securesms.util.RemoteConfig
+ import org.thoughtcrime.securesms.util.livedata.Store
+ 
+ class InternalSettingsViewModel(private val repository: InternalSettingsRepository) : ViewModel() {
+@@ -202,7 +203,8 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
+     hasPendingOneTimeDonation = SignalStore.inAppPayments.getPendingOneTimeDonation() != null,
+     hevcEncoding = SignalStore.internal.hevcEncoding,
+     forceSplitPane = SignalStore.internal.forceSplitPane,
+-    useNewMediaActivity = SignalStore.internal.useNewMediaActivity
++    useNewMediaActivity = SignalStore.internal.useNewMediaActivity,
++    disableInternalUser = RemoteConfig.internalUserDisabled
+   )
+ 
+   fun onClearOnboardingState() {
+@@ -213,6 +215,11 @@ class InternalSettingsViewModel(private val repository: InternalSettingsReposito
+     StoryOnboardingDownloadJob.enqueueIfNeeded()
+   }
+ 
++  fun setDisableInternalUser(disabled: Boolean) {
++    RemoteConfig.internalUserDisabled = disabled
++    refresh()
++  }
++
+   fun setForceSplitPane(forceSplitPane: Boolean) {
+     SignalStore.internal.forceSplitPane = forceSplitPane
+     refresh()

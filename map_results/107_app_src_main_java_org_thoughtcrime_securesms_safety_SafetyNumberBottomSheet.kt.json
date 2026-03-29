@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt",
+  "change_summary": "안전 번호 바텀 시트 생성 로직을 발신 및 수신 메시지 케이스로 명확히 구분하여 처리하도록 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Conversation > Safety Number Change Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "자신이 보낸 메시지가 안전 번호 불일치로 실패했을 때, 변경된 명칭의 팩토리 메서드(forOutgoingMessageRecord)를 통해 시트가 정상적으로 팝업되는지 확인",
+    "상대방으로부터 받은 메시지에 안전 번호 변경 경고가 있을 때, 클릭 시 신규 추가된 메서드(forIncomingMessageRecord)가 호출되어 적절한 대상자 정보를 포함한 시트가 나타나는지 확인"
+  ],
+  "confirmed_facts": [
+    "기존 forMessageRecord 메서드를 forOutgoingMessageRecord로 이름을 변경하여 역할 명시화",
+    "수신 메시지 대응을 위한 forIncomingMessageRecord 메서드 신규 추가 및 목적지(destinations) 설정 로직 포함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

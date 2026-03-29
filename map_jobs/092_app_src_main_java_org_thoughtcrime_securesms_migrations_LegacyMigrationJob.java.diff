@@ -1,0 +1,39 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java
+
+[Changed Symbols]: SignalDatabase, System
+
+[References]:
+  LegacyMigrationJob:
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/JobManagerFactories.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/migrations/ApplicationMigrations.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/helpers/SQLCipherMigrationHelper.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/helpers/ClassicOpenHelper.java
+  SignalDatabase: (10+ references - common utility)
+  System: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java b/app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java
+index bd7b204cb3..fa3c0c6e00 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java
+@@ -217,12 +217,12 @@ public class LegacyMigrationJob extends MigrationJob {
+ //        }
+ //      }
+ 
+-    if (lastSeenVersion < COLOR_MIGRATION) {
+-      long startTime = System.currentTimeMillis();
+-      //noinspection deprecation
+-      SignalDatabase.recipients().updateSystemContactColors();
+-      Log.i(TAG, "Color migration took " + (System.currentTimeMillis() - startTime) + " ms");
+-    }
++//    if (lastSeenVersion < COLOR_MIGRATION) {
++//      long startTime = System.currentTimeMillis();
++//      //noinspection deprecation
++//      SignalDatabase.recipients().updateSystemContactColors();
++//      Log.i(TAG, "Color migration took " + (System.currentTimeMillis() - startTime) + " ms");
++//    }
+ 
+     if (lastSeenVersion < UNIDENTIFIED_DELIVERY) {
+       Log.i(TAG, "Scheduling UD attributes refresh.");

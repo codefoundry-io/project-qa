@@ -1,0 +1,83 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+
+[Changed Symbols]: Compact, MemberLabel, MemberLabelPillView, NameColor, Style
+
+[References]:
+  GroupMemberListAdapter:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListView.java
+  Compact: (10+ references - common utility)
+  MemberLabel: (10+ references - common utility)
+  MemberLabelPillView:
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+  NameColor: (10+ references - common utility)
+  Style: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java b/app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+index 48fa2b28a0..510c1914b5 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+@@ -19,6 +19,9 @@ import org.thoughtcrime.securesms.R;
+ import org.thoughtcrime.securesms.badges.BadgeImageView;
+ import org.thoughtcrime.securesms.components.AvatarImageView;
+ import org.thoughtcrime.securesms.components.emoji.EmojiTextView;
++import org.thoughtcrime.securesms.conversation.colors.NameColor;
++import org.thoughtcrime.securesms.groups.memberlabel.MemberLabel;
++import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelPillView;
+ import org.thoughtcrime.securesms.recipients.Recipient;
+ import org.signal.core.util.Util;
+ 
+@@ -194,6 +197,8 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
+               final View                       popupMenuContainer;
+               final ProgressBar                busyProgress;
+     @Nullable final View                       admin;
++    @Nullable final MemberLabelPillView        memberLabelView;
++    @Nullable final View                       addMemberLabel;
+               final SelectionChangeListener    selectionChangeListener;
+     @Nullable final RecipientClickListener     recipientClickListener;
+     @Nullable final AdminActionsListener       adminActionsListener;
+@@ -224,6 +229,8 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
+       this.popupMenuContainer         = itemView.findViewById(R.id.popupMenuProgressContainer);
+       this.busyProgress               = itemView.findViewById(R.id.menuBusyProgress);
+       this.admin                      = itemView.findViewById(R.id.admin);
++      this.memberLabelView            = itemView.findViewById(R.id.recipient_member_label);
++      this.addMemberLabel             = itemView.findViewById(R.id.add_member_label);
+       this.recipientClickListener     = recipientClickListener;
+       this.recipientLongClickListener = recipientLongClickListener;
+       this.adminActionsListener       = adminActionsListener;
+@@ -296,6 +303,9 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
+       if (admin != null) {
+         admin.setVisibility(View.GONE);
+       }
++      if (addMemberLabel != null) {
++        addMemberLabel.setVisibility(View.GONE);
++      }
+       hideMenu();
+ 
+       itemView.setOnClickListener(null);
+@@ -346,6 +356,19 @@ final class GroupMemberListAdapter extends RecyclerView.Adapter<GroupMemberListA
+       if (admin != null) {
+         admin.setVisibility(fullMember.isAdmin() ? View.VISIBLE : View.INVISIBLE);
+       }
++
++      MemberLabel label     = fullMember.getMemberLabel();
++      NameColor   nameColor = fullMember.getNameColor();
++      if (memberLabelView != null) {
++        if (label != null && nameColor != null) {
++          memberLabelView.setStyle(MemberLabelPillView.Style.Compact);
++          memberLabelView.setLabel(label, nameColor.getColor(context));
++          memberLabelView.setVisibility(View.VISIBLE);
++          if (about != null) about.setVisibility(View.GONE);
++        } else {
++          memberLabelView.setVisibility(View.GONE);
++        }
++      }
+     }
+   }
+   final static class NewGroupInviteeViewHolder extends ViewHolder {

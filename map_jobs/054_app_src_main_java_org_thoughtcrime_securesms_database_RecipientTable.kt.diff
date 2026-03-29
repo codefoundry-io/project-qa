@@ -1,0 +1,249 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+
+[Changed Symbols]: AppDependencies, ChatColor, ChatColors, ChatColorsMapper, Companion, MaterialColor, MentionSetting, NotificationSetting, RecipientId, StorageSyncHelper, This, UnknownColorException, fromId, setCallNotificationSetting, setMentionSetting, setReplyNotificationSetting, updateSystemContactColors
+
+[References]:
+  RecipientTable: (10+ references - common utility)
+  AppDependencies: (10+ references - common utility)
+  ChatColor: (10+ references - common utility)
+  ChatColors: (10+ references - common utility)
+  ChatColorsMapper:
+    - ./app/src/main/java/org/thoughtcrime/securesms/wallpaper/ChatWallpaper.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/MultiDeviceContactUpdateJob.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/colors/ChatColorsMapper.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V149_LegacyMigrations.kt
+  Companion: (10+ references - common utility)
+  MaterialColor:
+    - ./app/src/main/java/org/thoughtcrime/securesms/color/MaterialColor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/color/MaterialColors.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/contacts/avatars/ContactColorsLegacy.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/contacts/avatars/ContactColors.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/colors/ChatColorsMapper.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V149_LegacyMigrations.kt
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientId: (10+ references - common utility)
+  StorageSyncHelper: (10+ references - common utility)
+  This: (10+ references - common utility)
+  UnknownColorException:
+    - ./app/src/main/java/org/thoughtcrime/securesms/contacts/avatars/ContactColorsLegacy.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/color/MaterialColor.java
+  fromId: (10+ references - common utility)
+  setCallNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+  setMentionSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+  setReplyNotificationSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+  updateSystemContactColors:
+    - ./app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt b/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+index 5bc14020be..6b32c33f56 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+@@ -52,14 +52,10 @@ import org.signal.storageservice.storage.protos.groups.local.DecryptedGroup
+ import org.thoughtcrime.securesms.badges.Badges.toDatabaseBadge
+ import org.thoughtcrime.securesms.badges.models.Badge
+ import org.thoughtcrime.securesms.color.MaterialColor
+-import org.thoughtcrime.securesms.color.MaterialColor.UnknownColorException
+ import org.thoughtcrime.securesms.contacts.paged.ContactSearchSortOrder
+ import org.thoughtcrime.securesms.conversation.colors.AvatarColor
+ import org.thoughtcrime.securesms.conversation.colors.AvatarColorHash
+ import org.thoughtcrime.securesms.conversation.colors.ChatColors
+-import org.thoughtcrime.securesms.conversation.colors.ChatColors.Companion.forChatColor
+-import org.thoughtcrime.securesms.conversation.colors.ChatColors.Id.Companion.forLongValue
+-import org.thoughtcrime.securesms.conversation.colors.ChatColorsMapper.getChatColors
+ import org.thoughtcrime.securesms.crypto.ProfileKeyUtil
+ import org.thoughtcrime.securesms.database.GroupTable.LegacyGroupInsertException
+ import org.thoughtcrime.securesms.database.GroupTable.ShowAsStoryState
+@@ -74,7 +70,6 @@ import org.thoughtcrime.securesms.database.model.DistributionListId
+ import org.thoughtcrime.securesms.database.model.RecipientRecord
+ import org.thoughtcrime.securesms.database.model.ThreadRecord
+ import org.thoughtcrime.securesms.database.model.databaseprotos.BadgeList
+-import org.thoughtcrime.securesms.database.model.databaseprotos.ChatColor
+ import org.thoughtcrime.securesms.database.model.databaseprotos.DeviceLastResetTime
+ import org.thoughtcrime.securesms.database.model.databaseprotos.ExpiringProfileKeyCredentialColumnData
+ import org.thoughtcrime.securesms.database.model.databaseprotos.RecipientExtras
+@@ -173,6 +168,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+     const val STORAGE_SERVICE_ID = "storage_service_id"
+     const val STORAGE_SERVICE_PROTO = "storage_service_proto"
+     const val MENTION_SETTING = "mention_setting"
++    const val CALL_NOTIFICATION_SETTING = "call_notification_setting"
++    const val REPLY_NOTIFICATION_SETTING = "reply_notification_setting"
+     const val CAPABILITIES = "capabilities"
+     const val LAST_SESSION_RESET = "last_session_reset"
+     const val WALLPAPER = "wallpaper"
+@@ -246,7 +243,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+         $SEALED_SENDER_MODE INTEGER DEFAULT 0, 
+         $STORAGE_SERVICE_ID TEXT UNIQUE DEFAULT NULL, 
+         $STORAGE_SERVICE_PROTO TEXT DEFAULT NULL,
+-        $MENTION_SETTING INTEGER DEFAULT ${MentionSetting.ALWAYS_NOTIFY.id}, 
++        $MENTION_SETTING INTEGER DEFAULT ${NotificationSetting.ALWAYS_NOTIFY.id},
+         $CAPABILITIES INTEGER DEFAULT 0,
+         $LAST_SESSION_RESET BLOB DEFAULT NULL,
+         $WALLPAPER BLOB DEFAULT NULL,
+@@ -269,7 +266,9 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+         $NICKNAME_JOINED_NAME TEXT DEFAULT NULL,
+         $NOTE TEXT DEFAULT NULL,
+         $MESSAGE_EXPIRATION_TIME_VERSION INTEGER DEFAULT 1 NOT NULL,
+-        $KEY_TRANSPARENCY_DATA BLOB DEFAULT NULL
++        $KEY_TRANSPARENCY_DATA BLOB DEFAULT NULL,
++        $CALL_NOTIFICATION_SETTING INTEGER DEFAULT ${NotificationSetting.ALWAYS_NOTIFY.id},
++        $REPLY_NOTIFICATION_SETTING INTEGER DEFAULT ${NotificationSetting.ALWAYS_NOTIFY.id}
+       )
+       """
+ 
+@@ -318,6 +317,8 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+       SEALED_SENDER_MODE,
+       STORAGE_SERVICE_ID,
+       MENTION_SETTING,
++      CALL_NOTIFICATION_SETTING,
++      REPLY_NOTIFICATION_SETTING,
+       CAPABILITIES,
+       WALLPAPER,
+       WALLPAPER_URI,
+@@ -1650,7 +1651,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+     }
+   }
+ 
+-  fun setMentionSetting(id: RecipientId, mentionSetting: MentionSetting) {
++  fun setMentionSetting(id: RecipientId, mentionSetting: NotificationSetting) {
+     val values = ContentValues().apply {
+       put(MENTION_SETTING, mentionSetting.id)
+     }
+@@ -1661,6 +1662,30 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+     }
+   }
+ 
++  fun setCallNotificationSetting(id: RecipientId, setting: NotificationSetting) {
++    val values = ContentValues().apply {
++      put(CALL_NOTIFICATION_SETTING, setting.id)
++    }
++    if (update(id, values)) {
++      // TODO rotate storageId once this is actually synced in storage service
++//      rotateStorageId(id)
++      AppDependencies.databaseObserver.notifyRecipientChanged(id)
++      StorageSyncHelper.scheduleSyncForDataChange()
++    }
++  }
++
++  fun setReplyNotificationSetting(id: RecipientId, setting: NotificationSetting) {
++    val values = ContentValues().apply {
++      put(REPLY_NOTIFICATION_SETTING, setting.id)
++    }
++    if (update(id, values)) {
++      // TODO rotate storageId once this is actually synced in storage service
++//      rotateStorageId(id)
++      AppDependencies.databaseObserver.notifyRecipientChanged(id)
++      StorageSyncHelper.scheduleSyncForDataChange()
++    }
++  }
++
+   /**
+    * Updates the profile key.
+    *
+@@ -3366,62 +3391,6 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+       }
+   }
+ 
+-  /**
+-   * We no longer automatically generate a chat color. This method is used only
+-   * in the case of a legacy migration and otherwise should not be called.
+-   */
+-  @Deprecated("")
+-  fun updateSystemContactColors() {
+-    val db = readableDatabase
+-    val updates: MutableMap<RecipientId, ChatColors> = HashMap()
+-
+-    db.beginTransaction()
+-    try {
+-      db.query(TABLE_NAME, arrayOf(ID, "color", CHAT_COLORS, CUSTOM_CHAT_COLORS_ID, SYSTEM_JOINED_NAME), "$SYSTEM_JOINED_NAME IS NOT NULL AND $SYSTEM_JOINED_NAME != \'\'", null, null, null, null).use { cursor ->
+-        while (cursor != null && cursor.moveToNext()) {
+-          val id = cursor.requireLong(ID)
+-          val serializedColor = cursor.requireString("color")
+-          val customChatColorsId = cursor.requireLong(CUSTOM_CHAT_COLORS_ID)
+-          val serializedChatColors = cursor.requireBlob(CHAT_COLORS)
+-          var chatColors: ChatColors? = if (serializedChatColors != null) {
+-            try {
+-              forChatColor(forLongValue(customChatColorsId), ChatColor.ADAPTER.decode(serializedChatColors))
+-            } catch (e: IOException) {
+-              null
+-            }
+-          } else {
+-            null
+-          }
+-
+-          if (chatColors != null) {
+-            return
+-          }
+-
+-          chatColors = if (serializedColor != null) {
+-            try {
+-              getChatColors(MaterialColor.fromSerialized(serializedColor))
+-            } catch (e: UnknownColorException) {
+-              return
+-            }
+-          } else {
+-            return
+-          }
+-
+-          val contentValues = ContentValues().apply {
+-            put(CHAT_COLORS, chatColors.serialize().encode())
+-            put(CUSTOM_CHAT_COLORS_ID, chatColors.id.longValue)
+-          }
+-          db.update(TABLE_NAME, contentValues, "$ID = ?", arrayOf(id.toString()))
+-          updates[RecipientId.from(id)] = chatColors
+-        }
+-      }
+-    } finally {
+-      db.setTransactionSuccessful()
+-      db.endTransaction()
+-      updates.entries.forEach { AppDependencies.databaseObserver.notifyRecipientChanged(it.key) }
+-    }
+-  }
+-
+   fun queryByInternalFields(query: String): List<RecipientRecord> {
+     if (query.isBlank()) {
+       return emptyList()
+@@ -4208,7 +4177,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+       SYSTEM_CONTACT_URI to secondaryRecord.systemContactUri,
+       PROFILE_SHARING to (primaryRecord.profileSharing || secondaryRecord.profileSharing),
+       CAPABILITIES to max(primaryRecord.capabilities.rawBits, secondaryRecord.capabilities.rawBits),
+-      MENTION_SETTING to if (primaryRecord.mentionSetting != MentionSetting.ALWAYS_NOTIFY) primaryRecord.mentionSetting.id else secondaryRecord.mentionSetting.id,
++      MENTION_SETTING to if (primaryRecord.mentionSetting != NotificationSetting.ALWAYS_NOTIFY) primaryRecord.mentionSetting.id else secondaryRecord.mentionSetting.id,
+       PNI_SIGNATURE_VERIFIED to pniVerified.toInt()
+     )
+ 
+@@ -4341,7 +4310,7 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+       put(BLOCKED, if (groupV2.proto.blocked) "1" else "0")
+       put(MUTE_UNTIL, groupV2.proto.mutedUntilTimestamp)
+       put(STORAGE_SERVICE_ID, Base64.encodeWithPadding(groupV2.id.raw))
+-      put(MENTION_SETTING, if (groupV2.proto.dontNotifyForMentionsIfMuted) MentionSetting.DO_NOT_NOTIFY.id else MentionSetting.ALWAYS_NOTIFY.id)
++      put(MENTION_SETTING, if (groupV2.proto.dontNotifyForMentionsIfMuted) NotificationSetting.DO_NOT_NOTIFY.id else NotificationSetting.ALWAYS_NOTIFY.id)
+ 
+       if (groupV2.proto.hasUnknownFields()) {
+         put(STORAGE_SERVICE_PROTO, Base64.encodeWithPadding(groupV2.serializedUnknowns!!))
+@@ -4922,12 +4891,12 @@ open class RecipientTable(context: Context, databaseHelper: SignalDatabase) : Da
+     }
+   }
+ 
+-  enum class MentionSetting(val id: Int) {
++  enum class NotificationSetting(val id: Int) {
+     ALWAYS_NOTIFY(0),
+     DO_NOT_NOTIFY(1);
+ 
+     companion object {
+-      fun fromId(id: Int): MentionSetting {
++      fun fromId(id: Int): NotificationSetting {
+         return entries[id]
+       }
+     }

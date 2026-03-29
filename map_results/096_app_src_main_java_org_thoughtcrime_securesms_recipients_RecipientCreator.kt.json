@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt",
+  "change_summary": "수신자(Recipient) 객체 생성 과정에서 DB 레코드로부터 통화 및 답장 알림 설정값을 매핑하도록 로직 확장",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Recipient Object Creation)",
+  "entry_point_file": null,
+  "test_method": [
+    "RecipientRecord에서 Recipient 객체로 변환될 때 callNotificationSetting 및 replyNotificationSetting 데이터가 정확히 전달되는지 확인"
+  ],
+  "confirmed_facts": [
+    "Recipient 생성자 호출 시 callNotificationSettingValue 및 replyNotificationSettingValue 파라미터에 record의 대응하는 값을 할당하도록 수정"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "앱 전반에서 수신자 객체 생성을 담당하는 공통 유틸리티 클래스이며 특정 단일 진입점이 없음"
+}

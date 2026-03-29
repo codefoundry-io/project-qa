@@ -1,0 +1,34 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
+
+[Changed Symbols]: MentionSetting, NotificationSetting, RecipientId, RecipientTable, setMentionSetting
+
+[References]:
+  SoundsAndNotificationsSettingsRepository:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt [ENTRY: Fragment]
+  MentionSetting: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  RecipientId: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+  setMentionSetting:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
+index 1a5193cf43..44ed7c3236 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsRepository.kt
+@@ -25,7 +25,7 @@ class SoundsAndNotificationsSettingsRepository(private val context: Context) {
+     }
+   }
+ 
+-  fun setMentionSetting(recipientId: RecipientId, mentionSetting: RecipientTable.MentionSetting) {
++  fun setMentionSetting(recipientId: RecipientId, mentionSetting: RecipientTable.NotificationSetting) {
+     SignalExecutors.BOUNDED.execute {
+       SignalDatabase.recipients.setMentionSetting(recipientId, mentionSetting)
+     }

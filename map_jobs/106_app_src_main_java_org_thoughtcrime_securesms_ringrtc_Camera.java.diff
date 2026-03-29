@@ -1,0 +1,26 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/ringrtc/Camera.java
+
+[References]:
+  Camera: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/ringrtc/Camera.java b/app/src/main/java/org/thoughtcrime/securesms/ringrtc/Camera.java
+index 26dc436f31..8cd080aa52 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/ringrtc/Camera.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/ringrtc/Camera.java
+@@ -87,6 +87,7 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
+                             new CameraCapturerWrapper(observer));
+         capturer.setOrientation(orientation);
+         isInitialized = true;
++        setEnabled(enabled);
+       });
+     }
+   }
+@@ -120,7 +121,7 @@ public class Camera implements CameraControl, CameraVideoCapturer.CameraSwitchHa
+ 
+     this.enabled = enabled;
+ 
+-    if (capturer == null) {
++    if (capturer == null || !isInitialized) {
+       return;
+     }

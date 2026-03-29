@@ -1,0 +1,49 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt
+
+[Changed Symbols]: Copyright, Identifier, License, Messenger, NotificationSetting, Recipient, RecipientId, RecipientTable, Signal
+
+[References]:
+  SoundsAndNotificationsSettingsState2:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsScreen.kt
+  Copyright: (10+ references - common utility)
+  Identifier: (10+ references - common utility)
+  License: (10+ references - common utility)
+  Messenger: (10+ references - common utility)
+  NotificationSetting: (10+ references - common utility)
+  Recipient: (10+ references - common utility)
+  RecipientId: (10+ references - common utility)
+  RecipientTable: (10+ references - common utility)
+  Signal: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt
+new file mode 100644
+index 0000000000..5ad31c553d
+--- /dev/null
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState2.kt
+@@ -0,0 +1,23 @@
++/*
++ * Copyright 2025 Signal Messenger, LLC
++ * SPDX-License-Identifier: AGPL-3.0-only
++ */
++
++package org.thoughtcrime.securesms.components.settings.conversation.sounds
++
++import org.thoughtcrime.securesms.database.RecipientTable.NotificationSetting
++import org.thoughtcrime.securesms.recipients.Recipient
++import org.thoughtcrime.securesms.recipients.RecipientId
++
++data class SoundsAndNotificationsSettingsState2(
++  val recipientId: RecipientId = Recipient.UNKNOWN.id,
++  val muteUntil: Long = 0L,
++  val mentionSetting: NotificationSetting = NotificationSetting.ALWAYS_NOTIFY,
++  val callNotificationSetting: NotificationSetting = NotificationSetting.ALWAYS_NOTIFY,
++  val replyNotificationSetting: NotificationSetting = NotificationSetting.ALWAYS_NOTIFY,
++  val hasCustomNotificationSettings: Boolean = false,
++  val hasMentionsSupport: Boolean = false,
++  val channelConsistencyCheckComplete: Boolean = false
++) {
++  val isMuted = muteUntil > 0
++}

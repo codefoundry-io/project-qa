@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlAndInfoState.kt",
+  "change_summary": "통화 제어 상태 클래스에 그룹 관리자 여부 필드를 추가하고, 본인의 관리자 권한 판단 로직에 이를 통합",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Call Controls State)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt",
+  "test_method": [
+    "통화 링크 권한과 별개로 그룹 관리자인 경우에도 관리자 전용 기능(예: 참여자 음소거 등)을 사용할 수 있는 권한 상태가 되는지 확인"
+  ],
+  "confirmed_facts": [
+    "ControlAndInfoState 데이터 클래스에 isGroupAdmin 필드 추가",
+    "isSelfAdmin() 메서드에서 callLink 권한 외에 isGroupAdmin 여부도 함께 확인하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt",
+  "change_summary": "백업 구독 취소가 예정된 상태일 경우 기기 내 미디어 최적화 작업을 건너뛰도록 실행 조건 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Media Optimization)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/OptimizeMediaJob.kt",
+  "test_method": [
+    "백업 구독 해지 절차가 진행 중인 사용자의 기기에서 미디어 최적화 작업이 실행될 때, 로직이 수행되지 않고 즉시 종료되는지 확인"
+  ],
+  "confirmed_facts": [
+    "onRun 시작 부분에 SignalStore.backup.backupDownloadNotifierState 존재 여부를 확인하여 작업을 조기 종료(success)하는 분기 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

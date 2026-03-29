@@ -1,0 +1,40 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt
+
+[Changed Symbols]: ArchiveDatabaseExecutor, ArchiveTransferState, AttachmentTable, Result
+
+[References]:
+  UploadAttachmentToArchiveJob: (10+ references - common utility)
+  ArchiveDatabaseExecutor:
+    - ./app/src/test/java/org/thoughtcrime/securesms/backup/v2/ArchiveDatabaseExecutorTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveDatabaseExecutor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/ArchiveThumbnailUploadJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/CopyAttachmentToArchiveJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/RestoreAttachmentThumbnailJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/RestoreAttachmentJob.kt
+  ArchiveTransferState: (10+ references - common utility)
+  AttachmentTable: (10+ references - common utility)
+  Result: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt b/app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt
+index 8fe2a344d2..1dc693fb12 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt
+@@ -145,6 +145,17 @@ class UploadAttachmentToArchiveJob private constructor(
+ 
+     if (attachment.uri == null) {
+       Log.w(TAG, "[$attachmentId]$mediaIdLog Attachment has no uri! Cannot upload.")
++      ArchiveDatabaseExecutor.runBlocking {
++        setArchiveTransferStateWithDelayedNotification(attachmentId, AttachmentTable.ArchiveTransferState.PERMANENT_FAILURE)
++      }
++      return Result.failure()
++    }
++
++    if (attachment.size == 0L) {
++      Log.w(TAG, "[$attachmentId]$mediaIdLog Attachment has no data (size is 0)! Cannot upload.")
++      ArchiveDatabaseExecutor.runBlocking {
++        setArchiveTransferStateWithDelayedNotification(attachmentId, AttachmentTable.ArchiveTransferState.PERMANENT_FAILURE)
++      }
+       return Result.failure()
+     }

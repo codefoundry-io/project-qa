@@ -1,0 +1,42 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+
+[Changed Symbols]: DoNotDisturbUtil, Recipient
+
+[References]:
+  BeginCallActionProcessorDelegate:
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IdleActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/PreJoinActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+  DoNotDisturbUtil:
+    - ./app/src/main/java/org/thoughtcrime/securesms/notifications/DoNotDisturbUtil.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingGroupCallActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+  Recipient: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+index 454eeb3523..6dd7947657 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+@@ -13,6 +13,8 @@ import org.thoughtcrime.securesms.events.CallParticipant;
+ import org.thoughtcrime.securesms.events.CallParticipantId;
+ import org.thoughtcrime.securesms.events.WebRtcViewModel;
+ import org.thoughtcrime.securesms.keyvalue.SignalStore;
++import org.thoughtcrime.securesms.notifications.DoNotDisturbUtil;
++import org.thoughtcrime.securesms.recipients.Recipient;
+ import org.thoughtcrime.securesms.ringrtc.RemotePeer;
+ import org.thoughtcrime.securesms.service.webrtc.state.WebRtcServiceState;
+ import org.signal.core.util.Util;
+@@ -116,8 +118,11 @@ public class BeginCallActionProcessorDelegate extends WebRtcActionProcessor {
+ 
+ 
+     boolean    isRemoteVideoOffer = currentState.getCallSetupState(remotePeer).isRemoteVideoOffer();
++    Recipient  recipient          = remotePeer.getRecipient();
+ 
+-    webRtcInteractor.setCallInProgressNotification(TYPE_INCOMING_CONNECTING, remotePeer, isRemoteVideoOffer);
++    if (DoNotDisturbUtil.shouldDisturbUserWithCall(context.getApplicationContext(), recipient)) {
++      webRtcInteractor.setCallInProgressNotification(TYPE_INCOMING_CONNECTING, remotePeer, isRemoteVideoOffer);
++    }
+     webRtcInteractor.retrieveTurnServers(remotePeer);
+     webRtcInteractor.initializeAudioForCall();

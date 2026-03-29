@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/res/layout/group_recipient_list_item.xml",
+  "change_summary": "그룹 멤버 리스트 아이템의 클릭 효과 적용 방식 변경 및 라벨 추가 안내 문구의 초기 가시성 조정",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Group Settings > Member List Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java",
+  "test_method": [
+    "그룹 멤버 목록에서 항목을 터치했을 때 리플(Ripple) 효과가 배경이 아닌 전경(Foreground)에 올바르게 나타나는지 확인",
+    "멤버 라벨이 없는 일반 사용자 항목에서 '라벨 추가' 안내 텍스트가 불필요하게 노출되지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "root 레이아웃의 선택 효과 속성을 background에서 foreground로 변경",
+    "recipient_add_label 텍스트 뷰의 기본 visibility를 visible에서 gone으로 수정",
+    "레이아웃 도구용(tools) 미리보기 가시성 설정 최적화"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

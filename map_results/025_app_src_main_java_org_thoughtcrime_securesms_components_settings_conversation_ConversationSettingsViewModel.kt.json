@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsViewModel.kt",
+  "change_summary": "대화방 설정 뷰모델의 멤버 라벨 설정 권한 확인 메서드 내 매개변수 명칭 변경 (v2GroupId -> groupId)",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > View)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt",
+  "test_method": [
+    "그룹 대화방 설정 진입 시 본인의 멤버 라벨 설정 가능 여부 권한이 올바르게 판단되는지 확인"
+  ],
+  "confirmed_facts": [
+    "loadCanSetMemberLabel 메서드의 매개변수 이름을 v2GroupId에서 groupId로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

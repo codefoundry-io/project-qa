@@ -1,0 +1,33 @@
+[Target File]: app/src/main/res/layout/group_recipient_list_item.xml
+
+[Diff]:
+diff --git a/app/src/main/res/layout/group_recipient_list_item.xml b/app/src/main/res/layout/group_recipient_list_item.xml
+index 639e196c5a..ab8a274383 100644
+--- a/app/src/main/res/layout/group_recipient_list_item.xml
++++ b/app/src/main/res/layout/group_recipient_list_item.xml
+@@ -4,7 +4,7 @@
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+-    android:background="?selectableItemBackground"
++    android:foreground="?attr/selectableItemBackground"
+     android:clickable="true"
+     android:focusable="true"
+     android:minHeight="64dp"
+@@ -90,7 +90,7 @@
+             android:text="@string/GroupRecipientListItem__add_member_label"
+             android:textAppearance="@style/Signal.Text.LabelMedium"
+             android:textColor="@color/signal_colorOnSurfaceVariant"
+-            android:visibility="visible" />
++            android:visibility="gone" />
+ 
+         <org.thoughtcrime.securesms.components.emoji.EmojiTextView
+             android:id="@+id/recipient_about"
+@@ -104,7 +104,7 @@
+             android:textColor="@color/signal_text_secondary"
+             android:visibility="gone"
+             tools:text="Hangin' around the web"
+-            tools:visibility="gone" />
++            tools:visibility="visible" />
+ 
+     </FrameLayout>

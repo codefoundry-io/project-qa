@@ -1,0 +1,49 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+
+[Changed Symbols]: Mirrors, SignalSQLiteDatabase, tryRunInTransaction
+
+[References]:
+  SignalDatabase: (10+ references - common utility)
+  Mirrors:
+    - ./feature/media-send/src/main/java/org/signal/mediasend/MediaSendActivityContract.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/migrations/Svr2MirrorMigrationJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+  SignalSQLiteDatabase:
+    - ./app/src/test/java/org/thoughtcrime/securesms/testing/TestSignalDatabase.kt
+    - ./app/src/test/java/org/thoughtcrime/securesms/testing/TestSignalSQLiteDatabase.kt
+    - ./app/src/test/java/org/thoughtcrime/securesms/testutil/SignalDatabaseMigrationRule.kt
+    - ./app/src/androidTest/java/org/thoughtcrime/securesms/database/helpers/migration/MyStoryMigrationTest.kt
+    - ./app/src/androidTest/java/org/thoughtcrime/securesms/database/DatabaseConsistencyTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+  tryRunInTransaction:
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt b/app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+index 3fdbd58016..cc2f654011 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt
+@@ -385,6 +385,22 @@ open class SignalDatabase(private val context: Application, databaseSecret: Data
+       }
+     }
+ 
++    /**
++     * Mirrors [runInTransaction] but instead of returning the result of calling block it returns
++     * whether the transaction completed successfully.
++     */
++    @JvmStatic
++    fun tryRunInTransaction(block: (SignalSQLiteDatabase) -> Unit): Boolean {
++      var committed = false
++
++      instance!!.signalWritableDatabase.withinTransaction {
++        block(it)
++        it.runPostSuccessfulTransaction { committed = true }
++      }
++
++      return committed
++    }
++
+     @get:JvmStatic
+     @get:JvmName("attachments")
+     val attachments: AttachmentTable

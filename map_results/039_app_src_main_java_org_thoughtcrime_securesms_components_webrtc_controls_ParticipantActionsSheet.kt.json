@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ParticipantActionsSheet.kt",
+  "change_summary": "통화 중 특정 참여자에 대한 관리자 제어(음소거, 제거) 및 정보 확인(연락처 상세, 대화방 이동 등) 기능을 제공하는 바텀 시트 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Call > Info > Participant Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt",
+  "test_method": [
+    "통화 참여자 리스트에서 참여자 클릭 시 해당 바텀 시트가 정상적으로 표시되는지 확인",
+    "관리자 권한이 있는 경우에만 '음소거' 및 '통화에서 제거' 옵션이 노출되는지 확인",
+    "참여자의 이름과 아바타, 전화번호가 정확하게 렌더링되는지 확인"
+  ],
+  "confirmed_facts": [
+    "ModalBottomSheet를 활용한 Compose UI 구현",
+    "isSelfAdmin 및 isCallLink 상태에 따른 관리자 전용 액션 노출 분기 처리",
+    "AvatarImageView를 AndroidView로 브릿지하여 프로필 이미지 표시"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

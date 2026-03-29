@@ -1,0 +1,15 @@
+[Target File]: app/src/main/res/values/light_colors.xml
+
+[Diff]:
+diff --git a/app/src/main/res/values/light_colors.xml b/app/src/main/res/values/light_colors.xml
+index 8c1a4cece0..7fb8c14c03 100644
+--- a/app/src/main/res/values/light_colors.xml
++++ b/app/src/main/res/values/light_colors.xml
+@@ -179,7 +179,7 @@
+     <color name="quote_view_bar_outgoing_normal">@color/signal_colorOnCustom</color>
+     <color name="quote_view_foreground_outgoing_normal">@color/signal_colorOnSurface</color>
+     <color name="quote_view_label_background_incoming_normal">@color/signal_colorOnSurface_8</color>
+-    <color name="quote_view_label_background_incoming_wallpaper">@color/transparent_white_80</color>
++    <color name="quote_view_label_background_incoming_wallpaper">@color/signal_colorOnSurface_8</color>
+     <color name="quote_view_label_background_outgoing_normal">@color/transparent_white_36</color>
+     <color name="quote_view_label_background_outgoing_wallpaper">@color/transparent_white_36</color>

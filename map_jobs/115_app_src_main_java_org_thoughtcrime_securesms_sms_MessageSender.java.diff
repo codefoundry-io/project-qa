@@ -1,0 +1,50 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java
+
+[Changed Symbols]: AdminDeleteSendJob, AppDependencies, MessageRecord, RecipientId, SignalDatabase, Update
+
+[References]:
+  MessageSender: (10+ references - common utility)
+  AdminDeleteSendJob:
+    - ./app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/JobManagerFactories.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/AdminDeleteSendJob.kt
+  AppDependencies: (10+ references - common utility)
+  MessageRecord: (10+ references - common utility)
+  RecipientId: (10+ references - common utility)
+  SignalDatabase: (10+ references - common utility)
+  Update: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java b/app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java
+index 29f16855d4..81489e639e 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java
+@@ -519,9 +519,9 @@ public class MessageSender {
+   }
+ 
+   public static void sendAdminDelete(long messageId) {
+-    // TODO(michelle): Update with failure states
+     SignalDatabase.messages().markAsDeleteBySelf(messageId);
+-    AdminDeleteSendJob job = AdminDeleteSendJob.create(messageId);
++    SignalDatabase.messages().markAsPendingAdminDelete(messageId);
++    AdminDeleteSendJob job = AdminDeleteSendJob.create(messageId, Collections.emptyList());
+     if (job != null) {
+       AppDependencies.getJobManager().add(job);
+     } else {
+@@ -529,6 +529,16 @@ public class MessageSender {
+     }
+   }
+ 
++  public static void resendAdminDelete(MessageRecord message, List<RecipientId> filteredRecipients) {
++    SignalDatabase.messages().markAsPendingAdminDelete(message.getId());
++    AdminDeleteSendJob job = AdminDeleteSendJob.create(message.getId(), filteredRecipients);
++    if (job != null) {
++      AppDependencies.getJobManager().add(job);
++    } else {
++      Log.w(TAG, "[resendAdminDelete] Could not resend the admin delete job.");
++    }
++  }
++
+   public static void resendGroupMessage(@NonNull Context context, @NonNull MessageRecord messageRecord, @NonNull Set<RecipientId> filterRecipientIds) {
+     if (!messageRecord.isMms()) throw new AssertionError("Not Group");
+     sendGroupPush(context, messageRecord.getToRecipient(), messageRecord.getId(), filterRecipientIds, Collections.emptyList());

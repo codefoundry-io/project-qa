@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/util/Environment.kt",
+  "change_summary": "빌드 환경 판단 로직을 고도화하기 위해 IS_BENCHMARK, IS_PERF 상수를 추가하고, 내부 빌드 여부를 통합 판단하는 isInternal 메서드 구현",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Environment Check)",
+  "entry_point_file": null,
+  "test_method": [
+    "Debug, Nightly, Perf, Staging 등 각 빌드 배리언트에서 isInternal() 및 이와 연동된 신규 백업 포맷 지원 여부가 올바르게 반환되는지 확인"
+  ],
+  "confirmed_facts": [
+    "BUILD_VARIANT_TYPE을 기반으로 하는 IS_BENCHMARK, IS_PERF 불리언 상수 추가",
+    "복잡한 내부 빌드 판별 로직을 isInternal() 메서드로 캡슐화",
+    "isNewFormatSupportedForLocalBackup의 판별 기준을 isInternal() 결과로 대체"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "전역 환경 설정을 관리하는 유틸리티 오브젝트로 특정 실행 흐름의 진입점이 아님"
+}

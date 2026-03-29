@@ -1,0 +1,21 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt
+
+[References]:
+  InternalSettingsState:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt
+index 1e3e990d52..ebc8990966 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsState.kt
+@@ -31,5 +31,6 @@ data class InternalSettingsState(
+   val hasPendingOneTimeDonation: Boolean,
+   val hevcEncoding: Boolean,
+   val forceSplitPane: Boolean,
+-  val useNewMediaActivity: Boolean
++  val useNewMediaActivity: Boolean,
++  val disableInternalUser: Boolean
+ )

@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt",
+  "change_summary": "소리 및 알림 설정 화면에서 멘션 알림 설정(항상 알림/알림 없음)을 구분하는 상수를 MentionSetting에서 NotificationSetting으로 교체",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > Sounds and notifications)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt",
+  "test_method": [
+    "대화방 알림 설정에서 멘션 알림 옵션을 변경했을 때 값이 정상적으로 저장되고 다시 화면에 진입했을 때 유지되는지 확인"
+  ],
+  "confirmed_facts": [
+    "기존 MentionSetting.ALWAYS_NOTIFY/DO_NOT_NOTIFY를 NotificationSetting.ALWAYS_NOTIFY/DO_NOT_NOTIFY로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

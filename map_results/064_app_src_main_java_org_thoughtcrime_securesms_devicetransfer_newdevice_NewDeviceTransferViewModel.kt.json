@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferViewModel.kt",
+  "change_summary": "기기 이전 성공 시 사용자 이름 복구가 필요함을 알리는 상태 플래그(needsUsernameRestore) 설정 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(New Device Transfer > Success)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/devicetransfer/newdevice/NewDeviceTransferFragment.kt",
+  "test_method": [
+    "새 기기 데이터 이전 완료 후 SignalStore에 사용자 이름 복구 필요 플래그가 저장되는지 확인",
+    "이후 ReclaimUsernameAndLinkJob이 정상적으로 등록되어 실행되는지 확인"
+  ],
+  "confirmed_facts": [
+    "onTransferSuccess 콜백 내에서 SignalStore.misc.needsUsernameRestore를 true로 설정하는 코드 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

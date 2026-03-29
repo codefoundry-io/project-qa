@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsState.kt",
+  "change_summary": "알림 설정 상태 데이터 클래스에서 멘션 설정 필드의 타입을 MentionSetting에서 NotificationSetting으로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "BG(SoundsAndNotificationsSettingsViewModel)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt",
+  "test_method": [
+    "알림 설정 화면 로드 시 멘션 알림 상태(항상 알림/무음)가 정상적으로 표시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "mentionSetting 필드의 데이터 타입을 RecipientTable.NotificationSetting으로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

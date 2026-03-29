@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/protowire/Database.proto",
+  "change_summary": "메시지 추가 정보(MessageExtras)에 관리자 메시지 삭제 상태(PENDING, DONE, FAILED)를 기록하기 위한 신규 필드 정의",
+  "risk_level": "HIGH",
+  "trigger_point": "BG(Database Persistence / Serialization)",
+  "entry_point_file": null,
+  "test_method": [
+    "Protobuf 직렬화 및 역직렬화 시 AdminDeleteStatus 필드가 데이터 유실 없이 정확하게 변환되는지 확인",
+    "데이터베이스의 MessageExtras 컬럼에 저장된 해당 상태값이 앱 재시작 후에도 올바르게 로드되는지 확인"
+  ],
+  "confirmed_facts": [
+    "MessageExtras 메시지에 tag 7번으로 AdminDeleteStatus 필드 추가",
+    "PENDING(0), DONE(1), FAILED(2) 값을 가지는 AdminDeleteStatus 메시지 구조 신규 정의"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "데이터 모델 및 통신 프로토콜을 정의하는 프로토버프 파일이며 특정 Android 컴포넌트 진입점을 가지지 않음"
+}

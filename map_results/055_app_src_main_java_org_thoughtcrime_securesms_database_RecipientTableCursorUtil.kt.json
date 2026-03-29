@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/RecipientTableCursorUtil.kt",
+  "change_summary": "수신자 테이블 커서에서 데이터를 읽어올 때 새로운 통화 및 답장 알림 설정 컬럼을 읽도록 로직 확장",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Database Query)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/database/RecipientTable.kt",
+  "test_method": [
+    "데이터베이스에서 Recipient 정보를 쿼리할 때 새로 추가된 알림 설정 필드(Call, Reply)들이 RecipientRecord 객체에 정확히 매핑되는지 확인"
+  ],
+  "confirmed_facts": [
+    "CALL_NOTIFICATION_SETTING 및 REPLY_NOTIFICATION_SETTING 컬럼값을 커서로부터 추출하여 모델에 할당하는 코드 추가",
+    "기존 MENTION_SETTING 추출 시 사용하는 enum 타입을 NotificationSetting으로 업데이트"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

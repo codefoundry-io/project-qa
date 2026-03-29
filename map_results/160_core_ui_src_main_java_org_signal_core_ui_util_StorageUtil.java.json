@@ -1,0 +1,17 @@
+{
+  "target_file": "core/ui/src/main/java/org/signal/core/ui/util/StorageUtil.java",
+  "change_summary": "저장소 경로 표시 메서드(getDisplayPath)의 API 버전 제약을 완화하여 구형 안드로이드 버전에서도 안정적으로 동작하도록 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Global > Path Display)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt",
+  "test_method": [
+    "안드로이드 API 24 미만 기기에서 백업 디렉토리 선택 시, 앱 크래시 없이 파일 이름이 정상적으로 표시되는지 확인",
+    "API 24 이상 기기에서 기존의 볼륨 라벨이 포함된 전체 표시 경로 기능이 여전히 잘 작동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "getDisplayPath 메서드 상단의 @RequiresApi(24) 어노테이션 제거",
+    "내부 로직에 Build.VERSION.SDK_INT 분기를 추가하여 API 24 미만 시 단순 backupName을 반환하는 안전 장치 마련"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

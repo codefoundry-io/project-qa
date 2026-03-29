@@ -1,0 +1,87 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+
+[Changed Symbols]: BackupBodyRange, BackupMessageRecord, ByteArray, ChatItem, ExportOddities, ExportSkips, Style
+
+[References]:
+  ChatItemArchiveExporter:
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/database/MessageTableArchiveExtensions.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+  BackupBodyRange:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+  BackupMessageRecord:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+  ByteArray: (10+ references - common utility)
+  ChatItem:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/util/FrameExtensions.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/AttachmentTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/ChatItemArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/BackupRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/importer/ChatItemArchiveImporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/database/MessageTableArchiveExtensions.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+  ExportOddities:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/RecipientArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/DistributionListArchiveExporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+  ExportSkips:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AdHocCallArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/StickerArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/RecipientArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+  Style: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+index bb350f6e5c..85089e5060 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+@@ -1179,6 +1179,11 @@ private fun BackupMessageRecord.toRemoteQuote(exportState: ExportState, attachme
+     return null
+   }
+ 
++  if (exportState.recipientIdToAci[this.quoteAuthor] == null && exportState.recipientIdToE164[this.quoteAuthor] == null) {
++    Log.w(TAG, ExportOddities.quoteAuthorHasNoAciOrE164(this.dateSent))
++    return null
++  }
++
+   val localType = QuoteModel.Type.fromCode(this.quoteType)
+   val remoteType = when (localType) {
+     QuoteModel.Type.NORMAL -> {
+@@ -1388,16 +1393,16 @@ private fun ByteArray.toRemoteBodyRanges(dateSent: Long): List<BackupBodyRange>
+     return emptyList()
+   }
+ 
+-  return decoded.ranges.map { range ->
++  return decoded.ranges.mapNotNull { range ->
+     val mention = range.mentionUuid?.let { UuidUtil.parseOrNull(it) }?.toByteArray()?.toByteString()?.takeIf { it.isNotEmpty() }
+     val style = if (mention == null) {
+-      range.style?.toRemote() ?: BackupBodyRange.Style.NONE
++      range.style?.toRemote()
+     } else {
+       null
+     }
+ 
+     if (mention == null && style == null) {
+-      return emptyList()
++      return@mapNotNull null
+     }
+ 
+     BackupBodyRange(
+@@ -1700,6 +1705,11 @@ private fun ChatItem.validateChatItem(exportState: ExportState, selfRecipientId:
+     return null
+   }
+ 
++  if (this.directionless != null && this.authorId != selfRecipientId.toLong() && exportState.recipientIdToAci[this.authorId] == null && exportState.recipientIdToE164[this.authorId] == null) {
++    Log.w(TAG, ExportSkips.directionlessMessageAuthorDoesNotHaveAciOrE164(this.dateSent))
++    return null
++  }
++
+   if (this.outgoing != null && exportState.releaseNoteRecipientId != null && exportState.threadIdToRecipientId[this.chatId] == exportState.releaseNoteRecipientId) {
+     Log.w(TAG, ExportSkips.outgoingMessageToReleaseNotesChat(this.dateSent))
+     return null

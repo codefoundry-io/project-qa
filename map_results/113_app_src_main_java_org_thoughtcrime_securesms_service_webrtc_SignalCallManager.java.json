@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java",
+  "change_summary": "통화 서비스 매니저에 원격 음소거 요청(Remote Mute)을 액션 프로세서로 전달하는 브릿지 메서드 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(WebRtc Service Control)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java",
+  "test_method": [
+    "통화 화면의 참여자 제어 로직에서 sendRemoteMuteRequest를 호출했을 때, 시스템이 이를 가로채지 않고 정상적으로 ActionProcessor로 전달하는지 확인"
+  ],
+  "confirmed_facts": [
+    "퍼블릭 메서드 sendRemoteMuteRequest를 추가하고 내부 process 큐를 통해 handleSendRemoteMuteRequest 작업을 예약함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

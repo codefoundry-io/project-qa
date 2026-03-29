@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt",
+  "change_summary": "스토리 그룹 답장 화면의 에러 처리 로직에서 호출하는 안전 번호 바텀 시트 생성 메서드 명칭 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Story Group Reply > Error Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt",
+  "test_method": [
+    "스토리에 대한 그룹 답장 전송 중 신원 불일치 오류가 발생했을 때, 에러 상태를 클릭하여 안전 번호 확인 다이얼로그가 정상적으로 팝업되는지 확인"
+  ],
+  "confirmed_facts": [
+    "onMessageWithErrorClicked 내에서 SafetyNumberBottomSheet.forMessageRecord 호출을 forOutgoingMessageRecord로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

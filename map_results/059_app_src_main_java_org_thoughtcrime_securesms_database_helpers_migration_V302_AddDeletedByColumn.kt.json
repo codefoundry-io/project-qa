@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/helpers/migration/V302_AddDeletedByColumn.kt",
+  "change_summary": "메시지 삭제 주체를 추적하기 위한 deleted_by 컬럼 추가 마이그레이션 방식을 안정성을 위해 테이블 재구축 방식으로 변경",
+  "risk_level": "CRITICAL",
+  "trigger_point": "BG(Database Migration V302)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt",
+  "test_method": [
+    "마이그레이션 완료 후 기존 메시지들이 누락 없이 새로운 테이블 구조로 모두 이전되었는지 확인",
+    "대량의 메시지(수십만 건 이상)가 있는 환경에서 OOM(메모리 부족) 발생 없이 배치가 정상 작동하는지 확인",
+    "마이그레이션 후 Foreign Key 위반 사항이 없는지 및 인덱스가 정상적으로 재생성되었는지 확인"
+  ],
+  "confirmed_facts": [
+    "OOM 방지를 위해 임시 테이블(message_tmp)을 생성하고 50,000개 단위로 데이터를 복사하는 배치 로직 적용",
+    "ALTER TABLE DROP COLUMN의 제약을 피하기 위해 전체 테이블 드롭 및 리네임 방식 채택",
+    "트리거, 인덱스 등 메시지 테이블에 의존적인 SQL 항목들을 자동으로 식별하여 드롭 후 복구하는 getAllDependentItems 로직 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

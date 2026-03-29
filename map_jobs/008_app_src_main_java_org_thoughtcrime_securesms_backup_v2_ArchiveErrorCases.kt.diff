@@ -1,0 +1,51 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+
+[Changed Symbols]: ExportOddities, ExportSkips, directionlessMessageAuthorDoesNotHaveAciOrE164, quoteAuthorHasNoAciOrE164
+
+[References]:
+  ArchiveErrorCases: (no references found)
+  ExportOddities:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/DistributionListArchiveExporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/RecipientArchiveProcessor.kt
+  ExportSkips:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/AdHocCallArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/StickerArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/processor/RecipientArchiveProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+  directionlessMessageAuthorDoesNotHaveAciOrE164:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+  quoteAuthorHasNoAciOrE164:
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/backup/v2/exporters/ChatItemArchiveExporter.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+index 28948db128..3c9b7fff64 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/backup/v2/ArchiveErrorCases.kt
+@@ -155,6 +155,10 @@ object ExportSkips {
+     return log(sentTimestamp, "An incoming message author did not have an aci or e164.")
+   }
+ 
++  fun directionlessMessageAuthorDoesNotHaveAciOrE164(sentTimestamp: Long): String {
++    return log(sentTimestamp, "A directionlessmessage author did not have an aci or e164.")
++  }
++
+   fun outgoingMessageToReleaseNotesChat(sentTimestamp: Long): String {
+     return log(sentTimestamp, "An outgoing message was sent to the release notes chat.")
+   }
+@@ -218,6 +222,10 @@ object ExportOddities {
+     return log(sentTimestamp, "Quote author was not found in the exported recipients. Removing the quote.")
+   }
+ 
++  fun quoteAuthorHasNoAciOrE164(sentTimestamp: Long): String {
++    return log(sentTimestamp, "Quote author has neither an ACI nor an E164. Removing the quote.")
++  }
++
+   fun emptyQuote(sentTimestamp: Long): String {
+     return log(sentTimestamp, "Quote had no text or attachments. Removing it.")
+   }

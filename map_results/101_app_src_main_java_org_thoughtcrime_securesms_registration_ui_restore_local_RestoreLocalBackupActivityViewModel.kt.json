@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivityViewModel.kt",
+  "change_summary": "복구 프로세스 재시작을 위해 복구 결정 상태(RestoreDecisionState)를 초기화하는 메서드 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Restore State Management)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/registration/ui/restore/local/RestoreLocalBackupActivity.kt",
+  "test_method": [
+    "복구 실패 후 이전 화면으로 돌아갈 때 resetRestoreState()가 정상 호출되어 SignalStore의 복구 결정 상태가 START로 리셋되는지 확인"
+  ],
+  "confirmed_facts": [
+    "SignalStore.registration.restoreDecisionState를 새로운 RestoreDecisionState(START) 객체로 업데이트하는 resetRestoreState 메서드 구현"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

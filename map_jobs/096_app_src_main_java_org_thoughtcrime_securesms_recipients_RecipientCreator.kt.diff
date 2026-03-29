@@ -1,0 +1,26 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt
+
+[References]:
+  RecipientCreator:
+    - ./app/src/test/java/org/thoughtcrime/securesms/database/RecipientDatabaseTestUtils.kt
+    - ./app/src/test/java/org/thoughtcrime/securesms/components/webrtc/CallParticipantListUpdateTest.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/LiveRecipient.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/LiveRecipientCache.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/providers/AvatarProvider.kt [ENTRY: Provider]
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt b/app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt
+index 9cf2ae9498..6b5207cc4a 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/recipients/RecipientCreator.kt
+@@ -185,6 +185,8 @@ object RecipientCreator {
+       capabilities = record.capabilities,
+       storageId = record.storageId,
+       mentionSetting = record.mentionSetting,
++      callNotificationSettingValue = record.callNotificationSetting,
++      replyNotificationSettingValue = record.replyNotificationSetting,
+       wallpaperValue = record.wallpaper?.validate(),
+       chatColorsValue = record.chatColors,
+       avatarColor = avatarColor ?: record.avatarColor,

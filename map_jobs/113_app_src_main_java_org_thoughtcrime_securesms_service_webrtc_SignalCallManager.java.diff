@@ -1,0 +1,24 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java
+
+[Changed Symbols]: CallParticipant
+
+[References]:
+  SignalCallManager: (10+ references - common utility)
+  CallParticipant: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java
+index da402ba187..5ec02b80ca 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/SignalCallManager.java
+@@ -393,6 +393,10 @@ public final class SignalCallManager implements CallManager.Observer, GroupCall.
+     process((s, p) -> p.handleSetCallLinkJoinRequestRejected(s, participant));
+   }
+ 
++  public void sendRemoteMuteRequest(@NonNull CallParticipant participant) {
++    process((s, p) -> p.handleSendRemoteMuteRequest(s, participant));
++  }
++
+   public void removeFromCallLink(@NonNull CallParticipant participant) {
+     process((s, p) -> p.handleRemoveFromCallLink(s, participant));
+   }

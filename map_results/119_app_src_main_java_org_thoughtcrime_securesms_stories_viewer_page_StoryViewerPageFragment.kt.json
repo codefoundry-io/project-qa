@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt",
+  "change_summary": "스토리 뷰어 화면의 에러 처리 로직에서 호출하는 안전 번호 바텀 시트 생성 메서드 명칭 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Story Viewer > Error Action)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt",
+  "test_method": [
+    "스토리 뷰어 화면에서 자신이 올린 스토리가 전송 실패(신원 불일치) 상태일 때, 에러 액션을 통해 안전 번호 확인 다이얼로그가 정상적으로 나타나는지 확인"
+  ],
+  "confirmed_facts": [
+    "SafetyNumberBottomSheet.forMessageRecord 호출을 forOutgoingMessageRecord로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

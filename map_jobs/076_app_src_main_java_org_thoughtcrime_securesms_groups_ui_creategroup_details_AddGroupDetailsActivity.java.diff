@@ -1,0 +1,45 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java
+
+[Changed Symbols]: GroupInviteSentDialog
+
+[References]:
+  AddGroupDetailsActivity:
+    - ./app/src/main/AndroidManifest.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/CreateGroupActivity.kt [ENTRY: Activity]
+  GroupInviteSentDialog:
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/managegroup/dialogs/GroupInviteSentDialog.java [ENTRY: Fragment]
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java [ENTRY: Activity]
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java b/app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java
+index ac78d491de..2297ed78c4 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/groups/ui/creategroup/details/AddGroupDetailsActivity.java
+@@ -1,6 +1,5 @@
+ package org.thoughtcrime.securesms.groups.ui.creategroup.details;
+ 
+-import android.app.Dialog;
+ import android.content.Context;
+ import android.content.Intent;
+ import android.os.Bundle;
+@@ -64,11 +63,15 @@ public class AddGroupDetailsActivity extends PassphraseRequiredActivity implemen
+                              long threadId,
+                              @NonNull List<Recipient> invitedMembers)
+   {
+-    Dialog dialog = GroupInviteSentDialog.showInvitesSent(this, this, invitedMembers);
+-    if (dialog != null) {
+-      dialog.setOnDismissListener((d) -> goToConversation(recipientId, threadId));
+-    } else {
++    if (invitedMembers.isEmpty()) {
+       goToConversation(recipientId, threadId);
++    } else {
++      getSupportFragmentManager().setFragmentResultListener(
++          GroupInviteSentDialog.RESULT_DISMISSED,
++          this,
++          (requestKey, result) -> goToConversation(recipientId, threadId)
++      );
++      GroupInviteSentDialog.show(getSupportFragmentManager(), invitedMembers);
+     }
+   }

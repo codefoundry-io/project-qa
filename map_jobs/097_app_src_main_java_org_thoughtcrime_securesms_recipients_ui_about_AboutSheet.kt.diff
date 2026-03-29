@@ -1,0 +1,23 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheet.kt
+
+[Changed Symbols]: MemberLabelRow
+
+[References]:
+  AboutSheet: (10+ references - common utility)
+  MemberLabelRow:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheet.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheet.kt b/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheet.kt
+index 21a74880dc..5505791a54 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheet.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/recipients/ui/about/AboutSheet.kt
+@@ -381,7 +381,7 @@ private fun MemberLabelRow(
+         }
+ 
+         Text(
+-          text = memberLabel.text,
++          text = memberLabel.displayText,
+           style = MaterialTheme.typography.bodyLarge,
+           maxLines = 1,
+           overflow = TextOverflow.Ellipsis,

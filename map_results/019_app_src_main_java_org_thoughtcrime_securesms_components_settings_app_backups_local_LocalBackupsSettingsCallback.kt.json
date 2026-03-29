@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsSettingsCallback.kt",
+  "change_summary": "로컬 백업 생성 시 뷰모델에 백업 시작 상태를 알리는 호출 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Settings > Local Backups > Create Backup)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt",
+  "test_method": [
+    "로컬 백업 생성 버튼을 클릭했을 때, UI에서 즉각적으로 백업이 시작되었음을 알리는 상태 변화(예: 버튼 비활성화, 진행률 표시 등)가 나타나는지 확인"
+  ],
+  "confirmed_facts": [
+    "onCreateBackupClick 콜백 내에서 enqueueArchive를 호출하기 전 viewModel.onBackupStarted()를 실행하도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

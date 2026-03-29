@@ -1,0 +1,120 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+
+[Changed Symbols]: Collect, Delete, Final, MessageTable, Phase, Query, SignalTrace, SqlUtil, ThreadDeleteSyncInfo
+
+[References]:
+  ThreadTable: (10+ references - common utility)
+  Collect: (10+ references - common utility)
+  Delete: (10+ references - common utility)
+  Final: (10+ references - common utility)
+  MessageTable: (10+ references - common utility)
+  Phase: (10+ references - common utility)
+  Query: (10+ references - common utility)
+  SignalTrace:
+    - ./app/src/benchmarkShared/java/org/whispersystems/signalservice/internal/websocket/BenchmarkWebSocketConnection.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversationlist/ConversationListDataSource.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/MessageContentProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/ReceiptMessageProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/DataMessageProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/IncomingMessageObserver.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/util/SignalLocalMetrics.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/util/SignalTrace.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/MessageTable.kt
+  SqlUtil: (10+ references - common utility)
+  ThreadDeleteSyncInfo:
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/MultiDeviceDeleteSyncJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt b/app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+index edfec744f9..608c196da9 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/database/ThreadTable.kt
+@@ -70,6 +70,7 @@ import org.thoughtcrime.securesms.storage.StorageSyncHelper
+ import org.thoughtcrime.securesms.util.ConversationUtil
+ import org.thoughtcrime.securesms.util.JsonUtils
+ import org.thoughtcrime.securesms.util.JsonUtils.SaneJSONObject
++import org.thoughtcrime.securesms.util.SignalTrace
+ import org.thoughtcrime.securesms.util.TextSecurePreferences
+ import org.thoughtcrime.securesms.util.isPoll
+ import org.thoughtcrime.securesms.util.isScheduled
+@@ -1315,46 +1316,43 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
+   }
+ 
+   fun deleteConversations(selectedConversations: Set<Long>, syncThreadDeletes: Boolean = true) {
++    SignalTrace.beginSection("ThreadTable#deleteConversations")
+     Log.d(TAG, "[deleteConversations] Deleting ${selectedConversations.size} chats syncThreadDeletes: $syncThreadDeletes")
+     val recipientIds = getRecipientIdsForThreadIds(selectedConversations)
+ 
+     val addressableMessages = mutableListOf<ThreadDeleteSyncInfo>()
+ 
+-    val queries: List<SqlUtil.Query> = SqlUtil.buildCollectionQuery(ID, selectedConversations)
+-    Log.d(TAG, "[deleteConversations] Enter transaction")
+-    writableDatabase.withinTransaction { db ->
+-      if (syncThreadDeletes) {
+-        for (threadId in selectedConversations) {
+-          val mostRecentMessages = messages.getMostRecentAddressableMessages(threadId, excludeExpiring = false)
+-          val mostRecentNonExpiring = if (mostRecentMessages.size == MessageTable.ADDRESSABLE_MESSAGE_LIMIT && mostRecentMessages.any { it.expiresIn > 0 }) {
+-            messages.getMostRecentAddressableMessages(threadId, excludeExpiring = true)
+-          } else {
+-            emptySet()
+-          }
+-
+-          addressableMessages += ThreadDeleteSyncInfo(threadId, mostRecentMessages, mostRecentNonExpiring)
++    // Phase 1: Collect sync info (reads only, before any deletion)
++    if (syncThreadDeletes) {
++      for (threadId in selectedConversations) {
++        val mostRecentMessages = messages.getMostRecentAddressableMessages(threadId, excludeExpiring = false)
++        val mostRecentNonExpiring = if (mostRecentMessages.size == MessageTable.ADDRESSABLE_MESSAGE_LIMIT && mostRecentMessages.any { it.expiresIn > 0 }) {
++          messages.getMostRecentAddressableMessages(threadId, excludeExpiring = true)
++        } else {
++          emptySet()
+         }
+-        Log.d(TAG, "[deleteConversations] Retrieved sync thread delete addressable messages (${addressableMessages.size})")
+-      } else {
+-        Log.d(TAG, "[deleteConversations] No addressable messages needed")
++
++        addressableMessages += ThreadDeleteSyncInfo(threadId, mostRecentMessages, mostRecentNonExpiring)
+       }
++      Log.d(TAG, "[deleteConversations] Retrieved sync thread delete addressable messages (${addressableMessages.size})")
++    } else {
++      Log.d(TAG, "[deleteConversations] No addressable messages needed")
++    }
++
++    // Phase 2: Delete messages (per-batch transactions, write lock released between batches)
++    Log.d(TAG, "[deleteConversations] Deleting messages in thread")
++    messages.deleteMessagesInThread(selectedConversations)
+ 
+-      Log.d(TAG, "[deleteConversations] Deactivating threads")
++    // Phase 3: Final lightweight transaction (deactivate threads, clear drafts, update cache)
++    val queries: List<SqlUtil.Query> = SqlUtil.buildCollectionQuery(ID, selectedConversations)
++    Log.d(TAG, "[deleteConversations] Deactivating threads and cleaning up")
++    writableDatabase.withinTransaction { db ->
+       for (query in queries) {
+         db.deactivateThread(query)
+       }
+ 
+-      Log.d(TAG, "[deleteConversations] Deleting messages in thread")
+-      messages.deleteMessagesInThread(selectedConversations)
+-      Log.d(TAG, "[deleteConversations] Trimming attachments")
+-      attachments.trimAllAbandonedAttachments()
+-      Log.d(TAG, "[deleteConversations] Deleting abandoned group receipts")
+-      groupReceipts.deleteAbandonedRows()
+-      Log.d(TAG, "[deleteConversations] Deleting abandoned mentions")
+-      mentions.deleteAbandonedMentions()
+-      Log.d(TAG, "[deleteConversations] Clearing drafts")
+       drafts.clearDrafts(selectedConversations)
+-      Log.d(TAG, "[deleteConversations] Updating threadId cache")
++
+       synchronized(threadIdCache) {
+         for (recipientId in recipientIds) {
+           threadIdCache.remove(recipientId)
+@@ -1378,6 +1376,7 @@ class ThreadTable(context: Context, databaseHelper: SignalDatabase) : DatabaseTa
+     ConversationUtil.clearShortcuts(context, recipientIds)
+ 
+     OptimizeMessageSearchIndexJob.enqueue()
++    SignalTrace.endSection()
+   }
+ 
+   @SuppressLint("DiscouragedApi")

@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationDialogs.kt",
+  "change_summary": "메시지 삭제 실패 시 에러 안내 및 재전송 기능을 제공하는 다이얼로그(displayDeletionFailedDialog) 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation > Message Status Click)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "관리자 삭제 요청이 네트워크 오류 등으로 실패했을 때 표시되는 다이얼로그에서 '보내기' 버튼 클릭 시 실패한 참여자들에게 삭제 명령이 재전송되는지 확인",
+    "재시도 불가능한 환경에서는 전송 버튼 없이 일반 안내 문구만 포함된 다이얼로그가 노출되는지 확인"
+  ],
+  "confirmed_facts": [
+    "MaterialAlertDialogBuilder를 사용하여 삭제 실패 상황에 따른 분기(재시도 가능 여부) 처리 구현",
+    "재시도 시 MessageSender.resendAdminDelete를 호출하여 실패한 수신자들에게 다시 삭제 요청을 보내도록 처리"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

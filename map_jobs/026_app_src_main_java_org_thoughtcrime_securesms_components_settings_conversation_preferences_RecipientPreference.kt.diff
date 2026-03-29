@@ -1,0 +1,85 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+
+[Changed Symbols]: Compact, MemberLabelPill, MemberLabelPillView, Style, StyledMemberLabel
+
+[References]:
+  RecipientPreference: (10+ references - common utility)
+  Compact: (10+ references - common utility)
+  MemberLabelPill:
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPill.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/SenderNameWithLabel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+  MemberLabelPillView:
+    - ./app/src/main/res/layout/recipient_bottom_sheet.xml
+    - ./app/src/main/res/layout/group_recipient_list_item.xml
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientBottomSheetDialogFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/ui/GroupMemberListAdapter.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+  Style: (10+ references - common utility)
+  StyledMemberLabel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDetailsState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+index 51b4421902..07b296b787 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/preferences/RecipientPreference.kt
+@@ -3,7 +3,6 @@ package org.thoughtcrime.securesms.components.settings.conversation.preferences
+ import android.text.SpannableStringBuilder
+ import android.view.View
+ import android.widget.TextView
+-import androidx.compose.ui.unit.dp
+ import androidx.core.content.ContextCompat
+ import androidx.lifecycle.LifecycleOwner
+ import androidx.lifecycle.Observer
+@@ -11,7 +10,6 @@ import org.thoughtcrime.securesms.R
+ import org.thoughtcrime.securesms.badges.BadgeImageView
+ import org.thoughtcrime.securesms.components.AvatarImageView
+ import org.thoughtcrime.securesms.components.settings.PreferenceModel
+-import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelPill
+ import org.thoughtcrime.securesms.groups.memberlabel.MemberLabelPillView
+ import org.thoughtcrime.securesms.groups.memberlabel.StyledMemberLabel
+ import org.thoughtcrime.securesms.recipients.Recipient
+@@ -65,9 +63,10 @@ object RecipientPreference {
+ 
+     private var recipient: Recipient? = null
+     private var canSetMemberLabel: Boolean = false
++    private var memberLabel: StyledMemberLabel? = null
+ 
+     private val recipientObserver = Observer<Recipient> { recipient ->
+-      onRecipientChanged(recipient = recipient, memberLabel = null, canSetMemberLabel = canSetMemberLabel)
++      onRecipientChanged(recipient = recipient, memberLabel = memberLabel, canSetMemberLabel = canSetMemberLabel)
+     }
+ 
+     override fun bind(model: Model) {
+@@ -84,6 +83,7 @@ object RecipientPreference {
+       }
+ 
+       canSetMemberLabel = model.canSetMemberLabel
++      memberLabel = model.memberLabel
+ 
+       if (model.lifecycleOwner != null) {
+         observeRecipient(model.lifecycleOwner, model.recipient)
+@@ -133,11 +133,7 @@ object RecipientPreference {
+ 
+     private fun showMemberLabel(styledLabel: StyledMemberLabel) {
+       memberLabelView?.apply {
+-        style = MemberLabelPillView.Style(
+-          horizontalPadding = 8.dp,
+-          verticalPadding = 2.dp,
+-          textStyle = { MemberLabelPill.textStyleCompact }
+-        )
++        style = MemberLabelPillView.Style.Compact
+         setLabel(styledLabel.label, styledLabel.tintColor)
+         visible = true
+       }

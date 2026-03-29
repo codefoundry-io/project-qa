@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/sms/MessageSender.java",
+  "change_summary": "관리자 메시지 삭제 요청 발신 및 실패 시 재전송을 위한 유틸리티 로직 개선",
+  "risk_level": "HIGH",
+  "trigger_point": "UI(Conversation > Delete For Everyone)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "관리자가 그룹 메시지를 삭제할 때 메시지 상태가 즉시 '펜딩(Pending)'으로 업데이트되고 삭제 작업이 예약되는지 확인",
+    "삭제 실패한 메시지에 대해 특정 수신자를 대상으로 재전송(resendAdminDelete) 시 정상적으로 작업이 재등록되는지 확인"
+  ],
+  "confirmed_facts": [
+    "sendAdminDelete 메서드에서 markAsPendingAdminDelete 호출을 추가하여 상태 관리 강화",
+    "특정 수신자 목록(filteredRecipients)을 지원하는 resendAdminDelete 메서드 신규 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

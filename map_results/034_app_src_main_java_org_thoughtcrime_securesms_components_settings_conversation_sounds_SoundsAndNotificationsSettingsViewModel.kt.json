@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsViewModel.kt",
+  "change_summary": "알림 설정 뷰모델의 멘션 설정 저장 메서드(setMentionSetting)의 매개변수 타입을 MentionSetting에서 NotificationSetting으로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > Sounds and notifications)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt",
+  "test_method": [
+    "대화방 알림 설정(V1)에서 멘션 알림 옵션을 변경했을 때 뷰모델이 변경 사항을 정상적으로 수신하고 처리하는지 확인"
+  ],
+  "confirmed_facts": [
+    "setMentionSetting 메서드의 mentionSetting 매개변수 타입을 RecipientTable.NotificationSetting으로 변경함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

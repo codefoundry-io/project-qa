@@ -1,0 +1,49 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java
+
+[Changed Symbols]: AppForegroundObserver, LockManager, PhoneState, WebRtcViewModel
+
+[References]:
+  IncomingCallActionProcessor:
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/service/webrtc/BeginCallActionProcessorDelegate.java
+  AppForegroundObserver: (10+ references - common utility)
+  LockManager: (10+ references - common utility)
+  PhoneState: (10+ references - common utility)
+  WebRtcViewModel: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java
+index fd6e811ace..37019d88b7 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java
++++ b/app/src/main/java/org/thoughtcrime/securesms/service/webrtc/IncomingCallActionProcessor.java
+@@ -240,18 +240,23 @@ public class IncomingCallActionProcessor extends DeviceAwareActionProcessor {
+                                               CallTable.Direction.INCOMING,
+                                               CallTable.Event.ONGOING);
+ 
++    if (!shouldDisturbUserWithCall) {
++      Log.i(TAG, "Silently ignoring call due to mute settings.");
++      return currentState.builder()
++                         .changeCallInfoState()
++                         .callState(WebRtcViewModel.State.CALL_INCOMING)
++                         .build();
++    }
+ 
+-    if (shouldDisturbUserWithCall) {
+-      webRtcInteractor.updatePhoneState(LockManager.PhoneState.INTERACTIVE);
+-      boolean started = webRtcInteractor.startWebRtcCallActivityIfPossible();
+-      if (!started) {
+-        Log.i(TAG, "Unable to start call activity due to OS version or not being in the foreground");
+-        AppForegroundObserver.addListener(webRtcInteractor.getForegroundListener());
+-      }
++    webRtcInteractor.updatePhoneState(LockManager.PhoneState.INTERACTIVE);
++    boolean started = webRtcInteractor.startWebRtcCallActivityIfPossible();
++    if (!started) {
++      Log.i(TAG, "Unable to start call activity due to OS version or not being in the foreground");
++      AppForegroundObserver.addListener(webRtcInteractor.getForegroundListener());
+     }
+ 
+     boolean isCallNotificationsEnabled = SignalStore.settings().isCallNotificationsEnabled() && NotificationChannels.getInstance().areNotificationsEnabled();
+-    if (shouldDisturbUserWithCall && isCallNotificationsEnabled) {
++    if (isCallNotificationsEnabled) {
+       Uri                         ringtone     = recipient.resolve().getCallRingtone();
+       RecipientTable.VibrateState vibrateState = recipient.resolve().getCallVibrate();

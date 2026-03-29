@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/database/helpers/SignalDatabaseMigrations.kt",
+  "change_summary": "데이터베이스 버전을 304로 상향하고 통화 및 답장 알림 설정을 위한 마이그레이션(V304) 등록",
+  "risk_level": "CRITICAL",
+  "trigger_point": "BG(Database Migration)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/database/SignalDatabase.kt",
+  "test_method": [
+    "앱 업데이트(버전 업) 시 데이터베이스 마이그레이션 로직이 호출되어 에러 없이 304 버전으로 업그레이드되는지 확인"
+  ],
+  "confirmed_facts": [
+    "DATABASE_VERSION 상수를 303에서 304로 변경",
+    "MIGRATIONS 맵에 V304_CallAndReplyNotificationSettings 클래스 매핑 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

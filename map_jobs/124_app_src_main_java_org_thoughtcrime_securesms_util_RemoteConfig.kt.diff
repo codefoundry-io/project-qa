@@ -1,0 +1,85 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt
+
+[Changed Symbols]: Environment, Solely, Volatile
+
+[References]:
+  RemoteConfig: (10+ references - common utility)
+  Environment: (10+ references - common utility)
+  Solely:
+    - ./app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt
+  Volatile: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt b/app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt
+index e8fce78370..7b222bb306 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/util/RemoteConfig.kt
+@@ -82,6 +82,14 @@ object RemoteConfig {
+   var initialized: Boolean = false
+   private val initLock: ReentrantLock = ReentrantLock()
+ 
++  /** Solely for fixing an issue with the internalUser flag */
++  @VisibleForTesting
++  var underTest: Boolean = false
++
++  @JvmStatic
++  @Volatile
++  var internalUserDisabled: Boolean = false
++
+   @JvmStatic
+   fun init() {
+     initLock.withLock {
+@@ -590,7 +598,12 @@ object RemoteConfig {
+     key = "android.internalUser",
+     hotSwappable = true
+   ) { value ->
+-    value.asBoolean(false) || Environment.IS_NIGHTLY || Environment.IS_STAGING
++    when {
++      internalUserDisabled -> false
++      underTest -> value.asBoolean(false)
++      Environment.isInternal() -> true
++      else -> value.asBoolean(false)
++    }
+   }
+ 
+   /** The raw client expiration JSON string.  */
+@@ -1252,7 +1265,7 @@ object RemoteConfig {
+   @JvmStatic
+   @get:JvmName("sendMemberLabels")
+   val sendMemberLabels: Boolean by remoteBoolean(
+-    key = "android.sendMemberLabels.2",
++    key = "android.sendMemberLabels.3",
+     defaultValue = false,
+     hotSwappable = true
+   )
+@@ -1263,7 +1276,7 @@ object RemoteConfig {
+   @JvmStatic
+   @get:JvmName("receiveAdminDelete")
+   val receiveAdminDelete: Boolean by remoteBoolean(
+-    key = "android.receiveAdminDelete",
++    key = "android.receiveAdminDelete.2",
+     defaultValue = false,
+     hotSwappable = true
+   )
+@@ -1285,8 +1298,8 @@ object RemoteConfig {
+   @JvmStatic
+   @get:JvmName("regularDeleteThreshold")
+   val regularDeleteThreshold: Long by remoteLong(
+-    key = "android.regularDeleteThreshold",
+-    defaultValue = 1.days.inWholeMilliseconds,
++    key = "global.normalDeleteMaxAgeInSeconds",
++    defaultValue = 1.days.inWholeSeconds,
+     hotSwappable = true
+   )
+ 
+@@ -1296,8 +1309,8 @@ object RemoteConfig {
+   @JvmStatic
+   @get:JvmName("adminDeleteThreshold")
+   val adminDeleteThreshold: Long by remoteLong(
+-    key = "android.adminDeleteThreshold",
+-    defaultValue = 1.days.inWholeMilliseconds,
++    key = "global.adminDeleteMaxAgeInSeconds",
++    defaultValue = 1.days.inWholeSeconds,
+     hotSwappable = true
+   )
+   // endregion

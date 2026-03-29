@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt",
+  "change_summary": "Compose 기반의 새로운 소리 및 알림 설정 화면(V2) 프래그먼트 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > Sounds and notifications (Internal))",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment2.kt",
+  "test_method": [
+    "내부 사용자 설정 활성화 후 대화방 설정에서 새로운 알림 설정 화면이 정상적으로 열리는지 확인",
+    "무음 설정 버튼 클릭 시 다이얼로그가 표시되고 선택한 시간이 ViewModel에 반영되는지 확인",
+    "커스텀 알림 설정 항목 클릭 시 해당 화면으로 네비게이션이 작동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "ComposeFragment를 상속받아 SoundsAndNotificationsSettingsViewModel2와 결합된 UI 구현",
+    "NavigateToCustomNotifications 이벤트 발생 시 Safe Navigation을 통한 화면 이동 처리"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

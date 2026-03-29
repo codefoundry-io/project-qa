@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt",
+  "change_summary": "통화 제어 뷰모델에서 그룹 통화인 경우 사용자의 그룹 관리자 권한 여부를 확인하여 상태에 반영하는 로직 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Call > Info)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallScreen.kt",
+  "test_method": [
+    "그룹 통화 화면 진입 시 사용자가 그룹 관리자인 경우 해당 정보가 상태(isGroupAdmin)에 정상적으로 로드되는지 확인"
+  ],
+  "confirmed_facts": [
+    "onRecipientChanged에서 수신자가 그룹일 때 SignalDatabase를 조회하여 관리자 여부 판별 로직 구현",
+    "비동기 처리를 위해 Single(RxJava)과 Schedulers.io()를 사용함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

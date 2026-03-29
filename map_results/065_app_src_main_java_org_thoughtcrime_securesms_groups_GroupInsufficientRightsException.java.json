@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/GroupInsufficientRightsException.java",
+  "change_summary": "그룹 권한 부족 예외 클래스의 생성자 가시성을 public으로 변경하여 외부 패키지에서의 접근 허용",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Group Operation Error)",
+  "entry_point_file": null,
+  "test_method": [
+    "다른 패키지에 위치한 클래스(예: MemberLabelViewModel)에서 해당 예외를 정상적으로 인스턴스화할 수 있는지 확인"
+  ],
+  "confirmed_facts": [
+    "GroupInsufficientRightsException 생성자에 public 키워드 추가"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "단순한 접근 제어자 변경(Visibility change)이며 특정 기능 진입점을 가지지 않음"
+}

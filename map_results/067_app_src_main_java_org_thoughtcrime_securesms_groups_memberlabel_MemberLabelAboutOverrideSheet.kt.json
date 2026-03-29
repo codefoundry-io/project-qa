@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelAboutOverrideSheet.kt",
+  "change_summary": "멤버 라벨 설정 시 해당 라벨이 기존의 '소개(About)' 텍스트를 대체하여 표시됨을 사용자에게 안내하는 바텀 시트 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Member Label Settings > Save)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelFragment.kt",
+  "test_method": [
+    "멤버 라벨을 설정하려 할 때 안내 바텀 시트가 의도한 타이밍에 노출되는지 확인",
+    "'확인' 버튼 클릭 시와 '다시 보지 않기' 버튼 클릭 시 각각의 결과값이 setFragmentResult를 통해 올바르게 전달되는지 확인"
+  ],
+  "confirmed_facts": [
+    "ComposeBottomSheetDialogFragment를 상속받아 Compose UI로 구현됨",
+    "RESULT_KEY와 KEY_DONT_SHOW_AGAIN 상수를 통해 부모 프래그먼트와 통신함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

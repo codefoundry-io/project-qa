@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "change_summary": "메시지 삭제 실패(Admin Delete) 시의 에러 핸들링 로직 추가 및 사용되지 않는 그룹 멤버 다이얼로그 관련 코드 제거",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Conversation > Message Interaction)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt",
+  "test_method": [
+    "관리자 메시지 삭제 시 실패한 메시지를 클릭했을 때, 신원 불일치 여부와 재시도 가능 여부에 따라 적절한 에러 다이얼로그 또는 안전 번호 확인 시트가 나타나는지 확인",
+    "대화방 배너를 통해 그룹 구성원 추가 제안 다이얼로그(GroupsV1MigrationSuggestionsDialog)가 정상적으로 표시되는지 확인",
+    "기존 옵션 메뉴에서 제거된 '그룹 구성원 보기' 기능(handleDisplayGroupRecipients)이 정상적으로 동작하지 않거나 호출되지 않는지 확인"
+  ],
+  "confirmed_facts": [
+    "onMessageWithErrorClicked 메서드에 isFailedAdminDelete 상태에 따른 복합 분기 로직(SafetyNumberBottomSheet 및 ConversationDialogs 연동) 추가",
+    "GroupsV1MigrationSuggestionsDialog.show 호출 시 FragmentManager를 사용하도록 파라미터 수정",
+    "더 이상 사용되지 않는 GroupMembersDialog 참조 및 handleDisplayGroupRecipients 구현부 제거"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

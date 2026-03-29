@@ -1,0 +1,39 @@
+[Target File]: core/ui/src/main/java/org/signal/core/ui/util/StorageUtil.java
+
+[Changed Symbols]: Build, RequiresApi
+
+[References]:
+  StorageUtil: (10+ references - common utility)
+  Build: (10+ references - common utility)
+  RequiresApi: (10+ references - common utility)
+
+[Diff]:
+diff --git a/core/ui/src/main/java/org/signal/core/ui/util/StorageUtil.java b/core/ui/src/main/java/org/signal/core/ui/util/StorageUtil.java
+index bf8425987f..f43cd364d7 100644
+--- a/core/ui/src/main/java/org/signal/core/ui/util/StorageUtil.java
++++ b/core/ui/src/main/java/org/signal/core/ui/util/StorageUtil.java
+@@ -11,7 +11,6 @@ import android.provider.MediaStore;
+ 
+ import androidx.annotation.NonNull;
+ import androidx.annotation.Nullable;
+-import androidx.annotation.RequiresApi;
+ import androidx.core.content.ContextCompat;
+ 
+ import org.signal.core.ui.CoreUiDependencies;
+@@ -91,12 +90,15 @@ public class StorageUtil {
+     return backups;
+   }
+ 
+-  @RequiresApi(24)
+   public static @NonNull String getDisplayPath(@NonNull Context context, @NonNull Uri uri) {
+     String lastPathSegment = Objects.requireNonNull(uri.getLastPathSegment());
+     String backupVolume    = lastPathSegment.replaceFirst(":.*", "");
+     String backupName      = lastPathSegment.replaceFirst(".*:", "");
+ 
++    if (Build.VERSION.SDK_INT < 24) {
++      return backupName;
++    }
++
+     StorageManager      storageManager = ContextCompat.getSystemService(context, StorageManager.class);
+     List<StorageVolume> storageVolumes = storageManager.getStorageVolumes();
+     StorageVolume       storageVolume  = null;

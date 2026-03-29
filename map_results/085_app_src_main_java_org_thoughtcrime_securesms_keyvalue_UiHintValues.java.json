@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/keyvalue/UiHintValues.java",
+  "change_summary": "사용자 UI 안내 힌트 저장소에 '멤버 라벨 소개 글 대체 안내'의 노출 여부를 관리하기 위한 키 및 메서드 추가",
+  "risk_level": "LOW",
+  "trigger_point": "BG(SignalStore / UI Hints)",
+  "entry_point_file": null,
+  "test_method": [
+    "markMemberLabelAboutOverrideWarningDismissed() 호출 후 hasDismissedMemberLabelAboutOverrideWarning()가 true를 반환하는지 확인",
+    "해당 설정값이 앱 재시작 후에도 SharedPreferences에 유지되는지 확인"
+  ],
+  "confirmed_facts": [
+    "새로운 상수 문자열 HAS_DISMISSED_MEMBER_LABEL_ABOUT_OVERRIDE_WARNING 정의",
+    "안내문 노출 여부 확인을 위한 getter 및 노출 차단 설정을 위한 setter 메서드 구현"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "전역 설정값을 관리하는 데이터 클래스이며 특정 실행 흐름의 진입점이 아님"
+}

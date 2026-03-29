@@ -1,0 +1,86 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+
+[Changed Symbols]: ContactSearchKey, Create, Factory, MessageId, MessageRecord, Recipient, RecipientSearchKey, SafetyNumberBottomSheetArgs, SheetFactory, This, forIncomingMessageRecord, forMessageRecord, forOutgoingMessageRecord
+
+[References]:
+  SafetyNumberBottomSheet: (10+ references - common utility)
+  ContactSearchKey: (10+ references - common utility)
+  Create: (10+ references - common utility)
+  Factory: (10+ references - common utility)
+  MessageId: (10+ references - common utility)
+  MessageRecord: (10+ references - common utility)
+  Recipient: (10+ references - common utility)
+  RecipientSearchKey: (10+ references - common utility)
+  SafetyNumberBottomSheetArgs:
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheetArgs.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheetFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheetViewModel.kt
+  SheetFactory:
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+  This: (10+ references - common utility)
+  forIncomingMessageRecord:
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt
+  forMessageRecord: (no references found)
+  forOutgoingMessageRecord:
+    - ./app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/my/MyStoriesFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/stories/viewer/page/StoryViewerPageFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/ConversationFragment.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messagedetails/MessageDetailsFragment.kt [ENTRY: Fragment]
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt b/app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+index 1ce41bc749..a898c26824 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/safety/SafetyNumberBottomSheet.kt
+@@ -10,6 +10,7 @@ import org.thoughtcrime.securesms.database.model.IdentityRecord
+ import org.thoughtcrime.securesms.database.model.MessageId
+ import org.thoughtcrime.securesms.database.model.MessageRecord
+ import org.thoughtcrime.securesms.database.model.MmsMessageRecord
++import org.thoughtcrime.securesms.recipients.Recipient
+ import org.thoughtcrime.securesms.recipients.RecipientId
+ import org.whispersystems.signalservice.api.util.Preconditions
+ 
+@@ -73,14 +74,14 @@ object SafetyNumberBottomSheet {
+   }
+ 
+   /**
+-   * Create a factory to generate a sheet for the given message record. This will try
++   * Create a factory to generate a sheet for an outgoing message record. This will try
+    * to resend the message automatically when the user confirms.
+    *
+    * @param context Not held on to, so any context is fine.
+    * @param messageRecord The message record containing failed identities.
+    */
+   @JvmStatic
+-  fun forMessageRecord(context: Context, messageRecord: MessageRecord): Factory {
++  fun forOutgoingMessageRecord(context: Context, messageRecord: MessageRecord): Factory {
+     val args = SafetyNumberBottomSheetArgs(
+       untrustedRecipients = messageRecord.identityKeyMismatches.map { it.recipientId },
+       destinations = getDestinationFromRecord(messageRecord),
+@@ -90,6 +91,21 @@ object SafetyNumberBottomSheet {
+     return SheetFactory(args)
+   }
+ 
++  /**
++   * Create a factory to generate a sheet for an incoming message record. This will try
++   * to resend the message automatically when the user confirms.
++   */
++  @JvmStatic
++  fun forIncomingMessageRecord(messageRecord: MessageRecord, conversationRecipient: Recipient): Factory {
++    val args = SafetyNumberBottomSheetArgs(
++      untrustedRecipients = messageRecord.identityKeyMismatches.map { it.recipientId },
++      destinations = listOf(ContactSearchKey.RecipientSearchKey(conversationRecipient.id, false)),
++      messageId = MessageId(messageRecord.id)
++    )
++
++    return SheetFactory(args)
++  }
++
+   /**
+    * Create a factory to generate a sheet for the given identity records and destinations.
+    *

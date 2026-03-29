@@ -1,0 +1,18 @@
+{
+  "target_file": "app/build.gradle.kts",
+  "change_summary": "앱 버전(8.2.0) 업데이트 및 'backup' 빌드 배리언트(variant) 관련 구성 삭제",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Build process)",
+  "entry_point_file": null,
+  "test_method": [
+    "새 버전(8.2.0)으로 앱이 정상적으로 빌드되는지 확인",
+    "삭제된 backup 배리언트를 사용하는 기존 프로세스(CI/CD 등)에 영향이 없는지 확인"
+  ],
+  "confirmed_facts": [
+    "canonicalVersionName이 8.1.0에서 8.2.0으로 변경됨",
+    "canonicalVersionCode가 1657에서 1661로 변경됨",
+    "buildTypes 내 'backup' 구성 및 selectableVariants 내 backup 관련 항목 삭제됨"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "빌드 설정 파일이며, 특정 Android 컴포넌트(Activity/Fragment 등)의 코드 실행을 유도하는 진입점이 아니므로 추적 제외함"
+}

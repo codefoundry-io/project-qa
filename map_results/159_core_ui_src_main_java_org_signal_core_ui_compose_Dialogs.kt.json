@@ -1,0 +1,17 @@
+{
+  "target_file": "core/ui/src/main/java/org/signal/core/ui/compose/Dialogs.kt",
+  "change_summary": "로딩 다이얼로그(IndeterminateProgressDialog)에 지연 노출 및 최소 표시 시간 제어 로직을 추가하여 UI 깜빡임 현상 개선",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Global > Loading State)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/backups/local/LocalBackupsFragment.kt",
+  "test_method": [
+    "작업이 매우 빨리 끝날 경우(delayDuration 이내), 로딩 다이얼로그가 아예 나타나지 않는지 확인",
+    "로딩 바가 화면에 표시된 후 즉시 작업이 완료되더라도, minimumDisplayDuration으로 설정된 시간만큼은 다이얼로그가 유지되어 시각적 안정성을 주는지 확인"
+  ],
+  "confirmed_facts": [
+    "LaunchedEffect와 delay를 사용하여 가시성(visible) 변경에 따른 시간차 제어 구현",
+    "isVisibleSince 변수를 통해 실제 다이얼로그가 노출된 시점을 기록하고 남은 표시 시간을 계산하도록 설계"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt",
+  "change_summary": "멤버 라벨 필 뷰에서 Bidi 텍스트 처리를 강화하고 Java 코드 호환성을 위한 미리 정의된 스타일(Normal, Compact) 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Global > Member Label Rendering)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelPillView.kt",
+  "test_method": [
+    "멤버 라벨 표시 시 원본 텍스트(text) 대신 Bidi 격리가 적용된 displayText가 사용되어 텍스트 방향이 올바른지 확인",
+    "RecipientPreference 등에서 Style.Compact를 사용할 때 적절한 패딩과 글꼴 크기가 적용되는지 확인"
+  ],
+  "confirmed_facts": [
+    "Content 렌더링 시 MemberLabelPill에 label.displayText를 전달하도록 수정",
+    "Style 클래스에 maxLines 필드 추가 및 Companion object 내에 Normal, Compact 정적 스타일 정의 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

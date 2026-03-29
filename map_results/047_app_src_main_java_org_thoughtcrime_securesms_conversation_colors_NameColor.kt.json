@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/conversation/colors/NameColor.kt",
+  "change_summary": "그룹 대화방 내 이름 색상 정보를 담는 NameColor 클래스를 data class로 변경하고 어노테이션 위치 최적화",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Color Management)",
+  "entry_point_file": null,
+  "test_method": [
+    "NameColor 객체 사용 시 다크 모드와 라이트 모드 전환에 따라 getColor가 올바른 색상 정수값을 반환하는지 확인"
+  ],
+  "confirmed_facts": [
+    "클래스 선언에 data 키워드 추가",
+    "@ColorInt 어노테이션을 @get:ColorInt로 변경하여 코틀린 프로퍼티 getter에 적용되도록 수정"
+  ],
+  "trace_aborted": true,
+  "abort_reason": "단순 데이터 홀더 클래스이며 특정 Android 생명주기 진입점을 가지지 않음"
+}

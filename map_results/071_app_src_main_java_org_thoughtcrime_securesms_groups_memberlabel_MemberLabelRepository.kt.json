@@ -1,0 +1,20 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelRepository.kt",
+  "change_summary": "멤버 라벨 레포지토리에 데이터 정제(Sanitization), 네트워크 결과 처리 로직 및 안내 경고 상태 관리 기능 추가",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Member Label Data Operations)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/groups/memberlabel/MemberLabelViewModel.kt",
+  "test_method": [
+    "멤버 라벨 저장(setLabel) 시 네트워크 성공/실패 여부가 NetworkResult를 통해 뷰모델로 올바르게 전달되는지 확인",
+    "라벨 조회 및 저장 시 MemberLabel.sanitized()가 호출되어 부적절한 텍스트나 이모지가 정제되는지 확인",
+    "소개 글 대체 안내 바텀 시트의 '다시 보지 않기' 설정(UiHintValues)이 정상적으로 반영되고 유지되는지 확인"
+  ],
+  "confirmed_facts": [
+    "setLabel 메서드의 반환 타입을 Unit에서 NetworkResult<Unit>으로 변경하고 GroupManager 호출을 래핑함",
+    "MemberLabel.sanitized() 확장 함수를 추가하여 데이터 정제 로직을 통합함",
+    "hasDismissedMemberLabelAboutOverrideWarning 등 안내 팝업 노출 여부 결정을 위한 헬퍼 메서드 구현",
+    "Java 호환성을 위해 blocking 방식의 getLabelsJava 메서드 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

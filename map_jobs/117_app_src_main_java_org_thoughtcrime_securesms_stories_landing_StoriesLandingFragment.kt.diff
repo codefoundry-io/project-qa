@@ -1,0 +1,19 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt
+
+[References]:
+  StoriesLandingFragment: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt
+index 72cf08c099..b44103d4da 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/stories/landing/StoriesLandingFragment.kt
+@@ -288,7 +288,7 @@ class StoriesLandingFragment : DSLSettingsFragment(layoutId = R.layout.stories_l
+     } else if (model.data.primaryStory.messageRecord.isOutgoing && model.data.primaryStory.messageRecord.isFailed) {
+       if (model.data.primaryStory.messageRecord.isIdentityMismatchFailure) {
+         SafetyNumberBottomSheet
+-          .forMessageRecord(requireContext(), model.data.primaryStory.messageRecord)
++          .forOutgoingMessageRecord(requireContext(), model.data.primaryStory.messageRecord)
+           .show(childFragmentManager)
+       } else {
+         StoryDialogs.resendStory(requireContext()) {

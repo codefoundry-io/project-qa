@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/CheckKeyTransparencyJob.kt",
+  "change_summary": "키 투명성 검사 작업의 에러 핸들링 로직을 API 변경사항에 맞춰 간소화하고 저장소 오염에 대한 복구 로직 위치를 재조정",
+  "risk_level": "MEDIUM",
+  "trigger_point": "BG(Key Transparency Periodic Check)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/CheckKeyTransparencyJob.kt",
+  "test_method": [
+    "키 투명성 검증 실패(NonSuccess) 발생 시, 1차 실패인 경우 다음 날 재시도가 예약되고 2차 실패인 경우 실패 알림 시트가 정상적으로 표시되는지 확인",
+    "KT 저장소 데이터 손상(IllegalArgumentException) 발생 시 계정 정보 및 로컬 KT 데이터를 초기화하고 즉시 재시도 로직이 동작하는지 확인"
+  ],
+  "confirmed_facts": [
+    "NonSuccess 케이스 내부에서 개별 예외 클래스(VerificationFailedException 등)에 의존하던 분기문을 제거하고 통합 처리",
+    "KT 저장소 오염 처리를 RequestResult.ApplicationError 케이스 내로 이동하여 보다 정확한 예외 상황 대응"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

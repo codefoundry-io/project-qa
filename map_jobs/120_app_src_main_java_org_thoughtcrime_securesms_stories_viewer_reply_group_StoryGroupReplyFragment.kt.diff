@@ -1,0 +1,19 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt
+
+[References]:
+  StoryGroupReplyFragment: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt b/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt
+index e3c0606c81..b904f015b2 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/stories/viewer/reply/group/StoryGroupReplyFragment.kt
+@@ -315,7 +315,7 @@ class StoryGroupReplyFragment :
+ 
+     if (messageRecord.isIdentityMismatchFailure) {
+       SafetyNumberBottomSheet
+-        .forMessageRecord(requireContext(), messageRecord)
++        .forOutgoingMessageRecord(requireContext(), messageRecord)
+         .show(childFragmentManager)
+     } else if (messageRecord.hasFailedWithNetworkFailures()) {
+       MaterialAlertDialogBuilder(requireContext())

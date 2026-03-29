@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/res/navigation/conversation_settings.xml",
+  "change_summary": "대화방 설정 네비게이션 그래프에 새로운 소리 및 알림 설정(V2) 화면 등록 및 관련 이동 액션 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > Sounds and notifications)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/ConversationSettingsFragment.kt",
+  "test_method": [
+    "대화방 설정 메인 화면에서 알림 설정 항목 클릭 시 새로운 프래그먼트(V2)로 에러 없이 이동하는지 확인",
+    "새로운 알림 설정 화면 내에서 커스텀 알림 설정 페이지로의 네비게이션이 정상 작동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "soundsAndNotificationsSettingsFragment2 프래그먼트 노드 및 인자(recipient_id) 정의 추가",
+    "ConversationSettingsFragment에서 신규 프래그먼트로 향하는 action_conversationSettingsFragment_to_soundsAndNotificationsSettingsFragment2 추가",
+    "신규 프래그먼트에서 customNotificationsSettingsFragment로 향하는 이동 액션 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

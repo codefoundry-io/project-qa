@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/ringrtc/Camera.java",
+  "change_summary": "카메라 초기화 및 활성화 로직의 레이스 컨디션을 방지하고 초기 상태 반영의 정확성 개선",
+  "risk_level": "MEDIUM",
+  "trigger_point": "UI(Call > Camera Toggle)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/webrtc/WebRtcCallActivity.java",
+  "test_method": [
+    "영상 통화 진입 시 또는 카메라를 켤 때, 초기화 직후 의도한 활성화 상태(enabled)가 지연 없이 반영되는지 확인",
+    "카메라가 완전히 준비되기 전(isInitialized 전)에 활성화 명령이 내려질 경우 안전하게 무시되는지 확인"
+  ],
+  "confirmed_facts": [
+    "initialize 메서드 내에서 capturer 준비 완료 후 setEnabled(enabled)를 호출하도록 수정",
+    "setEnabled 메서드에서 capturer 널 체크 외에 isInitialized 플래그를 추가로 확인하도록 방어 로직 강화"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

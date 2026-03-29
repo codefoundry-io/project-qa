@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsViewModel.kt",
+  "change_summary": "내부 설정 뷰모델에 내부 사용자 플래그 비활성화 설정을 위한 메서드 추가 및 RemoteConfig와 연동",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Internal Settings > Disable internal user flag)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/app/internal/InternalSettingsFragment.kt",
+  "test_method": [
+    "setDisableInternalUser를 통해 플래그를 변경했을 때 RemoteConfig.internalUserDisabled 값이 의도한 대로 업데이트되는지 확인",
+    "상태 변경 후 refresh()를 통해 UI에 즉각 반영되는지 확인"
+  ],
+  "confirmed_facts": [
+    "setDisableInternalUser(Boolean) 메서드 추가",
+    "상태 초기화 시 RemoteConfig.internalUserDisabled 값을 가져오도록 수정"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

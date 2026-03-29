@@ -1,0 +1,16 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/groups/ui/managegroup/dialogs/GroupMentionSettingDialog.java",
+  "change_summary": "그룹 멘션 알림 설정 다이얼로그에서 사용하는 데이터 타입을 MentionSetting에서 NotificationSetting으로 변경",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Conversation Settings > Sounds and notifications)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/components/settings/conversation/sounds/SoundsAndNotificationsSettingsFragment.kt",
+  "test_method": [
+    "대화방 알림 설정에서 멘션 설정을 클릭하여 다이얼로그가 정상적으로 표시되는지 확인",
+    "다이얼로그에서 '항상 알림' 또는 '알림 없음'을 선택하고 확인을 눌렀을 때 설정이 정상적으로 변경되는지 확인"
+  ],
+  "confirmed_facts": [
+    "메서드 시그니처 및 내부 로직에서 참조하는 타입을 RecipientTable.NotificationSetting으로 업데이트함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

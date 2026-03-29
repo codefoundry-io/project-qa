@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt",
+  "change_summary": "첨부파일 백업 업로드 시 유효하지 않은 데이터(URI 부재 또는 크기 0)에 대해 영구 실패 상태를 기록하도록 에러 핸들링 강화",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Attachment Backup Upload)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/jobs/UploadAttachmentToArchiveJob.kt",
+  "test_method": [
+    "파일 크기가 0이거나 URI 정보가 누락된 첨부파일을 백업하려 할 때, 단순 실패 처리가 아닌 ArchiveTransferState.PERMANENT_FAILURE가 DB에 정상적으로 기록되는지 확인"
+  ],
+  "confirmed_facts": [
+    "attachment.uri == null 조건 발생 시 PERMANENT_FAILURE 상태를 설정하고 작업을 종료하는 로직 추가",
+    "attachment.size == 0L 조건 발생 시 동일하게 영구 실패 상태를 설정하는 분기 추가",
+    "상태 업데이트를 위해 ArchiveDatabaseExecutor.runBlocking 및 setArchiveTransferStateWithDelayedNotification 호출"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

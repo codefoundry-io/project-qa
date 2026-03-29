@@ -1,0 +1,26 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/conversation/colors/NameColor.kt
+
+[Changed Symbols]: ColorInt
+
+[References]:
+  NameColor: (10+ references - common utility)
+  ColorInt: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/conversation/colors/NameColor.kt b/app/src/main/java/org/thoughtcrime/securesms/conversation/colors/NameColor.kt
+index 77567bb0dd..b26b6caaca 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/conversation/colors/NameColor.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/conversation/colors/NameColor.kt
+@@ -7,9 +7,9 @@ import org.signal.core.ui.util.ThemeUtil
+ /**
+  * Class which stores information for a Recipient's name color in a group.
+  */
+-class NameColor(
+-  @ColorInt private val lightColor: Int,
+-  @ColorInt private val darkColor: Int
++data class NameColor(
++  @get:ColorInt private val lightColor: Int,
++  @get:ColorInt private val darkColor: Int
+ ) {
+   @ColorInt
+   fun getColor(context: Context): Int {

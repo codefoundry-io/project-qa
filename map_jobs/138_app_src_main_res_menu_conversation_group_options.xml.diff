@@ -1,0 +1,19 @@
+[Target File]: app/src/main/res/menu/conversation_group_options.xml
+[Deleted]
+
+[Diff]:
+diff --git a/app/src/main/res/menu/conversation_group_options.xml b/app/src/main/res/menu/conversation_group_options.xml
+deleted file mode 100644
+index c1dc37e350..0000000000
+--- a/app/src/main/res/menu/conversation_group_options.xml
++++ /dev/null
+@@ -1,9 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+-
+-    <item android:title="@string/convesation_group_options__recipients_list"
+-          android:id="@+id/menu_group_recipients"
+-          android:icon="@drawable/ic_group_solid_highlight_24"
+-          app:showAsAction="ifRoom" />
+-
+-</menu>

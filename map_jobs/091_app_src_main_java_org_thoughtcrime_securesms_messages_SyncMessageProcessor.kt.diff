@@ -1,0 +1,26 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/messages/SyncMessageProcessor.kt
+
+[References]:
+  SyncMessageProcessor:
+    - ./app/src/androidTest/java/org/thoughtcrime/securesms/messages/SyncMessageProcessorTest_readSyncs.kt
+    - ./app/src/androidTest/java/org/thoughtcrime/securesms/messages/SyncMessageProcessorTest_synchronizeDeleteForMe.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/MessageContentProcessor.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messages/SyncMessageProcessor.kt
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/messages/SyncMessageProcessor.kt b/app/src/main/java/org/thoughtcrime/securesms/messages/SyncMessageProcessor.kt
+index 34718fef83..26d24d5591 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/messages/SyncMessageProcessor.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/messages/SyncMessageProcessor.kt
+@@ -1893,6 +1893,11 @@ object SyncMessageProcessor {
+       return -1
+     }
+ 
++    if (targetMessage.isRemoteDelete) {
++      warn(envelope.timestamp!!, "Cannot pin deleted message")
++      return -1
++    }
++
+     val targetMessageId = (targetMessage as? MmsMessageRecord)?.latestRevisionId?.id ?: targetMessage.id
+     val duration = if (pinMessage.pinDurationForever == true) MessageTable.PIN_FOREVER else pinMessage.pinDurationSeconds!!.toLong()
+     val outgoingMessage = OutgoingMessage.pinMessage(

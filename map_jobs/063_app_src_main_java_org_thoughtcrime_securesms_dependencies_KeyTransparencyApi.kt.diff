@@ -1,0 +1,154 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+
+[Changed Symbols]: AppExpiredException, ApplicationError, BadRequestError, ByteArray, ChatServiceException, IdentityKey, KeyTransparency, KeyTransparencyError, KeyTransparencyException, KeyTransparencyStore, MonitorMode, NetworkException, NetworkProtocolException, NonSuccess, RequestResult, RetryLaterException, RetryableNetworkError, ServerSideErrorException, ServiceId, Success, Throwable, TimeoutException, VerificationFailedException, monitor, search
+
+[References]:
+  KeyTransparencyApi:
+    - ./app/src/test/java/org/thoughtcrime/securesms/dependencies/MockApplicationDependencyProvider.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/AppDependencies.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/NetworkDependenciesModule.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/ApplicationDependencyProvider.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/net/SignalNetwork.kt
+  AppExpiredException:
+    - ./lib/libsignal-service/src/main/java/org/whispersystems/signalservice/internal/websocket/LibSignalChatConnection.kt
+  ApplicationError: (10+ references - common utility)
+  BadRequestError:
+    - ./lib/libsignal-service/src/main/java/org/whispersystems/signalservice/api/websocket/SignalWebSocket.kt
+  ByteArray: (10+ references - common utility)
+  ChatServiceException:
+    - ./lib/libsignal-service/src/test/java/org/whispersystems/signalservice/internal/websocket/LibSignalChatConnectionTest.kt
+    - ./lib/libsignal-service/src/main/java/org/whispersystems/signalservice/internal/ServiceResponseProcessor.java
+    - ./lib/libsignal-service/src/main/java/org/whispersystems/signalservice/internal/websocket/LibSignalChatConnection.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/ApplicationContext.java
+  IdentityKey: (10+ references - common utility)
+  KeyTransparency: (10+ references - common utility)
+  KeyTransparencyError: (no references found)
+  KeyTransparencyException:
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+  KeyTransparencyStore:
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/CheckKeyTransparencyJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/model/KeyTransparencyStore.kt
+  MonitorMode:
+    - ./app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/CheckKeyTransparencyJob.kt
+  NetworkException: (10+ references - common utility)
+  NetworkProtocolException:
+    - ./lib/libsignal-service/src/main/java/org/whispersystems/signalservice/api/svr/SvrBApi.kt
+  NonSuccess: (10+ references - common utility)
+  RequestResult: (10+ references - common utility)
+  RetryLaterException: (10+ references - common utility)
+  RetryableNetworkError:
+    - ./lib/libsignal-service/src/main/java/org/whispersystems/signalservice/api/websocket/SignalWebSocket.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/verify/VerifySafetyNumberRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/profiles/manage/UsernameRepository.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/CheckKeyTransparencyJob.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/jobs/RefreshOwnProfileJob.kt
+  ServerSideErrorException: (no references found)
+  ServiceId: (10+ references - common utility)
+  Success: (10+ references - common utility)
+  Throwable: (10+ references - common utility)
+  TimeoutException: (10+ references - common utility)
+  VerificationFailedException: (10+ references - common utility)
+  monitor: (10+ references - common utility)
+  search: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt b/app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+index 51c4c62b31..0f99154983 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/dependencies/KeyTransparencyApi.kt
+@@ -1,18 +1,8 @@
+ package org.thoughtcrime.securesms.dependencies
+ 
+-import org.signal.libsignal.internal.mapWithCancellation
+ import org.signal.libsignal.keytrans.KeyTransparencyException
+-import org.signal.libsignal.keytrans.VerificationFailedException
+-import org.signal.libsignal.net.AppExpiredException
+-import org.signal.libsignal.net.BadRequestError
+-import org.signal.libsignal.net.ChatServiceException
+ import org.signal.libsignal.net.KeyTransparency
+-import org.signal.libsignal.net.NetworkException
+-import org.signal.libsignal.net.NetworkProtocolException
+ import org.signal.libsignal.net.RequestResult
+-import org.signal.libsignal.net.RetryLaterException
+-import org.signal.libsignal.net.ServerSideErrorException
+-import org.signal.libsignal.net.TimeoutException
+ import org.signal.libsignal.net.getOrError
+ import org.signal.libsignal.protocol.IdentityKey
+ import org.signal.libsignal.protocol.ServiceId
+@@ -27,69 +17,18 @@ class KeyTransparencyApi(private val unauthWebSocket: SignalWebSocket.Unauthenti
+   /**
+    * Uses KT to verify recipient. This is an unauthenticated and should only be called the first time KT is being requested for this recipient.
+    */
+-  suspend fun search(aci: ServiceId.Aci, aciIdentityKey: IdentityKey, e164: String?, unidentifiedAccessKey: ByteArray?, usernameHash: ByteArray?, keyTransparencyStore: KeyTransparencyStore): RequestResult<Unit, KeyTransparencyError> {
++  suspend fun search(aci: ServiceId.Aci, aciIdentityKey: IdentityKey, e164: String?, unidentifiedAccessKey: ByteArray?, usernameHash: ByteArray?, keyTransparencyStore: KeyTransparencyStore): RequestResult<Unit, KeyTransparencyException> {
+     return unauthWebSocket.runCatchingWithUnauthChatConnection { chatConnection ->
+       chatConnection.keyTransparencyClient().search(aci, aciIdentityKey, e164, unidentifiedAccessKey, usernameHash, keyTransparencyStore)
+-        .mapWithCancellation(
+-          onSuccess = { RequestResult.Success(Unit) },
+-          onError = { throwable ->
+-            when (throwable) {
+-              is VerificationFailedException,
+-              is KeyTransparencyException,
+-              is AppExpiredException,
+-              is IllegalArgumentException -> {
+-                RequestResult.NonSuccess(KeyTransparencyError(throwable))
+-              }
+-              is ChatServiceException,
+-              is NetworkException,
+-              is NetworkProtocolException -> {
+-                RequestResult.RetryableNetworkError(throwable, null)
+-              }
+-              is RetryLaterException -> {
+-                RequestResult.RetryableNetworkError(throwable, throwable.duration)
+-              }
+-              else -> {
+-                RequestResult.ApplicationError(throwable)
+-              }
+-            }
+-          }
+-        )
+     }.getOrError()
+   }
+ 
+   /**
+    * Monitors KT to verify recipient. This is an unauthenticated and should only be called following a successful [search].
+    */
+-  suspend fun monitor(monitorMode: KeyTransparency.MonitorMode, aci: ServiceId.Aci, aciIdentityKey: IdentityKey, e164: String?, unidentifiedAccessKey: ByteArray?, usernameHash: ByteArray?, keyTransparencyStore: KeyTransparencyStore): RequestResult<Unit, KeyTransparencyError> {
++  suspend fun monitor(monitorMode: KeyTransparency.MonitorMode, aci: ServiceId.Aci, aciIdentityKey: IdentityKey, e164: String?, unidentifiedAccessKey: ByteArray?, usernameHash: ByteArray?, keyTransparencyStore: KeyTransparencyStore): RequestResult<Unit, KeyTransparencyException> {
+     return unauthWebSocket.runCatchingWithUnauthChatConnection { chatConnection ->
+       chatConnection.keyTransparencyClient().monitor(monitorMode, aci, aciIdentityKey, e164, unidentifiedAccessKey, usernameHash, keyTransparencyStore)
+-        .mapWithCancellation(
+-          onSuccess = { RequestResult.Success(Unit) },
+-          onError = { throwable ->
+-            when (throwable) {
+-              is TimeoutException,
+-              is ServerSideErrorException,
+-              is NetworkException,
+-              is NetworkProtocolException -> {
+-                RequestResult.RetryableNetworkError(throwable, null)
+-              }
+-              is RetryLaterException -> {
+-                RequestResult.RetryableNetworkError(throwable, throwable.duration)
+-              }
+-              is VerificationFailedException,
+-              is KeyTransparencyException,
+-              is AppExpiredException,
+-              is IllegalArgumentException -> {
+-                RequestResult.NonSuccess(KeyTransparencyError(throwable))
+-              }
+-              else -> {
+-                RequestResult.ApplicationError(throwable)
+-              }
+-            }
+-          }
+-        )
+     }.getOrError()
+   }
+ }
+-
+-data class KeyTransparencyError(val exception: Throwable) : BadRequestError

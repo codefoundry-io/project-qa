@@ -1,0 +1,15 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java",
+  "change_summary": "레거시 마이그레이션 작업 중 시스템 연락처 색상 업데이트 로직 비활성화",
+  "risk_level": "LOW",
+  "trigger_point": "BG(Legacy Database Migration)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/migrations/LegacyMigrationJob.java",
+  "test_method": [
+    "오래된 버전에서 앱 업데이트 시 마이그레이션 과정 중 런타임 예외 없이 작업이 완료되는지 확인"
+  ],
+  "confirmed_facts": [
+    "RecipientTable에서 삭제된 updateSystemContactColors() 메서드에 대한 호출부를 주석 처리함"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

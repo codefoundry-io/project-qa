@@ -1,0 +1,19 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/notifications/v2/NotificationStateProvider.kt",
+  "change_summary": "무음 대화방에서도 특정 조건(멘션, 본인 인용 답장, 부재중 전화)에 따라 알림이 발생할 수 있도록 예외 알림 로직 세분화 및 강화",
+  "risk_level": "HIGH",
+  "trigger_point": "BG(Message/Call Notification)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/notifications/v2/DefaultMessageNotifier.kt",
+  "test_method": [
+    "대화방을 무음으로 설정한 후, '멘션 시 알림' 옵션을 켰을 때 본인이 언급된 메시지에 대해 알림이 정상적으로 오는지 확인",
+    "대화방이 무음일 때 '답장 시 알림' 옵션을 켰을 경우, 본인이 작성한 메시지를 인용한 답장 메시지가 도착하면 알림이 울리는지 확인",
+    "부재중 전화 알림 설정을 '항상 알림'으로 했을 때 무음 대화방에서도 부재중 전화 노티피케이션이 생성되는지 확인"
+  ],
+  "confirmed_facts": [
+    "무음 상태를 무시하고 알림을 보낼지 판단하는 breaksThroughMute() 전용 메서드 구현",
+    "breaksThroughMute 내부에 부재중 전화, 멘션, 인용 답장 각각에 대한 NotificationSetting 확인 로직 포함",
+    "기존의 멘션/인용 판단 로직을 그룹 대화방에 특화된 hasGroupQuoteOrSelfMention으로 개선"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

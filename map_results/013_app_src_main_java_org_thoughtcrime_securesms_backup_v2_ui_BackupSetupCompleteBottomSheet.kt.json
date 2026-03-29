@@ -1,0 +1,17 @@
+{
+  "target_file": "app/src/main/java/org/thoughtcrime/securesms/backup/v2/ui/BackupSetupCompleteBottomSheet.kt",
+  "change_summary": "유료 백업 구독 완료 후 즉시 백업 시작 및 저장소 최적화 설정을 제안하는 새로운 바텀 시트 추가",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Backup Subscription > Setup Complete)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/backup/v2/ui/BackupSetupCompleteBottomSheet.kt",
+  "test_method": [
+    "유료 구독 절차를 마친 후 해당 바텀 시트가 노출되는지 확인",
+    "'지금 백업' 버튼 클릭 시 저장소 최적화 설정이 반영되고 백업 작업이 예약되는지 확인"
+  ],
+  "confirmed_facts": [
+    "ComposeBottomSheetDialogFragment를 상속받는 새로운 클래스 구현",
+    "백업 시작 시 SignalStore.backup.optimizeStorage 업데이트 및 BackupMessagesJob.enqueue() 수행"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

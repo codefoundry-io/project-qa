@@ -1,0 +1,18 @@
+{
+  "target_file": "app/src/main/res/navigation/restore.xml",
+  "change_summary": "백업 복구 네비게이션 그래프에 로컬 백업 V2 복구 화면을 등록하고 관련 전환 액션 구현",
+  "risk_level": "LOW",
+  "trigger_point": "UI(Registration/Restore > Select Method)",
+  "entry_point_file": "app/src/main/java/org/thoughtcrime/securesms/restore/selection/SelectRestoreMethodFragment.kt",
+  "test_method": [
+    "복구 방법 선택 화면에서 로컬 백업 V2 옵션 클릭 시 새로운 복구 프래그먼트(V2)로 정상 이동하는지 확인",
+    "V2 복구 화면 내에서 레거시(V1) 복구 방식으로 전환하는 액션이 정상 작동하는지 확인"
+  ],
+  "confirmed_facts": [
+    "choose_local_backup_fragment_v2(PostRegistrationRestoreLocalBackupFragment) 노드 정의 추가",
+    "SelectRestoreMethodFragment에서 V2 화면으로 이동하는 go_to_local_backup_restore_v2 액션 추가",
+    "V2 화면에서 V1 화면으로 이동하는 restore_local_v1_backup 액션 추가"
+  ],
+  "trace_aborted": false,
+  "abort_reason": null
+}

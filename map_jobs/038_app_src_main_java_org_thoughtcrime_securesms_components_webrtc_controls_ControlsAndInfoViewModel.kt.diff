@@ -1,0 +1,61 @@
+[Target File]: app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
+
+[Changed Symbols]: GroupTable, MemberLevel, Recipient, Schedulers, SignalDatabase, Single
+
+[References]:
+  ControlsAndInfoViewModel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/CallInfoView.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/ComposeCallScreenMediator.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/v2/CallInfoCallbacks.kt
+  GroupTable: (10+ references - common utility)
+  MemberLevel:
+    - ./app/src/main/java/org/thoughtcrime/securesms/recipients/ui/bottomsheet/RecipientDialogViewModel.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/LiveGroup.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/groups/GroupAccessControl.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/InputReadyState.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/groups/ConversationGroupMemberLevel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/conversation/v2/groups/ConversationGroupViewModel.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/messagerequests/MessageRequestRepository.java
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/model/GroupRecord.kt
+    - ./app/src/main/java/org/thoughtcrime/securesms/database/GroupTable.kt
+  Recipient: (10+ references - common utility)
+  Schedulers: (10+ references - common utility)
+  SignalDatabase: (10+ references - common utility)
+  Single: (10+ references - common utility)
+
+[Diff]:
+diff --git a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
+index f997668f94..f843f10e4d 100644
+--- a/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
++++ b/app/src/main/java/org/thoughtcrime/securesms/components/webrtc/controls/ControlsAndInfoViewModel.kt
+@@ -13,9 +13,12 @@ import io.reactivex.rxjava3.core.Single
+ import io.reactivex.rxjava3.disposables.CompositeDisposable
+ import io.reactivex.rxjava3.kotlin.plusAssign
+ import io.reactivex.rxjava3.kotlin.subscribeBy
++import io.reactivex.rxjava3.schedulers.Schedulers
+ import org.thoughtcrime.securesms.calls.links.CallLinks
+ import org.thoughtcrime.securesms.calls.links.UpdateCallLinkRepository
+ import org.thoughtcrime.securesms.calls.links.details.CallLinkDetailsRepository
++import org.thoughtcrime.securesms.database.GroupTable
++import org.thoughtcrime.securesms.database.SignalDatabase
+ import org.thoughtcrime.securesms.recipients.Recipient
+ import org.thoughtcrime.securesms.recipients.RecipientId
+ import org.thoughtcrime.securesms.service.webrtc.links.UpdateCallLinkResult
+@@ -42,6 +45,16 @@ class ControlsAndInfoViewModel(
+       disposables += CallLinks.watchCallLink(recipient.requireCallLinkRoomId()).subscribeBy {
+         _state.value = _state.value.copy(callLink = it)
+       }
++    } else if (recipient.isGroup && callRecipientId != recipient.id) {
++      callRecipientId = recipient.id
++      disposables += Single.fromCallable {
++        val groupRecord = SignalDatabase.groups.getGroup(recipient.requireGroupId())
++        groupRecord.isPresent && groupRecord.get().memberLevel(Recipient.self()) == GroupTable.MemberLevel.ADMINISTRATOR
++      }
++        .subscribeOn(Schedulers.io())
++        .subscribeBy { isAdmin ->
++          _state.value = _state.value.copy(isGroupAdmin = isAdmin)
++        }
+     }
+   }
