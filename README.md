@@ -352,6 +352,33 @@ ChatArchiveExporter → extension func → Processor → Repository → BackupMe
 ```
 2-depth로는 81%만 검출. 10-depth 초과 시 리팩토링 권유를 `abort_reason`에 포함합니다.
 
+### AI의 소스 파일 접근
+
+AI는 diff 파일만 받는 것이 아닙니다. `SKILL.md`에서 `rg`, `cat`, `head`, `find` 사용을 허용하므로,
+분석 중 필요하면 프로젝트의 다른 소스 파일을 직접 조회할 수 있습니다.
+
+- Entry Point Step 2에서 `rg -l "ClassName"`으로 caller를 추적할 때 활용
+- 변경 맥락 파악을 위해 관련 파일을 `cat`으로 읽을 수 있음
+- 단, sub-agent 위임은 금지 (`SKILL.md` Tool Constraints)
+
+### Hallucination Risk
+
+| 필드 | 위험도 | 근거 |
+|------|--------|------|
+| `target_file` | **없음** | 전처리에서 제공, AI가 생성하지 않음 |
+| `entry_point_file` (Step 1) | **없음** | 전처리에서 `[ENTRY]` 태그로 제공 |
+| `entry_point_file` (Step 2) | **낮음** | AI가 `rg` 실행 결과 기반으로 판단, 검증 가능 |
+| `risk_level` | **낮음** | `risk_guide.md` 기준에 따라 분류, 규칙 명시적 |
+| `change_summary` | **중간** | diff 기반이지만 AI의 해석이 들어감 |
+| `trigger_point` | **중간** | 참조 컨텍스트 기반 추론, 주관적 판단 포함 |
+| `test_method` | **중간** | AI가 생성하는 시나리오, 실행 검증 없음 |
+| `confirmed_facts` | **낮음** | AI가 실제로 확인한 사실을 기록하도록 강제 |
+
+**위험 완화 전략**:
+- 할루시네이션 위험이 **없는** 필드: 전처리에서 사실 데이터로 제공 (전체의 ~40%)
+- 할루시네이션 위험이 **낮은** 필드: 명시적 규칙 또는 도구 실행 결과 기반
+- 할루시네이션 위험이 **중간인** 필드: AI 추론이 필요한 영역이지만, `confirmed_facts`로 근거를 명시하도록 강제
+
 ### Why separate rate limit from token limit?
 
 | | Rate Limit (429) | Token Limit (400) |
@@ -398,4 +425,4 @@ ChatArchiveExporter → extension func → Processor → Repository → BackupMe
 | Trace aborted | 27건 |
 | 테스트 시나리오 생성 | **143건 (100%)** |
 
-Entry point가 null인 27건은 주로 유틸리티 클래스, 빌드 설정, proto 파일 등 진입점 개념이 없는 파일입니다.
+Entry point가 null인 27건은 주로 삭제, 유틸리티 클래스, 빌드 설정, proto 파일 등 진입점 개념이 없는 파일입니다.
