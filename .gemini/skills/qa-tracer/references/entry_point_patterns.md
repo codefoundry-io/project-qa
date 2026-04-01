@@ -21,6 +21,12 @@ class FooFragment : DialogFragment()
 class FooFragment : BottomSheetDialogFragment()
 ```
 
+### ComposeScreen
+Declared via `composable("route") { ... }` in Navigation Graph.
+```
+composable("home") { HomeScreen() }
+```
+
 ## Background Entry Points
 
 ### Service
@@ -50,12 +56,13 @@ class FooReceiver : BroadcastReceiver()
 When [References] contains tagged entries like:
 ```
   MemberLabel:
-    - app/.../MemberLabelFragment.kt [ENTRY: Fragment]
+    - app/.../MemberLabelFragment.kt [ENTRY: Fragment, VIEW_MODEL: MemberLabelViewModel]
     - app/.../MemberLabelViewModel.kt
 ```
 
 - `MemberLabelFragment.kt` is the entry point (tagged as Fragment = UI)
 - Set `entry_point_file` to `MemberLabelFragment.kt`
 - Set `trigger_point` to `UI(MemberLabel > ...)`
+- **Crucial Context:** The `VIEW_MODEL` tag indicates that changes to `MemberLabelViewModel` directly impact this UI entry point.
 
 When no [ENTRY] tag exists, set `entry_point_file` to null.

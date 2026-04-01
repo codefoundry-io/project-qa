@@ -13,7 +13,7 @@ GEMINI_TIMEOUT = 1800
 NODE_HEAP_MB = 8192
 SESSION_COOLDOWN = 5
 GEMINI_MODEL = "auto"
-# GEMINI_MODEL = "auto"                    # → -m 없이 실행 (자동 선택)
+# GEMINI_MODEL = "auto"                    # → run without -m (auto selection)
 # GEMINI_MODEL = "gemini-2.5-pro"          # → -m gemini-2.5-pro
 # GEMINI_MODEL = "gemini-3.1-pro-preview"  # → -m gemini-3.1-pro-preview
 
@@ -35,50 +35,12 @@ RATE_LIMIT_ERRORS = (
     "Too Many Requests",
 )
 
-ANALYSIS_PROMPT = """\
-You are running the qa-tracer skill. Analyze each diff file and write a JSON result.
-Follow the rules in your qa-tracer skill and its references/ documents.
+def load_prompt(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
 
-## Task
-Read each .diff file → analyze → write .json to {reports_dir}/.
-Do NOT stop until all files are done.
-
-## File List
-{file_list}
-"""
-
-REDUCE_PROMPT = """\
-You are a lead QA engineer and release manager.
-Below is a JSON array of per-file analysis results from this build's changes.
-
-{data}
-
-Write a final QA markdown report using the EXACT format below.
-
-## Format Rules
-1. Group items by high-level category (e.g., Background / Database, UI / Conversation, WebRTC / Call).
-2. Within each category, sort rows by risk_level: CRITICAL first, then HIGH, MEDIUM, LOW.
-3. Under each category, output a markdown table with these columns:
-   | 확인 | 위험도 | 트리거 | 진입점 | 테스트 시나리오 | 대상 파일 |
-4. The 확인 column MUST contain `[ ]` for every row.
-5. 위험도 column = risk_level value (CRITICAL, HIGH, MEDIUM, LOW).
-6. 트리거 column = trigger_point value.
-7. 진입점 column = entry_point_file value. Write `N/A` if null.
-8. 테스트 시나리오 column = one concrete, actionable test scenario in Korean.
-9. 대상 파일 column = short filename(s) without full path.
-10. If trace_aborted=true, add a separate "추적 중단 항목" section at the top.
-11. Deduplicate overlapping scenarios across files.
-12. Write all descriptions in Korean.
-13. Output ONLY the raw markdown. No code fences wrapping it.
-
-## Example Output
-### Background / Database
-
-| 확인 | 위험도 | 트리거 | 진입점 | 테스트 시나리오 | 대상 파일 |
-|------|--------|--------|--------|----------------|-----------|
-| [ ] | CRITICAL | BG(DB Migration) | `SignalDatabase.kt` | 앱 업데이트 시 V304 마이그레이션이 정상 수행되는지 확인 | `SignalDatabaseMigrations.kt` |
-| [ ] | MEDIUM | UI(Settings > Conversation) | `ConversationSettingsFragment.kt` | 수신자 로드 시 알림 설정이 정상 매핑되는지 확인 | `RecipientTable.kt` |
-"""
+ANALYSIS_PROMPT = load_prompt("prompts/qa/analysis.md")
+REDUCE_PROMPT = load_prompt("prompts/qa/reduce.md")
 
 
 def load_pending():
@@ -129,10 +91,15 @@ def run_gemini_session(pending):
     env["NODE_OPTIONS"] = f"--max-old-space-size={NODE_HEAP_MB}"
 
     cmd = ["gemini", "-p", prompt, "--yolo"]
-    if GEMINI_MODEL and GEMINI_MODEL.lower() != "auto":
-        cmd += ["-m", GEMINI_MODEL]
 
-    print(f"  Launching gemini CLI ({len(pending)} files, model={GEMINI_MODEL}) ...\n")
+    # Enforce using latest model in 2026 if set to auto
+    selected_model = GEMINI_MODEL
+    if selected_model == "auto":
+        pass
+    elif selected_model:
+        cmd += ["-m", selected_model]
+
+    print(f"  Launching gemini CLI ({len(pending)} files, model={selected_model}) ...\n")
 
     try:
         process = subprocess.Popen(
@@ -353,15 +320,15 @@ def reduce_phase():
         if info["count"] >= 2:
             ep_short = ep.rsplit("/", 1)[-1] if "/" in ep else ep
             hotspot_lines.append(
-                f"- **{ep_short}**: {info['count']}건 변경, "
-                f"최고 위험도 {info['max_risk']} "
+                f"- **{ep_short}**: {info['count']} changes, "
+                f"Max Risk {info['max_risk']} "
                 f"({', '.join(info['files'][:5])}{'...' if len(info['files']) > 5 else ''})")
 
     hotspot_section = ""
     if hotspot_lines:
         hotspot_section = (
-            "\n\n## 주요 변경 집중 지점 (Entry Point Hotspots)\n\n"
-            "아래 진입점은 다수의 파일이 동시에 변경되었으므로 통합 테스트가 필요합니다.\n\n"
+            "\n\n## Entry Point Hotspots\n\n"
+            "The following entry points have multiple concurrent changes and require integrated testing.\n\n"
             + "\n".join(hotspot_lines)
         )
         print(f"[Hotspots] {len(hotspot_lines)} entry points with 2+ changes")
@@ -379,8 +346,16 @@ def reduce_phase():
     env["NODE_OPTIONS"] = f"--max-old-space-size={NODE_HEAP_MB}"
 
     reduce_cmd = ["gemini", "-p", prompt, "--output-format", "json"]
-    if GEMINI_MODEL and GEMINI_MODEL.lower() != "auto":
-        reduce_cmd += ["-m", GEMINI_MODEL]
+    if "--yolo" in sys.argv:
+        reduce_cmd.append("--yolo")
+
+
+    # Enforce stable model for reduce phase as well
+    selected_model = GEMINI_MODEL
+    if selected_model == "auto":
+        pass
+    elif selected_model:
+        reduce_cmd += ["-m", selected_model]
 
     try:
         result = subprocess.run(

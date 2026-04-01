@@ -63,12 +63,15 @@ LISTENER_PATTERNS = [
     (r"setOnQueryTextListener", "query_text"),
     (r"setOnCloseListener", "close"),
     (r"setOnSeekBarChangeListener", "seek_change"),
+    (r"Modifier\.clickable", "compose_click"),
 ]
 
 SCREEN_LEVEL_PATTERNS = [
     "onOptionsItemSelected",
     "onContextItemSelected",
     "onCreateContextMenu",
+    "onCreateOptionsMenu",
+    "onPrepareOptionsMenu",
     "dispatchTouchEvent",
     "onKeyDown",
     "onKeyUp",
@@ -204,13 +207,16 @@ def parse_view_xml_file(xml_path, string_map, max_elements=40):
         aid = elem.attrib.get(f"{ANDROID_NS}id") or elem.attrib.get("android:id")
         text = elem.attrib.get(f"{ANDROID_NS}text") or elem.attrib.get("android:text")
         hint = elem.attrib.get(f"{ANDROID_NS}hint") or elem.attrib.get("android:hint")
-        cd = elem.attrib.get(f"{ANDROID_NS}contentDescription") or elem.attrib.get(
-            "android:contentDescription"
-        )
-        title = elem.attrib.get(f"{ANDROID_NS}title") or elem.attrib.get("android:title")
+        cd = (elem.attrib.get(f"{ANDROID_NS}contentDescription") or elem.attrib.get("android:contentDescription") or elem.attrib.get("app:contentDescription"))
+        title = (elem.attrib.get(f"{ANDROID_NS}title") or elem.attrib.get("android:title") or elem.attrib.get("app:title"))
         tag = elem.tag
         if "}" in tag:
             tag = tag.split("}", 1)[-1]
+
+        data_binding = None
+        if text and text.startswith("@{") and text.endswith("}"):
+            data_binding = text[2:-1].strip()
+            text = None
 
         if aid:
             m = re.search(r"@\+?id/(\w+)", aid)
@@ -219,6 +225,7 @@ def parse_view_xml_file(xml_path, string_map, max_elements=40):
                 "id": vid,
                 "tag": tag,
                 "text": resolve_attr_value(text, string_map) if text else None,
+                "data_binding": data_binding,
                 "hint": resolve_attr_value(hint, string_map) if hint else None,
                 "content_description": resolve_attr_value(cd, string_map) if cd else None,
                 "title": resolve_attr_value(title, string_map) if title else None,
@@ -277,8 +284,43 @@ def lines_near_listener_events(source_text):
             if key not in seen:
                 seen.add(key)
                 linked.append({"binding": m.group(1), "event_kind": event_kind})
+        for m in re.finditer(r'Modifier\.testTag\(\s*"([^"]+)"\s*\)', window):
+            key = (m.group(1), event_kind, "testTag")
+            if key not in seen:
+                seen.add(key)
+                linked.append({"test_tag": m.group(1), "event_kind": event_kind})
     return linked
 
+def extract_compose_elements(source_text, string_map):
+    elements = []
+
+    # 1. testTag 수집
+    test_tags = re.findall(r'Modifier\.testTag\(\s*"([^"]+)"\s*\)', source_text)
+    for tag in test_tags:
+        elements.append({"test_tag": tag})
+
+    # 2. semantics contentDescription 추출
+    semantics_cds = re.findall(r'semantics\s*\{\s*contentDescription\s*=\s*"([^"]+)"\s*\}', source_text)
+    for cd in semantics_cds:
+        elements.append({"content_description": cd})
+
+    # 3. stringResource 해석
+    string_resources = re.findall(r'stringResource\(\s*R\.string\.(\w+)\s*\)', source_text)
+    for sr in string_resources:
+        text = string_map.get(sr)
+        if text:
+             elements.append({"string_resource": sr, "text": text})
+
+    # 4. Text 컴포저블의 리터럴 문자열 추출
+    literal_texts = re.findall(r'Text\(\s*"([^"]+)"\s*(?:,|\))', source_text)
+    for text in literal_texts:
+         elements.append({"literal_text": text})
+
+    # 5. List items (LazyColumn/Row items)
+    if re.search(r'\b(?:items|itemsIndexed)\s*\(', source_text):
+         elements.append({"is_list_item": True, "note": "Contains Lazy list items"})
+
+    return elements[:40]
 
 def has_compose(source_text):
     return "@Composable" in source_text or " androidx.compose." in source_text
@@ -315,7 +357,14 @@ def analyze_source_file(filepath, string_map):
     event_links = lines_near_listener_events(text)
     screen_level = extract_screen_level_hooks(text)
 
+    # Check for RecyclerView ViewHolder pattern
+    if "ViewHolder" in text and "setOnClickListener" in text:
+         event_links.append({"note": "RecyclerView Item Click detected via ViewHolder"})
+
+    compose_elements = []
     compose_only = has_compose(text) and not layouts and not menus
+    if has_compose(text):
+         compose_elements = extract_compose_elements(text, string_map)
 
     return {
         "target_file": filepath,
@@ -326,6 +375,7 @@ def analyze_source_file(filepath, string_map):
         "listener_linked": event_links[:40],
         "screen_level_hooks": screen_level,
         "compose_only": compose_only,
+        "compose_elements": compose_elements,
     }
 
 

@@ -15,8 +15,9 @@ Changes that can cause data loss, app crashes, or security vulnerabilities.
 - Thread safety changes (synchronized, mutex, atomic, coroutine context switches)
 - Crash-path changes (try/catch removal, forced non-null assertions `!!`)
 - Serialization/deserialization schema changes (Proto, Parcelable, JSON model)
+- Cross-platform common logic changes (KMP `commonMain`)
 
-How to detect: diff touches `@Entity`, `ALTER TABLE`, `MIGRATION`, `Cipher`, `encrypt`, `decrypt`, `BiometricPrompt`, `!!`, `synchronized`, `Mutex`, `BillingClient`, or removes null/error checks.
+How to detect: diff touches `@Entity`, `ALTER TABLE`, `MIGRATION`, `Cipher`, `encrypt`, `decrypt`, `BiometricPrompt`, `!!`, `synchronized`, `Mutex`, `BillingClient`, removes null/error checks, or includes `[SCOPE: KMP_COMMON]`.
 
 ## HIGH
 

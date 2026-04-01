@@ -34,6 +34,7 @@ ENTRY_BASE_CLASSES = {
     "Service": "Service", "LifecycleService": "Service",
     "IntentService": "Service",
     "BroadcastReceiver": "Receiver",
+    "ViewModel": "ViewModel", "AndroidViewModel": "ViewModel"
 }
 
 EXCLUDES = [
@@ -156,28 +157,29 @@ def parse_manifest_components(manifest_path):
 def scan_class_inheritance():
     entries = {}
     base_names = sorted(ENTRY_BASE_CLASSES.keys(), key=len, reverse=True)
-    pattern = r"class\s+\w+.*(" + "|".join(base_names) + r")"
+    base_pattern = "|".join(base_names)
 
     try:
         result = subprocess.run(
-            ["rg", "-N", "--no-filename",
-             "--type", "kotlin", "--type", "java",
-             f"--max-filesize={RG_MAX_FILESIZE}"] + RG_EXCLUDE + [pattern, "."],
+            ["rg", "-l", "--type", "kotlin", "--type", "java", f"--max-filesize={RG_MAX_FILESIZE}"]
+            + RG_EXCLUDE + [base_pattern, "."],
             capture_output=True, text=True, timeout=30,
         )
     except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
         return entries
 
-    for line in result.stdout.splitlines():
-        cls_match = re.search(r"class\s+(\w+)", line)
-        if not cls_match:
-            continue
-        inherit_match = re.search(
-            r"(?::\s*|extends\s+).*\b(" + "|".join(base_names) + r")\b", line
-        )
-        if not inherit_match:
-            continue
-        entries[cls_match.group(1)] = ENTRY_BASE_CLASSES[inherit_match.group(1)]
+    files = result.stdout.splitlines()
+    pattern = re.compile(r"class\s+(\w+)[^{]*?(?::\s*|extends\s+)[^{]*?\b(" + base_pattern + r")\b")
+
+    for filepath in files:
+        if not filepath: continue
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+                for m in pattern.finditer(content):
+                    entries[m.group(1)] = ENTRY_BASE_CLASSES[m.group(2)]
+        except Exception:
+            pass
 
     return entries
 
@@ -203,6 +205,30 @@ def parse_nav_destinations():
     return entries
 
 
+def scan_compose_destinations():
+    entries = {}
+    try:
+        result = subprocess.run(
+            ["rg", "-l", "--type", "kotlin", f"--max-filesize={RG_MAX_FILESIZE}"]
+            + RG_EXCLUDE + ["composable", "."],
+            capture_output=True, text=True, timeout=30,
+        )
+    except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
+        return entries
+
+    pattern = re.compile(r'composable\s*\(\s*\"[^\"]+\"\s*(?:,[^)]*)?\)\s*\{[^{}]*?([A-Z]\w+)\s*\(')
+    for filepath in result.stdout.splitlines():
+        if not filepath: continue
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+                for m in pattern.finditer(content):
+                     entries[m.group(1)] = "ComposeScreen"
+        except Exception:
+            pass
+    return entries
+
+
 def build_entry_point_index():
     os.makedirs(JOBS_DIR, exist_ok=True)
     entry_points = {}
@@ -224,12 +250,18 @@ def build_entry_point_index():
             entry_points[cls] = cls_type
     nav_count = len(entry_points) - manifest_count - inherit_count
 
+    compose_entries = scan_compose_destinations()
+    for cls, cls_type in compose_entries.items():
+         if cls not in entry_points:
+             entry_points[cls] = cls_type
+    compose_count = len(entry_points) - manifest_count - inherit_count - nav_count
+
     with open(ENTRY_POINTS_FILE, "w", encoding="utf-8") as f:
         json.dump(entry_points, f, ensure_ascii=False, indent=2, sort_keys=True)
 
     print(f"  Entry points indexed: {len(entry_points)} "
           f"(manifest={manifest_count}, inheritance={inherit_count}, "
-          f"navigation={nav_count})")
+          f"navigation={nav_count}, compose={compose_count})")
     return entry_points
 
 
@@ -300,12 +332,38 @@ def find_references(symbol, target_file):
         return None
     return files
 
+def find_linked_viewmodel(filepath):
+    """Attempt to find ViewModel used in Activity/Fragment file"""
+    try:
+        with open(filepath, "r", encoding="utf-8", errors="replace") as f:
+            text = f.read()
+    except IOError:
+        return None
+
+    # 1. by viewModels() pattern
+    m = re.search(r"val\s+\w+\s*:\s*([A-Z]\w+ViewModel)\s+by\s+(?:viewModels|activityViewModels)", text)
+    if m:
+        return m.group(1)
+
+    # 2. ViewModelProvider pattern
+    m = re.search(r"ViewModelProvider.*\.get\(([A-Z]\w+ViewModel)::class\.java\)", text)
+    if m:
+        return m.group(1)
+
+    return None
 
 def format_ref_entry(ref, entry_points):
     ref_cls = os.path.splitext(os.path.basename(ref))[0]
     ep_type = entry_points.get(ref_cls)
+
+    extra_tags = ""
+    if ep_type in ("Activity", "Fragment"):
+        vm = find_linked_viewmodel(ref)
+        if vm:
+             extra_tags = f", VIEW_MODEL: {vm}"
+
     if ep_type:
-        return f"    - {ref} [ENTRY: {ep_type}]"
+        return f"    - {ref} [ENTRY: {ep_type}{extra_tags}]"
     return f"    - {ref}"
 
 
@@ -355,13 +413,31 @@ def format_ui_context_lines(data):
         if src:
             bits.append(f"from={src}")
         lines.append("    - " + " ".join(bits))
+
+    compose_els = data.get("compose_elements")
+    if compose_els:
+        lines.append("  Compose Elements:")
+        for el in compose_els:
+            bits = []
+            if el.get("test_tag"):
+                bits.append(f'testTag="{el["test_tag"]}"')
+            if el.get("content_description"):
+                bits.append(f'contentDescription="{el["content_description"]}"')
+            if el.get("string_resource"):
+                bits.append(f'stringResource=R.string.{el["string_resource"]} (text="{el.get("text", "")}")')
+            if el.get("literal_text"):
+                bits.append(f'Text="{el["literal_text"]}"')
+            if bits:
+                lines.append("    - " + " ".join(bits))
+
     for ll in data.get("listener_linked") or []:
         if "id" in ll:
             lines.append(f"    - [event:{ll.get('event_kind', '?')}] R.id.{ll['id']}")
         elif "binding" in ll:
-            lines.append(
-                f"    - [event:{ll.get('event_kind', '?')}] binding.{ll['binding']}"
-            )
+            lines.append(f"    - [event:{ll.get('event_kind', '?')}] binding.{ll['binding']}")
+        elif "test_tag" in ll:
+            lines.append(f"    - [event:{ll.get('event_kind', '?')}] testTag=\"{ll['test_tag']}\"")
+
     hooks = data.get("screen_level_hooks")
     if hooks:
         lines.append(f"  Screen-level hooks: {', '.join(hooks)}")
@@ -374,7 +450,12 @@ def format_ui_context_lines(data):
 
 def build_enriched_content(filepath, diff_text, target_class_refs,
                            symbols, references, entry_points):
-    lines = [f"[Target File]: {filepath}", ""]
+
+    scope_tag = ""
+    if "/commonMain/" in filepath:
+         scope_tag = " [SCOPE: KMP_COMMON]"
+
+    lines = [f"[Target File]: {filepath}{scope_tag}", ""]
 
     ui_data = load_ui_name_data(filepath)
     if ui_data:
