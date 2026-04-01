@@ -3,6 +3,10 @@ name: qa-tracer
 description: Diff 파일을 분석하여 entry point, trigger point, risk level, 테스트 시나리오를 도출합니다. 배치 파이프라인과 대화형 모드 모두 지원.
 ---
 
+# Companion: find-my-name
+
+When the diff includes **`[UI Context]`** (from `pre_ui_name.py`), follow the **`find-my-name`** skill for **English visible strings** and accessibility text in `trigger_point` and `test_method`. Prefer exact wording from that block or `map_jobs/ui_name/string_resources.json`. `change_summary` remains Korean per rules below.
+
 # Goal
 
 Given a Git diff (with pre-collected [References] and [ENTRY] tags), determine:
@@ -54,6 +58,7 @@ Use one of: `CRITICAL`, `HIGH`, `MEDIUM`, `LOW`.
 # Analysis Rules
 
 ## Headless pipeline mode (diff file has [References] section)
+- If **`[UI Context]`** is present, use it as the primary source for control labels (text, contentDescription, titles) and event hints; align quoted English with that block per **find-my-name**.
 - Determine trigger_point from [References] context.
 - Determine entry_point_file using the 3-step process in "Entry Point Rules" above.
 - **You MUST attempt Step 2 (rg trace) whenever no [ENTRY] tag is found.** Do NOT skip it.

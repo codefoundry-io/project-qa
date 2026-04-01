@@ -1,0 +1,5 @@
+{
+  "from_ref": "HEAD~1",
+  "to_ref": "HEAD",
+  "files": {}
+}

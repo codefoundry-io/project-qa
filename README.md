@@ -6,10 +6,16 @@ Git diff 기반 자동 QA 분석 파이프라인. 변경된 코드의 진입점,
 
 ```mermaid
 flowchart LR
+    subgraph ui["pre_ui_name.py"]
+        U0["values/strings + layout/menu + events"]
+        U0 --> U1["map_jobs/ui_name/*.json"]
+    end
+
     subgraph pre["pre_candidate.py"]
         A[git diff] --> B[Filter & Symbol Extraction]
         B --> C[Reference Trace + Entry Point Index]
         C --> F["Enriched .diff"]
+        U1 --> F
     end
 
     subgraph run["run_qa.py"]
@@ -24,14 +30,31 @@ flowchart LR
 ## Quick Start
 
 ```bash
-# 1. Preprocess
+# 0. (Recommended) UI labels for validators — run on TO_REF checkout
+python3 pre_ui_name.py <FROM_REF> <TO_REF>
+
+# 1. Preprocess (preserves map_jobs/ui_name/ when present)
 python3 pre_candidate.py <FROM_REF> <TO_REF>
 
 # 2. Analyze + Report
 python3 run_qa.py
 ```
 
+`pre_ui_name.py`는 선택이지만, 생략하면 enriched diff에 `[UI Context]` 블록이 붙지 않습니다. `pre_candidate.py`의 cleanup은 `map_jobs/ui_name/`만 남기고 나머지 `map_jobs` 항목을 지웁니다.
+
 ## Pipeline Detail
+
+### Phase 0: UI name context (`pre_ui_name.py`)
+
+Android 프로젝트 루트에서 실행합니다. `TO_REF`에 맞춰 checkout한 뒤:
+
+| 산출물 | 내용 |
+|--------|------|
+| `map_jobs/ui_name/string_resources.json` | 모든 `**/res/values/strings.xml`의 `name → value` (영어 기본) |
+| `map_jobs/ui_name/<path_safe>.json` | 파일별 레이아웃/메뉴 링크, 뷰 id·text·contentDescription, 리스너 근접 `R.id` / `binding.*`, 화면 단위 훅 |
+| `map_jobs/ui_name/ui_name_manifest.json` | 경로 → JSON 파일명 매핑 |
+
+소스(`.kt`/`.java`)는 `R.layout` / `R.menu`로 연결된 XML을 파싱합니다. `res/layout`, `res/menu`, `res/navigation` 변경 파일은 해당 XML을 직접 분석합니다.
 
 ### Phase 1: Preprocess (`pre_candidate.py`)
 
@@ -119,6 +142,10 @@ flowchart TD
 
 ```
 map_jobs/
+├── ui_name/                    (optional, from pre_ui_name.py)
+│   ├── string_resources.json
+│   ├── ui_name_manifest.json
+│   └── *.json
 ├── entry_points.json
 ├── pending.txt
 ├── 000_app_build.gradle.kts.diff
@@ -132,6 +159,12 @@ map_jobs/
 
 ```
 [Target File]: app/src/main/java/.../ConversationSettingsFragment.kt
+
+[UI Context]:
+  Layout: app/src/main/res/layout/conversation_settings_fragment.xml
+    - @id/notification_settings (Button) text="Notification settings" from=...
+    - [event:click] R.id.notification_settings
+  Screen-level hooks: onOptionsItemSelected
 
 [Changed Symbols]: ConversationSettingsFragmentDirections, GroupInviteSentDialog, RemoteConfig
 
@@ -200,7 +233,8 @@ flowchart LR
 | 계층 | 파일 | 역할 |
 |------|------|------|
 | Prompt | `ANALYSIS_PROMPT` | 작업 지시 (파일 리스트만, ~200 tokens) |
-| Skill | `SKILL.md` | 분석 규칙 + JSON 스키마 + 도구 제약 |
+| Skill | `qa-tracer/SKILL.md` | 분석 규칙 + JSON 스키마 + 도구 제약 |
+| Skill | `find-my-name/SKILL.md` | 보이는 영어 UI 문구·접근성 텍스트 (`[UI Context]` 소비) |
 | References | `risk_guide.md` | 위험도 분류 기준 |
 | References | `entry_point_patterns.md` | Android entry point 상속 패턴 |
 
@@ -299,6 +333,7 @@ Broken 파일은 로그 출력 후 리포트에서 제외됩니다.
 
 ```
 .
+├── pre_ui_name.py                      # Optional: UI strings + layout/event hints → map_jobs/ui_name/
 ├── pre_candidate.py                    # Preprocess
 ├── run_qa.py                           # Map → Validate → Reduce
 ├── .gemini/skills/qa-tracer/
@@ -306,7 +341,10 @@ Broken 파일은 로그 출력 후 리포트에서 제외됩니다.
 │   └── references/
 │       ├── risk_guide.md               # Risk classification
 │       └── entry_point_patterns.md     # Android entry point patterns
+├── .gemini/skills/find-my-name/
+│   └── SKILL.md                        # Human-visible UI labels for triggers & tests
 ├── map_jobs/                           # (generated) enriched .diff files
+│   ├── ui_name/                       # (optional) from pre_ui_name.py
 │   ├── entry_points.json              # pre-computed entry point index
 │   └── pending.txt                    # remaining files for resume
 ├── map_results/                        # (generated) per-file .json results
@@ -334,6 +372,13 @@ Broken 파일은 로그 출력 후 리포트에서 제외됩니다.
 | `RG_MAX_FILESIZE` | `500K` | rg 검색 대상 파일 크기 한도 |
 | `MAX_REFS_PER_SYMBOL` | `10` | 심볼당 최대 참조 수 |
 | `RG_TIMEOUT` | `10` | rg 타임아웃 (초) |
+
+`pre_ui_name.py`:
+
+| 변수 | 기본값 | 설명 |
+|------|--------|------|
+| `MAX_DIFF_LINES` | `3000` | 후보 파일 diff 상한 (`pre_candidate`와 동일 필터) |
+| `RG_MAX_FILESIZE` | `500K` | (예약) rg 연동 시와 동일 한도 |
 
 ## Design Decisions
 

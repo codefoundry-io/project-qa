@@ -15,6 +15,7 @@ REPORT_FILE = "FINAL_QA_REPORT.md"
 PENDING_FILE = "pending.txt"
 SKIPPED_FILE = "skipped.json"
 ENTRY_POINTS_FILE = os.path.join(JOBS_DIR, "entry_points.json")
+UI_NAME_DIR = os.path.join(JOBS_DIR, "ui_name")
 
 MAX_DIFF_LINES = 3000
 MAX_REFS_PER_SYMBOL = 10
@@ -308,9 +309,76 @@ def format_ref_entry(ref, entry_points):
     return f"    - {ref}"
 
 
+def load_ui_name_data(filepath):
+    safe = filepath.replace("/", "_")
+    p = os.path.join(UI_NAME_DIR, f"{safe}.json")
+    if not os.path.isfile(p):
+        return None
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return None
+
+
+def format_ui_context_lines(data):
+    if not data:
+        return []
+    lines = ["[UI Context]:"]
+    if data.get("compose_only"):
+        lines.append(
+            "  (Compose-heavy: infer visible strings from diff — Text(), stringResource(), "
+            "semantics contentDescription)"
+        )
+    if data.get("resource_self"):
+        lines.append(f"  Resource file: {data.get('target_file', '')}")
+    for lp in data.get("layouts") or []:
+        lines.append(f"  Layout: {lp}")
+    for mp in data.get("menus") or []:
+        lines.append(f"  Menu: {mp}")
+    nav = data.get("navigation_labels")
+    if nav:
+        lines.append(f"  Navigation labels: {', '.join(nav)}")
+    for el in data.get("elements") or []:
+        tid = el.get("id", "?")
+        tag = el.get("tag", "?")
+        bits = [f"@id/{tid}", f"({tag})"]
+        if el.get("text"):
+            bits.append(f'text="{el["text"]}"')
+        if el.get("hint"):
+            bits.append(f'hint="{el["hint"]}"')
+        if el.get("content_description"):
+            bits.append(f'contentDescription="{el["content_description"]}"')
+        if el.get("title"):
+            bits.append(f'title="{el["title"]}"')
+        src = el.get("from_layout") or el.get("from_menu")
+        if src:
+            bits.append(f"from={src}")
+        lines.append("    - " + " ".join(bits))
+    for ll in data.get("listener_linked") or []:
+        if "id" in ll:
+            lines.append(f"    - [event:{ll.get('event_kind', '?')}] R.id.{ll['id']}")
+        elif "binding" in ll:
+            lines.append(
+                f"    - [event:{ll.get('event_kind', '?')}] binding.{ll['binding']}"
+            )
+    hooks = data.get("screen_level_hooks")
+    if hooks:
+        lines.append(f"  Screen-level hooks: {', '.join(hooks)}")
+    lines.append("")
+    body = [l for l in lines[1:-1] if l.strip()]
+    if not body:
+        return []
+    return lines
+
+
 def build_enriched_content(filepath, diff_text, target_class_refs,
                            symbols, references, entry_points):
     lines = [f"[Target File]: {filepath}", ""]
+
+    ui_data = load_ui_name_data(filepath)
+    if ui_data:
+        lines.extend(format_ui_context_lines(ui_data))
 
     if symbols:
         lines.append(f"[Changed Symbols]: {', '.join(sorted(symbols))}")
@@ -359,10 +427,19 @@ def ensure_checkout(ref):
 
 
 def cleanup():
-    for d in [JOBS_DIR, REPORTS_DIR]:
-        if os.path.isdir(d):
-            shutil.rmtree(d)
-            print(f"  Removed {d}/")
+    if os.path.isdir(JOBS_DIR):
+        for name in os.listdir(JOBS_DIR):
+            path = os.path.join(JOBS_DIR, name)
+            if name == "ui_name":
+                continue
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
+        print(f"  Cleared {JOBS_DIR}/ (preserved ui_name/)")
+    if os.path.isdir(REPORTS_DIR):
+        shutil.rmtree(REPORTS_DIR)
+        print(f"  Removed {REPORTS_DIR}/")
     if os.path.isfile(REPORT_FILE):
         os.remove(REPORT_FILE)
         print(f"  Removed {REPORT_FILE}")
