@@ -65,4 +65,4 @@ When [References] contains tagged entries like:
 - Set `trigger_point` to `UI(MemberLabel > ...)`
 - **Crucial Context:** The `VIEW_MODEL` tag indicates that changes to `MemberLabelViewModel` directly impact this UI entry point.
 
-When no [ENTRY] tag exists, set `entry_point_file` to null.
+When no `[ENTRY: …]` tag appears for the relevant caller chain in `[References]`, do **not** stop at null immediately. Follow the main **qa-tracer** skill **Step 2** (iterative `rg` caller trace up to 10 levels). Set `entry_point_file` to null only after Step 2 fails or trace rules require abort (e.g. 10+ references utility path).

@@ -409,6 +409,8 @@ def format_ui_context_lines(data):
             bits.append(f'contentDescription="{el["content_description"]}"')
         if el.get("title"):
             bits.append(f'title="{el["title"]}"')
+        if el.get("data_binding"):
+            bits.append(f'dataBinding="{el["data_binding"]}"')
         src = el.get("from_layout") or el.get("from_menu")
         if src:
             bits.append(f"from={src}")
@@ -427,6 +429,10 @@ def format_ui_context_lines(data):
                 bits.append(f'stringResource=R.string.{el["string_resource"]} (text="{el.get("text", "")}")')
             if el.get("literal_text"):
                 bits.append(f'Text="{el["literal_text"]}"')
+            if el.get("is_list_item"):
+                bits.append("is_list_item=true")
+            if el.get("note"):
+                bits.append(f'note="{el["note"]}"')
             if bits:
                 lines.append("    - " + " ".join(bits))
 
@@ -437,6 +443,8 @@ def format_ui_context_lines(data):
             lines.append(f"    - [event:{ll.get('event_kind', '?')}] binding.{ll['binding']}")
         elif "test_tag" in ll:
             lines.append(f"    - [event:{ll.get('event_kind', '?')}] testTag=\"{ll['test_tag']}\"")
+        elif ll.get("note"):
+            lines.append(f"    - [hint] {ll['note']}")
 
     hooks = data.get("screen_level_hooks")
     if hooks:
