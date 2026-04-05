@@ -91,17 +91,30 @@ def run_gemini_session(pending, session_changed):
 
     env = os.environ.copy()
     env["NODE_OPTIONS"] = f"--max-old-space-size={NODE_HEAP_MB}"
+    selected_model = GEMINI_MODEL
+    
+    # with tempfile.NamedTemporaryFile(prefix="anr_codex_last_", suffix=".md", delete=False) as tf:
+    #     last_message_path = tf.name
+
+    
     if session_changed:
-        cmd = ["gemini", "-p", prompt, "--yolo"]
+    #     cmd = [
+    #     "codex",
+    #     "--search",
+    #     "exec",
+    #     "--dangerously-bypass-approvals-and-sandbox",
+    #     prompt
+    # ]
+        cmd = ["codex", "exec", "--dangerously-bypass-approvals-and-sandbox", prompt]
         if selected_model == "auto":
-        pass
+            pass
         elif selected_model:
             cmd += ["-m", selected_model]
     else:
         cmd = [prompt]
 
     # Enforce using latest model in 2026 if set to auto
-    selected_model = GEMINI_MODEL
+    
     
 
     print(f"  Launching gemini CLI ({len(pending)} files, model={selected_model}) ...\n")
